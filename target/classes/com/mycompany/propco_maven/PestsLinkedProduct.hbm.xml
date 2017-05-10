@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 10-May-2017 9:39:45 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.mycompany.propco_maven.PestsLinkedProduct" table="Pests_linked_Product" catalog="PROPCO_Maven" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="ID" />
+            <generator class="identity" />
+        </id>
+        <property name="pestsId" type="int">
+            <column name="PestsID" not-null="true" />
+        </property>
+        <property name="productId" type="int">
+            <column name="ProductID" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>
