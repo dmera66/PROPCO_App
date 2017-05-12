@@ -42,6 +42,7 @@ public class Customer  implements java.io.Serializable {
 
 	
     public Customer(Business business, Department department, Users users, String customerName, String notes, String address, String addressNotes, String city, String province, String postalCode, String contactName, String primaryPhone, String ext, String secondaryPhone, String ext2, String other, String fax, String emailAddress, String contractNr, Date creationDate, Date updateDate) {
+    //public Customer(Business business, Department department, Users users, String customerName, String notes, String address, String addressNotes, String city, String province, String postalCode, String contactName, String primaryPhone, String ext, String secondaryPhone, String ext2, String other, String fax, String emailAddress, Date creationDate, Date updateDate) {
         this.business = business;
         this.department = department;
         this.users = users;
@@ -65,6 +66,7 @@ public class Customer  implements java.io.Serializable {
         this.updateDate = updateDate;
     }
     public Customer(Bundles bundles, Business business, Department department, Users users, String customerName, String notes, String address, String addressNotes, String city, String province, String postalCode, String contactName, String primaryPhone, String ext, String secondaryPhone, String ext2, String other, String fax, String emailAddress, String contractNr, Date creationDate, Date updateDate, Set serviceRequests) {
+    //public Customer(Bundles bundles, Business business, Department department, Users users, String customerName, String notes, String address, String addressNotes, String city, String province, String postalCode, String contactName, String primaryPhone, String ext, String secondaryPhone, String ext2, String other, String fax, String emailAddress, Date creationDate, Date updateDate, Set serviceRequests) {    
        this.bundles = bundles;
        this.business = business;
        this.department = department;
@@ -258,10 +260,6 @@ public class Customer  implements java.io.Serializable {
     public void setServiceRequests(Set serviceRequests) {
         this.serviceRequests = serviceRequests;
     }
-
-
-
-
 }
 
 
