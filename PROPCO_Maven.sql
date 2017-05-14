@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 10, 2017 at 08:02 PM
+-- Generation Time: May 14, 2017 at 10:32 PM
 -- Server version: 10.0.29-MariaDB
 -- PHP Version: 7.0.7
 
@@ -74,19 +74,19 @@ INSERT INTO `Bundles` (`BDLID`, `BID`, `BundleName`) VALUES
 
 CREATE TABLE IF NOT EXISTS `Business` (
   `BID` smallint(6) NOT NULL,
-  `Name` varchar(50) NOT NULL,
-  `Alias` varchar(50) NOT NULL,
-  `Address` varchar(60) NOT NULL,
-  `City` varchar(30) NOT NULL,
-  `Province` varchar(2) NOT NULL,
-  `PostalCode` varchar(7) NOT NULL,
-  `ContactName` varchar(20) NOT NULL,
-  `PrimaryPhone` varchar(12) NOT NULL,
-  `Ext` varchar(5) NOT NULL,
-  `SecondaryPhone` varchar(12) NOT NULL,
-  `Ext2` varchar(5) NOT NULL,
-  `Fax` varchar(12) NOT NULL,
-  `EmailAddress` varchar(30) NOT NULL,
+  `BName` varchar(50) NOT NULL,
+  `BAlias` varchar(50) NOT NULL,
+  `BAddress` varchar(60) NOT NULL,
+  `BCity` varchar(30) NOT NULL,
+  `BProvince` varchar(2) NOT NULL,
+  `BPostalCode` varchar(7) NOT NULL,
+  `BContactName` varchar(20) NOT NULL,
+  `BPrimaryPhone` varchar(12) NOT NULL,
+  `BExt` varchar(5) NOT NULL,
+  `BSecondaryPhone` varchar(12) NOT NULL,
+  `BExt2` varchar(5) NOT NULL,
+  `BFax` varchar(12) NOT NULL,
+  `BEmailAddress` varchar(30) NOT NULL,
   `Tax` varchar(3) NOT NULL,
   `TaxRate` varchar(5) NOT NULL,
   `CreationDate` date NOT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `Business` (
 -- Dumping data for table `Business`
 --
 
-INSERT INTO `Business` (`BID`, `Name`, `Alias`, `Address`, `City`, `Province`, `PostalCode`, `ContactName`, `PrimaryPhone`, `Ext`, `SecondaryPhone`, `Ext2`, `Fax`, `EmailAddress`, `Tax`, `TaxRate`, `CreationDate`, `UpdateDate`, `UID`) VALUES
+INSERT INTO `Business` (`BID`, `BName`, `BAlias`, `BAddress`, `BCity`, `BProvince`, `BPostalCode`, `BContactName`, `BPrimaryPhone`, `BExt`, `BSecondaryPhone`, `BExt2`, `BFax`, `BEmailAddress`, `Tax`, `TaxRate`, `CreationDate`, `UpdateDate`, `UID`) VALUES
 (0, 'NO BUSINESS', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '2017-05-09', '2017-05-09', 1),
 (1, 'REGIONAL MUNICIPALITY OF DURHAM', '', '605 ROSSLAND RD E', 'WHITBY', 'ON', 'L1N 6A3', 'dudu', '', '', '', '', '', '', 'HST', '13.00', '0000-00-00', '2017-05-07', 1),
 (2, 'C/O GOLDVIEW PROPERTIES MANAGEMENT', 'VARIOUS LOCATIONS', '51 TORO RD # 200', 'TORONTO', 'ON', 'M6A 2E5', '', '', '', '', '', '', '', 'HST', '13.00', '0000-00-00', '0000-00-00', 1);
