@@ -12,43 +12,43 @@
             <column name="UID" not-null="true" />
         </many-to-one>
         <property name="name" type="string">
-            <column name="Name" length="50" not-null="true" />
+            <column name="BName" length="50" not-null="true" />
         </property>
         <property name="alias" type="string">
-            <column name="Alias" length="50" not-null="true" />
+            <column name="BAlias" length="50" not-null="true" />
         </property>
         <property name="address" type="string">
-            <column name="Address" length="60" not-null="true" />
+            <column name="BAddress" length="60" not-null="true" />
         </property>
         <property name="city" type="string">
-            <column name="City" length="30" not-null="true" />
+            <column name="BCity" length="30" not-null="true" />
         </property>
         <property name="province" type="string">
-            <column name="Province" length="2" not-null="true" />
+            <column name="BProvince" length="2" not-null="true" />
         </property>
         <property name="postalCode" type="string">
-            <column name="PostalCode" length="7" not-null="true" />
+            <column name="BPostalCode" length="7" not-null="true" />
         </property>
         <property name="contactName" type="string">
-            <column name="ContactName" length="20" not-null="true" />
+            <column name="BContactName" length="20" not-null="true" />
         </property>
         <property name="primaryPhone" type="string">
-            <column name="PrimaryPhone" length="12" not-null="true" />
+            <column name="BPrimaryPhone" length="12" not-null="true" />
         </property>
         <property name="ext" type="string">
-            <column name="Ext" length="5" not-null="true" />
+            <column name="BExt" length="5" not-null="true" />
         </property>
         <property name="secondaryPhone" type="string">
-            <column name="SecondaryPhone" length="12" not-null="true" />
+            <column name="BSecondaryPhone" length="12" not-null="true" />
         </property>
         <property name="ext2" type="string">
-            <column name="Ext2" length="5" not-null="true" />
+            <column name="BExt2" length="5" not-null="true" />
         </property>
         <property name="fax" type="string">
-            <column name="Fax" length="12" not-null="true" />
+            <column name="BFax" length="12" not-null="true" />
         </property>
         <property name="emailAddress" type="string">
-            <column name="EmailAddress" length="30" not-null="true" />
+            <column name="BEmailAddress" length="30" not-null="true" />
         </property>
         <property name="tax" type="string">
             <column name="Tax" length="3" not-null="true" />

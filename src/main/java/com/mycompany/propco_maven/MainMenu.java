@@ -4,17 +4,15 @@ package com.mycompany.propco_maven;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import propco_maven.util.HibernateUtil;
 
 /*
@@ -235,16 +233,21 @@ public MainMenu() {
     }
 
     private void executeHQLQuery(String query){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try{
-            Session session = HibernateUtil.getSessionFactory().openSession();
-            session.beginTransaction();
+            tx = session.beginTransaction();
             Query q = session.createQuery(query);
             List resultList = q.list();
             returnResult(resultList);
-            session.getTransaction().commit();
+            tx.commit();
         }
         catch (HibernateException he){
+            if (tx!=null) tx.rollback();
             he.printStackTrace();
+        }
+        finally{
+            session.close();
         }
     }
     private void returnResult(List resultList){
@@ -254,10 +257,12 @@ public MainMenu() {
         //get a count first
         JButton [] btn = new JButton[resultList.size()];
         System.out.println(resultList.size());
-                
-        for(Object obj : resultList){
-            Labels new_labels = (Labels)obj;
-            lbl_name = new_labels.getlabels();
+        
+        for (Iterator iterator = resultList.iterator(); iterator.hasNext();){
+            Labels label = (Labels) iterator.next(); 
+            //for(Object obj : resultList){
+            //    Labels new_labels = (Labels)obj;
+            lbl_name = label.getlabels();
             btn[counter] = new JButton(lbl_name);
             pnlOptions.add(btn[counter]);
             btn[counter].setEnabled(true);

@@ -1,7 +1,13 @@
 package com.mycompany.propco_maven;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Iterator;
 
-import java.awt.BorderLayout;
+import org.hibernate.EmptyInterceptor;
+import org.hibernate.Transaction;
+import org.hibernate.type.Type;
+
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
@@ -10,14 +16,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.sql.PreparedStatement;
+import java.io.Serializable;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -27,6 +33,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import org.hibernate.EmptyInterceptor;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import propco_maven.util.HibernateUtil;
 
 
 /*
@@ -50,7 +63,6 @@ public class CreateSR extends javax.swing.JFrame {
     Integer BusinessID = null;
     Integer DeptID = null;
     String FollowupCnt = "";
-    public static Object[] Fields_value_arr=null;
     
     public static String CustomerType = "";
     public static String BID = "";
@@ -60,14 +72,28 @@ public class CreateSR extends javax.swing.JFrame {
     String tblName = "";
     ResultSet rs_count = null;
     ResultSet rs = null;
+    List resultList =null;
+    List CustomerList = null;
+    List BusinessList = null;
     
+    private static String QUERY_BASED_ON_CUSTOMER_NAME = "from Customer c inner join fetch c.business inner join fetch c.users inner join fetch c.department inner join fetch c.bundles where c.customerName like '%";
+    //private static String QUERY_BASED_ON_CUSTOMER_STREET="from Customer so inner join fetch so.business where so.address like '520%';
+    private static String QUERY_BASED_ON_CUSTOMER_STREET = "from Customer c inner join fetch c.business inner join fetch c.users inner join fetch c.department inner join fetch c.bundles where c.address like '%";
+    private static String QUERY_BASED_ON_BILLING_NAME = "from Business b inner join fetch b.users where b.name like '%";
+    private static String QUERY_BASED_ON_DEPARTMENT = "from Department";
+    private static String QUERY_BASED_ON_BUNDLES = "from Bundles";
+    
+    private static SessionFactory factory;
+    private static Session session;
+    private static Transaction tx;
+    Customer new_customer = null;
+    Business new_business = null;
     
     /**
      * Creates new form ServiceReceipt
      */
     public CreateSR() {
         System.out.println("===ServiceReceipt===");
-        Fields_value_arr = new String[13];
         
         initComponents();
         //correct tab key functionality
@@ -79,12 +105,8 @@ public class CreateSR extends javax.swing.JFrame {
         CustDlg my_dlg = new CustDlg();
         my_dlg.init();
         my_dlg.dispose();
-        if (CustomerType.equals("Existing")){
-        }
-        else{
-            disable_form();
-        }
-        //establishConnection();
+        if (CustomerType.equals("New")){disable_form();}
+        initializeSession();
         System.out.println("this is a " + this.CustomerType + " customer!");
     }
 
@@ -130,9 +152,9 @@ public class CreateSR extends javax.swing.JFrame {
         txtBillingAlias = new javax.swing.JTextField();
         lblBillingDept = new javax.swing.JLabel();
         lblBillingContract = new javax.swing.JLabel();
-        txtBillingDept = new javax.swing.JTextField();
-        txtBillingContract = new javax.swing.JTextField();
         btnDocumentation = new javax.swing.JButton();
+        cmbDepartmentName = new javax.swing.JComboBox<>();
+        cmbContractNr = new javax.swing.JComboBox<>();
         pnlCustomer = new javax.swing.JPanel();
         lblName = new javax.swing.JLabel();
         lblStreet = new javax.swing.JLabel();
@@ -204,11 +226,6 @@ public class CreateSR extends javax.swing.JFrame {
         setName("frmServiceReceipt"); // NOI18N
         setPreferredSize(new java.awt.Dimension(1100, 772));
         setResizable(false);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowActivated(java.awt.event.WindowEvent evt) {
-                formWindowActivated(evt);
-            }
-        });
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
         jLabel1.setText("Create Service Receipt");
@@ -389,7 +406,6 @@ public class CreateSR extends javax.swing.JFrame {
         txtBillingFax.setNextFocusableComponent(txtBillingEmail);
 
         txtBillingEmail.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtBillingEmail.setNextFocusableComponent(txtBillingDept);
 
         txtBillingCity.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtBillingCity.setMaximumSize(new java.awt.Dimension(68, 17));
@@ -442,18 +458,6 @@ public class CreateSR extends javax.swing.JFrame {
         lblBillingContract.setRequestFocusEnabled(false);
         lblBillingContract.setVerifyInputWhenFocusTarget(false);
 
-        txtBillingDept.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtBillingDept.setMaximumSize(new java.awt.Dimension(68, 17));
-        txtBillingDept.setMinimumSize(new java.awt.Dimension(68, 17));
-        txtBillingDept.setNextFocusableComponent(txtBillingContract);
-        txtBillingDept.setPreferredSize(new java.awt.Dimension(68, 17));
-
-        txtBillingContract.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtBillingContract.setMaximumSize(new java.awt.Dimension(68, 17));
-        txtBillingContract.setMinimumSize(new java.awt.Dimension(68, 17));
-        txtBillingContract.setNextFocusableComponent(btnDocumentation);
-        txtBillingContract.setPreferredSize(new java.awt.Dimension(68, 17));
-
         btnDocumentation.setText("Documentation");
         btnDocumentation.setNextFocusableComponent(txtPO);
         btnDocumentation.addActionListener(new java.awt.event.ActionListener() {
@@ -474,8 +478,8 @@ public class CreateSR extends javax.swing.JFrame {
                             .addComponent(lblBillingDept, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtBillingContract, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-                            .addComponent(txtBillingDept, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(cmbDepartmentName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cmbContractNr, 0, 194, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnDocumentation, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlBillingCustomerLayout.createSequentialGroup()
@@ -571,12 +575,12 @@ public class CreateSR extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblBillingDept, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtBillingDept, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cmbDepartmentName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblBillingContract, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtBillingContract, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnDocumentation)))
+                            .addComponent(btnDocumentation)
+                            .addComponent(cmbContractNr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(pnlBillingCustomerLayout.createSequentialGroup()
                         .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtBillingExt1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1414,9 +1418,105 @@ public class CreateSR extends javax.swing.JFrame {
         );
     }// </editor-fold>//GEN-END:initComponents
     
-    
-    
+    public void initializeSession(){
+        try{
+            factory = new Configuration().configure().buildSessionFactory();
+            //session = factory.openSession( new MyInterceptor() );
+            session = factory.openSession();
             
+        }catch (Throwable ex) { 
+            System.err.println("Failed to create sessionFactory object." + ex);
+            throw new ExceptionInInitializerError(ex); 
+        }
+    }
+    
+    private List executeHQLQuery(String query){
+        System.out.println("Session executeHQLQuery opened");
+        resultList = null;
+        try{
+            tx = session.beginTransaction();
+            System.out.println("Session executeHQLQuery tx begin");
+            Query q = session.createQuery(query);
+            System.out.println("Session executeHQLQuery query completed");
+            resultList = q.list();
+            tx.commit();
+        }
+        catch (HibernateException he){
+            if (tx!=null) tx.rollback();
+            he.printStackTrace();
+        }
+        //when to close it????
+        //finally{
+        //    session.close();
+        //    System.out.println("Session executeHQLQuery closed");
+        //}
+        
+        return resultList;
+    }
+    
+    private void displayMessage(String message){JOptionPane.showMessageDialog(null,message,"",JOptionPane.ERROR_MESSAGE);}
+    private void displayMessage(String message,String Title){JOptionPane.showMessageDialog(null,message,Title,JOptionPane.ERROR_MESSAGE);}
+        
+    /* Method to CREATE an employee in the database */
+    public Integer addCustomer(String fname, String lname, int salary){
+        tx = null;
+        CustID = null;
+        try{
+            tx = session.beginTransaction();
+            new_customer = new Customer();
+                    // Business business, Department department, Users users, String customerName, String notes, 
+                    // String address, String addressNotes, String city, String province, String postalCode, String contactName, String primaryPhone, 
+                    // String ext, String secondaryPhone, String ext2, String other, String fax, String emailAddress, String contractNr, 
+                    // Date creationDate, Date updateDate, Set serviceRequests);
+                    
+            CustID = (Integer) session.save(new_customer); 
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace(); 
+        }
+        //finally {
+        //    session.close(); 
+        //}
+        return CustID;
+    }
+   
+    public void UpdateCustomer(Integer CustID,Integer BDLID, Business business, Department department, Users users, String customerName, String notes, String address, String addressNotes, String city, String province, String postalCode, String contactName, String primaryPhone, String ext, String secondaryPhone, String ext2, String other, String fax, String emailAddress, String contractNr, Date creationDate, Date updateDate, Set serviceRequests){
+        //Bundles bundles, Business business, Department department, String contractNr Set serviceRequests
+        session = HibernateUtil.getSessionFactory().openSession();
+        tx = null;
+        try{
+            tx = session.beginTransaction();
+            Customer update_customer = (Customer)session.get(Customer.class,CustID);
+            Bundles update_bundle = (Bundles)session.get(Bundles.class,BDLID);
+            Business update_business = (Business)session.get(Business.class,BID);
+            update_customer.setCustomerName(customerName);
+            update_customer.setNotes(notes);
+            update_customer.setAddress(address);
+            update_customer.setAddressNotes(addressNotes);
+            update_customer.setCity(city);
+            update_customer.setProvince(province);
+            update_customer.setPostalCode(postalCode);
+            update_customer.setContactName(contactName);
+            update_customer.setPrimaryPhone(primaryPhone);
+            update_customer.setExt(ext);
+            update_customer.setSecondaryPhone(secondaryPhone);
+            update_customer.setExt2(ext2);
+            update_customer.setOther(other);
+            update_customer.setFax(fax);
+            update_customer.setEmailAddress(emailAddress);
+            update_customer.setUpdateDate(updateDate);
+            update_customer.setBusiness(business)  ;
+        }
+        catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace(); 
+        }
+        finally {
+            session.close(); 
+        }
+   }
+    
     private void grpFreq( ) {
         ButtonGroup bgFreq = new ButtonGroup( );
         bgFreq.add(btngrpPerService);
@@ -1449,43 +1549,24 @@ public class CreateSR extends javax.swing.JFrame {
     
     private void disable_form(){
         System.out.println("disable_form");
-        for (Component cp : pnlCustomer.getComponents() ){
-            cp.setEnabled(false);
-        }
-        for (Component cp : pnlBillingCustomer.getComponents() ){
-            cp.setEnabled(false);
-        }
-        for (Component cp : pnlDetails.getComponents() ){
-            cp.setEnabled(false);
-        }
-        for (Component cp : pnlFreq.getComponents() ){
-            cp.setEnabled(false);
-        }
-        for (Component cp : pnlPayment.getComponents() ){
-            cp.setEnabled(false);
-        }
-        for (Component cp : pnlService.getComponents() ){
-            cp.setEnabled(false);
-        }
-        for (Component cp : pnlSchedule.getComponents() ){
-            cp.setEnabled(false);
-        }
+        for (Component cp : pnlCustomer.getComponents() ){cp.setEnabled(false);}
+        for (Component cp : pnlBillingCustomer.getComponents() ){cp.setEnabled(false);}
+        for (Component cp : pnlDetails.getComponents() ){cp.setEnabled(false);}
+        for (Component cp : pnlFreq.getComponents() ){cp.setEnabled(false);}
+        for (Component cp : pnlPayment.getComponents() ){cp.setEnabled(false);}
+        for (Component cp : pnlService.getComponents() ){cp.setEnabled(false);}
+        for (Component cp : pnlSchedule.getComponents() ){cp.setEnabled(false);}
         btnSave.setEnabled(false);
         btnNext.setEnabled(false);
         txtCustomer.setEnabled(true);
     }
    
     private void btngrpPerServiceMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btngrpPerServiceMousePressed
-        if (btngrpPerService.isSelected()){
-            Freq = btngrpPerService.getText();
-            System.out.println("Freq:" + Freq);
-        }
+        if (btngrpPerService.isSelected()){Freq = btngrpPerService.getText();System.out.println("Freq:" + Freq);}
     }//GEN-LAST:event_btngrpPerServiceMousePressed
 
     private void btngrpMonthlyMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btngrpMonthlyMousePressed
-        if (btngrpMonthly.isSelected()){
-            Freq = btngrpMonthly.getText();
-        }
+        if (btngrpMonthly.isSelected()){Freq = btngrpMonthly.getText();}
     }//GEN-LAST:event_btngrpMonthlyMousePressed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
@@ -1498,75 +1579,51 @@ public class CreateSR extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void rbEmergencyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbEmergencyActionPerformed
-        if (rbEmergency.isSelected()){
-            ServiceType = rbEmergency.getText();
-        }
+        if (rbEmergency.isSelected()){ServiceType = rbEmergency.getText();}
     }//GEN-LAST:event_rbEmergencyActionPerformed
 
     private void rbRegularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbRegularActionPerformed
-        if (rbRegular.isSelected()){
-            ServiceType = rbRegular.getText();
-        }
+        if (rbRegular.isSelected()){ServiceType = rbRegular.getText();}
     }//GEN-LAST:event_rbRegularActionPerformed
 
     private void rbBlockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbBlockActionPerformed
-        if (rbBlock.isSelected()){
-            ServiceType = rbBlock.getText();
-        }
+        if (rbBlock.isSelected()){ServiceType = rbBlock.getText();}
     }//GEN-LAST:event_rbBlockActionPerformed
 
     private void rbNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbNewActionPerformed
-        if (rbNew.isSelected()){
-            ServiceType = rbNew.getText();
-        }
+        if (rbNew.isSelected()){ServiceType = rbNew.getText();}
     }//GEN-LAST:event_rbNewActionPerformed
 
     private void rbProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbProductActionPerformed
-        if (rbProduct.isSelected()){
-            ServiceType = rbProduct.getText();
-        }
+        if (rbProduct.isSelected()){ServiceType = rbProduct.getText();}
     }//GEN-LAST:event_rbProductActionPerformed
 
     private void rbOtherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbOtherActionPerformed
-        if (rbOther.isSelected()){
-            ServiceType = rbOther.getText();
-        }
+        if (rbOther.isSelected()){ServiceType = rbOther.getText();}
     }//GEN-LAST:event_rbOtherActionPerformed
 
     private void rbInSuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbInSuitActionPerformed
-        if (rbInSuit.isSelected()){
-            ServiceType = rbInSuit.getText();
-        }
+        if (rbInSuit.isSelected()){ServiceType = rbInSuit.getText();}
     }//GEN-LAST:event_rbInSuitActionPerformed
 
     private void rbVisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbVisaActionPerformed
-        if (rbVisa.isSelected()){
-            Payment = rbVisa.getText();
-        }
+        if (rbVisa.isSelected()){Payment = rbVisa.getText();}
     }//GEN-LAST:event_rbVisaActionPerformed
 
     private void rbCheckActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbCheckActionPerformed
-        if (rbCheck.isSelected()){
-            Payment = rbCheck.getText();
-        }
+        if (rbCheck.isSelected()){Payment = rbCheck.getText();}
     }//GEN-LAST:event_rbCheckActionPerformed
 
     private void rbMastercardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbMastercardActionPerformed
-        if (rbMastercard.isSelected()){
-            Payment = rbMastercard.getText();
-        }
+        if (rbMastercard.isSelected()){Payment = rbMastercard.getText();}
     }//GEN-LAST:event_rbMastercardActionPerformed
 
     private void rbPcardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPcardActionPerformed
-        if (rbPcard.isSelected()){
-            Payment = rbPcard.getText();
-        }
+        if (rbPcard.isSelected()){Payment = rbPcard.getText();}
     }//GEN-LAST:event_rbPcardActionPerformed
 
     private void rbOthersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbOthersActionPerformed
-        if (rbOthers.isSelected()){
-            Payment = rbOthers.getText();
-        }
+        if (rbOthers.isSelected()){Payment = rbOthers.getText();}
     }//GEN-LAST:event_rbOthersActionPerformed
 
     public class CustDlg extends JFrame implements ActionListener{
@@ -1575,8 +1632,6 @@ public class CreateSR extends javax.swing.JFrame {
         JButton BtnYes = new JButton("Yes");
         JButton BtnNo = new JButton("No");
         private final JDialog Dlg = new JDialog((CreateSR) null,"Question",true);
-        
-        
         public void init()
         {
             Container DlgCntnr = Dlg.getContentPane();
@@ -1592,33 +1647,32 @@ public class CreateSR extends javax.swing.JFrame {
             Dlg.setLocationRelativeTo(null);
             Dlg.show();
         }
-        public void dispose()
-        {
-            Dlg.dispose();
+        public void dispose(){Dlg.dispose();}
+        public void actionPerformed(ActionEvent e1){
+            if(e1.getSource() == BtnYes){CustomerType = "New";Dlg.dispose();}
+            else{CustomerType = "Existing";Dlg.dispose();}
         }
-        public void actionPerformed(ActionEvent e1)
-            {
-                if(e1.getSource() == BtnYes)
-                    {
-                        CustomerType = "New";
-                        Dlg.dispose();
-                    }
-                else //(e1.getSource() == BtnNo)
-                    {
-                        CustomerType = "Existing";
-                        Dlg.dispose();
-                    }
-         }
     }
     
     public class SaveDlg extends JFrame implements ActionListener{
-        JLabel Lbl = new JLabel("Are you sure you want to modify the customer info?");
+        JLabel Lbl = new JLabel("Are you sure you want to save the customer info?");
         JPanel AskPanel = new JPanel();
         JButton BtnYes = new JButton("Yes");
         JButton BtnCancel = new JButton("Cancel");
-        private final JDialog Dlg = new JDialog((CreateSR) null,"Update Customer Info", true);
+        String message;
+        //private final JDialog Dlg = new JDialog((CreateSR) null,"Update Customer Info", true);
+        private JDialog Dlg;
+        // = new JDialog((CreateSR) null,message, true);
         public void init()
         {
+            if (CustomerType.equals("New")){ 
+                message = "Insert Customer Info";
+                Dlg = new JDialog((CreateSR) null,message, true);
+            }
+            else{
+                message = "Update Customer Info";
+                Dlg = new JDialog((CreateSR) null,message, true);
+            }
             Container DlgCntnr = Dlg.getContentPane();
             DlgCntnr.setLayout(new FlowLayout());
             DlgCntnr.add(Lbl);
@@ -1634,18 +1688,22 @@ public class CreateSR extends javax.swing.JFrame {
             Dlg.getRootPane().setWindowDecorationStyle(1);
             Dlg.show();
         }
-        public void dispose(){
-            Dlg.dispose();
-        }
+        public void dispose(){Dlg.dispose();}
         public void actionPerformed(ActionEvent e1){
             if(e1.getSource() == BtnYes)
                 {
-                    String bundle = "";
-                    try{    
+                    //String bundle = "";
+                    if (CustomerType == "Existing"){
+                        //ME.updateCustomer(txtCustomer.getText(),txtCustInfo.getText(),txtStreet.getText(),txtStreetInfo.getText(),txtCity.getText(),txtProv.getText(),txtPostalCode.getText(),txtContact.getText(),txtPhone1.getText(),txtExt1.getText(),txtPhone2.getText(),txtExt2.getText(),txtFax.getText(),txtEmail.getText(),txtBillingDept.getText(),txtBillingContract.getText(),DateUtils.now_date_time());
+                    }else{
+                        //new_customer
+                        //ME.addCustomer();
+                    }
+                    //try{    
                         //get bundle info
-                        if (cbBundle.isEnabled()){
-                            bundle = cmbBundles.getSelectedItem().toString();
-                        }
+                        //if (cbBundle.isEnabled()){
+                        //    bundle = cmbBundles.getSelectedItem().toString();
+                        //}
                         
                         //get user_id
                         //String return_field = "User_ID"; 
@@ -1655,7 +1713,7 @@ public class CreateSR extends javax.swing.JFrame {
                         //rs = SQLConnection.getRecordSet(sqlStmt);
                         //ServiceRequest new_cust = new ServiceRequest();
                         //Integer user_id = rs.getInt("User_ID");
-                        sqlStmt = "UPDATE Customer SET CustomerName = '" + txtCustomer.getText() + "'," 
+                        /*sqlStmt = "UPDATE Customer SET CustomerName = '" + txtCustomer.getText() + "'," 
                                 + " Notes = '" + txtCustInfo.getText() + "',"
                                 + " Address = '" + txtStreet.getText() + "',"
                                 + " AddressNotes = '" + txtStreetInfo.getText() + "',"
@@ -1670,7 +1728,7 @@ public class CreateSR extends javax.swing.JFrame {
                                 + " Other = '',"
                                 + " Fax = '" + txtFax.getText() + "',"
                                 + " EmailAddress = '" + txtEmail.getText() + "',"
-                                + " BundleName = '" + bundle + "',"
+                                //+ " BundleName = '" + bundle + "',"
                                 + " DepartmentName = '" + txtBillingDept.getText() + "',"
                                 + " ContractNr = '" + txtBillingContract.getText() + "',"
                                 + " UpdateDate = '" + DateUtils.now_date_time() + "',";
@@ -1680,6 +1738,7 @@ public class CreateSR extends javax.swing.JFrame {
                                 //+ " where cust_id = '" + CustID + "'";
 
                         System.out.println(sqlStmt);
+                        */
                         //int updateCust = SQLConnection.updateRecordSet(sqlStmt);
                         //reload Customer class
                         //int user_id = new_cust.getuser_id();
@@ -1687,26 +1746,26 @@ public class CreateSR extends javax.swing.JFrame {
                         //Customer upd_Cust = new Customer(user_id,txtCustomer.getText(),txtCustInfo.getText(),txtStreet.getText(),txtStreetInfo.getText(), txtCity.getText(), txtProv.getText(), txtPostalCode.getText(), txtContact.getText(),txtPhone1.getText(),txtExt1.getText(),txtPhone2.getText(),txtExt2.getText(),txtFax.getText(),txtEmail.getText(),bundle, txtBillingDept.getText(),txtBillingContract.getText(),custID);
                         //System.out.println("test" + upd_Cust.CustID);
                         //update Billing info
-                        if (BusinessID > 0) {
+                        //if (BusinessID > 0) {
                             //need to add new bundle if it was updated
-                            sqlStmt = "SELECT count(*) as num from Bundles where BundleName = '" + bundle 
-                                    + "' and BID = '" + BusinessID + "'";
+                            //sqlStmt = "SELECT count(*) as num from Bundles where BundleName = '" + bundle 
+                            //        + "' and BID = '" + BusinessID + "'";
                             //rs = SQLConnection.getRecordSet(sqlStmt);
-                            System.out.println("count is: " + rs.getInt("num"));
-                            if (rs.getInt("num") == 0){
-                                sqlStmt = "INSERT INTO Bundles (BID,BundleName) VALUES (?,?)";
-                                System.out.println(sqlStmt);
+                            //System.out.println("count is: " + rs.getInt("num"));
+                            //if (rs.getInt("num") == 0){
+                            //    sqlStmt = "INSERT INTO Bundles (BID,BundleName) VALUES (?,?)";
+                             //   System.out.println(sqlStmt);
                                 //PreparedStatement stmt = SQLConnection.conn.prepareStatement(sqlStmt);//"insert into Bundles (BID, BundleName) values (?, ?)");
                                 //System.out.println("insert into Bundles (BID, BundleName) values (?, ?)");
                                 //stmt.setInt(1, BusinessID);
-                                System.out.println("1");
+                            //    System.out.println("1");
                                 //stmt.setString(2, bundle);
-                                System.out.println("2");
+                            //    System.out.println("2");
                                 //stmt.executeUpdate();
                                 
                                 //SQLConnection.insertRecordSet(sqlStmt);
-                            }
-                            
+                            //}
+                            /*
                             sqlStmt = "UPDATE Business_Details SET Name = '" + txtBillingName.getText() + "'," 
                                     + " Alias = '" + txtBillingAlias.getText() + "',"
                                     + " Address = '" + txtBillingStreet.getText() + "',"
@@ -1722,22 +1781,22 @@ public class CreateSR extends javax.swing.JFrame {
                                     + " EmailAddress = '" + txtBillingEmail.getText() + "',"
                                     + " UpdateDate = '" + DateUtils.now_date_time() + "'"
                                     + " where BID = '" + BusinessID + "'";
-
-                            System.out.println(sqlStmt);
+*/
+                            //System.out.println(sqlStmt);
                             //int updateBillingCust = SQLConnection.updateRecordSet(sqlStmt);
-                        }
+                        //}
                         //if ((updateCust == 1) && (updateBillingCust == 1)){
                             //JOptionPane.showMessageDialog(null,"Customer Info Updated");
-                            JOptionPane.showMessageDialog(null, "Customer Info Updated", "Success!!", 1);
-                            Dlg.dispose();
+                        //    JOptionPane.showMessageDialog(null, "Customer Info Updated", "Success!!", 1);
+                        //    Dlg.dispose();
                         //}
 
-                    }
-                    catch (SQLException ex) {
+                    //}
+                    //catch (SQLException ex) {
                         //Logger.getLogger(ServiceReceipt.class.getName()).log(Level.SEVERE, null, ex);
                         //if (stmt != null) { stmt.close(); }
-                        System.out.println("error");      
-                    }
+                    //    System.out.println("error");      
+                    //}
                 }
             else {
                 //CustomerType = "Existing";
@@ -1746,55 +1805,39 @@ public class CreateSR extends javax.swing.JFrame {
         }
     }
     
-    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-    }//GEN-LAST:event_formWindowActivated
-
     private void txtCustomerKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCustomerKeyPressed
-        String strInput= this.txtCustomer.getText();
         if (evt.getKeyCode() == KeyEvent.VK_ENTER)  {
-            if (CustomerType == "Existing"){
-                //Statement stmt = null;
-                try {
-                    //System.out.println("conn success");
-                    String sqlStmt = "select count(*) as num from Customer where CustomerName like '%" + strInput + "%'";
-                    //String tblName = "Customer";
-                    //rs = stmt.executeQuery(sqlStmt);
-                    //rs = SQLConnection.getRecordSet(sqlStmt);
-                    //System.out.println("resultset " + sqlStmt);
-                    //rs.next();
-                    switch (rs.getInt("num")){
-                        case 0:
-                            JOptionPane.showMessageDialog(null,"There is no customer which have the Name containing '" + strInput + "'","",JOptionPane.ERROR_MESSAGE);
-                            break;
-                        case 1:
-                            sqlStmt = "select CID,CustomerName,Notes,Address,AddressNotes,City,Province,PostalCode,ContactName,PrimaryPhone,Ext,SecondaryPhone,Ext2,Fax,EmailAddress,BID,BundleName,DepartmentName,ContractNr,UID from Customer where CustomerName like '%" + strInput + "%'";
-                            //tblName = "Customer";
-                            //rs = SQLConnection.getRecordSet(sqlStmt);
-                            //rs.next();
-                            fillInfo(rs);
-                            
-                            btnNext.setEnabled(true);
-                            btnSave.setEnabled(true);
-                            break;
-                        default:
-                            //System.out.println("multiple records");
-                            sqlStmt = "select CustomerName, Address from Customer where CustomerName like '%" + strInput + "%'";
-                            //String tblName = "Customer";
-                            //rs = SQLConnection.getMultipleRecordsRS(sqlStmt);
-                            MultipleRecords MultipleCustomers = new MultipleRecords();
-                            MultipleCustomers.init();
-                            MultipleCustomers.dispose();
-                            btnNext.setEnabled(true);
-                            btnSave.setEnabled(true);
-                            pnlFreq.requestFocus();
-                            break;
-                    }
+            if (CustomerType.equals("Existing")){
+                CustomerList = executeHQLQuery(QUERY_BASED_ON_CUSTOMER_NAME + txtCustomer.getText() + "%'");
+                System.out.println("CustomerList retrieved");
+                switch (CustomerList.size()){
+                    case 0:
+                        displayMessage("There is no customer with Name containing '" + txtCustomer.getText() + "'");
+                        break;
+                    case 1:
+                        for(Object obj : CustomerList){
+                            new_customer = (Customer)obj;
+                            fillInfo(new_customer);
+                            //fillBusinessInfo(new_customer);
+                        }
+                        System.out.println("after fillinfo");
+
+                        btnNext.setEnabled(true);
+                        btnSave.setEnabled(true);
+                        break;
+                    default:
+                        //System.out.println("multiple records");
+                        //sqlStmt = "select CustomerName, Address from Customer where CustomerName like '%" + strInput + "%'";
+                        //String tblName = "Customer";
+                        //rs = SQLConnection.getMultipleRecordsRS(sqlStmt);
+                        MultipleRecords MultipleCustomers = new MultipleRecords();
+                        MultipleCustomers.init();
+                        MultipleCustomers.dispose();
+                        btnNext.setEnabled(true);
+                        btnSave.setEnabled(true);
+                        pnlFreq.requestFocus();
+                        break;
                 }
-                    catch (SQLException ex) {
-                    //Logger.getLogger(ServiceReceipt.class.getName()).log(Level.SEVERE, null, ex);
-                    //if (stmt != null) { stmt.close(); }
-                    System.out.println("error");
-                }    
             }
             else {
                 System.out.println("new customer ");
@@ -1806,90 +1849,69 @@ public class CreateSR extends javax.swing.JFrame {
                     pnlCustomer.setEnabled(true);
                     txtBillingName.setEnabled(true);
                 }
-                else{
-                    JOptionPane.showMessageDialog(null,"Customer Name is less than 5 characters","Customer Name too short!!!",JOptionPane.ERROR_MESSAGE);
-                }
+                else{displayMessage("Customer Name is less than 5 characters","Customer Name too short!!!");}
             }
-        }        
+        }
     }//GEN-LAST:event_txtCustomerKeyPressed
 
     private void txtStreetKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStreetKeyPressed
         
-        strInput = this.txtStreet.getText();
-        
         if ((evt.getKeyCode() == KeyEvent.VK_ENTER) || (evt.getKeyCode() == KeyEvent.VK_TAB)) {
-            System.out.println("street1 :" + strInput);
-            if (CustomerType == "Existing"){
-                
-                //System.out.println("key pressed 1");
-                try {
-                    sqlStmt = "select count(*) as num from Customer where Address like '%" + strInput + "%'";
-                    //tblName = "Customer";
-                    //rs = SQLConnection.getRecordSet(sqlStmt);
-                    System.out.println("resultset " + sqlStmt);
-                    //rs.next();
-                    switch (rs.getInt("num")){
-                        case 0:
-                            JOptionPane.showMessageDialog(null,"There is no customer which have the street containing '" + strInput + "'","",JOptionPane.ERROR_MESSAGE);
-                            break;
-                        case 1:
-                            sqlStmt = "select CID,CustomerName,Notes,Address,AddressNotes,City,Province,PostalCode,ContactName,PrimaryPhone,Ext,SecondaryPhone,Ext2,Fax,EmailAddress,BID,BundleName,DepartmentName,ContractNr,UID from Customer where Address like '%" + strInput + "%'";
-                            //rs = SQLConnection.getRecordSet(sqlStmt);
-                            //rs.next();
-                            fillInfo(rs);
-                            System.out.println("after fillinfo");
-                            btnNext.setEnabled(true);
-                            btnSave.setEnabled(true);
-                            break;
-                        default:
-                            System.out.println("multiple records");
-                            String sqlStmt = "select CustomerName, Address from Customer where Address like '%" + strInput + "%'";
-                            //rs = SQLConnection.getMultipleRecordsRS(sqlStmt);
-                            MultipleRecords MultipleCustomers = new MultipleRecords();
-                            MultipleCustomers.init();
-                            MultipleCustomers.dispose();
-                            btnNext.setEnabled(true);
-                            btnSave.setEnabled(true);
-                            break;
-                    }
-                }
-                    catch (SQLException ex) {
-                    //Logger.getLogger(ServiceReceipt.class.getName()).log(Level.SEVERE, null, ex);
-                    //if (stmt != null) { stmt.close(); }
-                    System.out.println("error");
+            //System.out.println("street1 :" + strInput);
+            if (CustomerType.equals("Existing")){
+                CustomerList = executeHQLQuery(QUERY_BASED_ON_CUSTOMER_STREET + txtStreet.getText() + "%'");
+                switch (CustomerList.size()){
+                    case 0:
+                        displayMessage("There is no customer with Street containing '" + txtStreet.getText() + "'");
+                        break;
+                    case 1:
+                        for(Object obj : CustomerList){
+                            new_customer = (Customer)obj;
+                            fillInfo(new_customer);
+                            //fillBusinessInfo(new_customer);
+                        }
+                        btnNext.setEnabled(true);
+                        btnSave.setEnabled(true);
+                        break;
+                    default:
+                        System.out.println("multiple records");
+                        //String sqlStmt = "select CustomerName, Address from Customer where Address like '%" + strInput + "%'";
+                        //rs = SQLConnection.getMultipleRecordsRS(sqlStmt);
+                        //for(Object obj : CustomerList){
+                        //    Customer new_customer = (Customer)obj;
+                            //fillInfo(new_customer);
+                        //}
+                        MultipleRecords MultipleCustomers = new MultipleRecords();
+                        MultipleCustomers.init();
+                        MultipleCustomers.dispose();
+                        btnNext.setEnabled(true);
+                        btnSave.setEnabled(true);
+                        break;
                 }
             }
             else {
                 System.out.println("new customer");
-                if (txtStreet.getText().length() <= 5){
-                    JOptionPane.showMessageDialog(null,"Customer Street is less than 5 characters","Street Name too short!!!",JOptionPane.ERROR_MESSAGE);
-                }
+                if (txtStreet.getText().length() <= 5){displayMessage("Customer Street is less than 5 characters","Street Name too short!!!");}
             }
         }
     }//GEN-LAST:event_txtStreetKeyPressed
 
     private void rbPMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbPMActionPerformed
-        if (rbPM.isSelected()){
-            DaySched = rbPM.getText();
-        }
+        if (rbPM.isSelected()){DaySched = rbPM.getText();}
     }//GEN-LAST:event_rbPMActionPerformed
 
     private void rbAMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbAMActionPerformed
-        if (rbAM.isSelected()){
-            DaySched = rbAM.getText();
-        }
+        if (rbAM.isSelected()){DaySched = rbAM.getText();}
     }//GEN-LAST:event_rbAMActionPerformed
 
     private void rbAnytimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbAnytimeActionPerformed
-        if (rbAnytime.isSelected()){
-            DaySched = rbAnytime.getText();
-        }
+        if (rbAnytime.isSelected()){DaySched = rbAnytime.getText();}
     }//GEN-LAST:event_rbAnytimeActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        SaveDlg save_dlg = new SaveDlg();
-        save_dlg.init();
-        save_dlg.dispose();
+        //SaveDlg save_dlg = new SaveDlg();
+        //save_dlg.init();
+        //save_dlg.dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
@@ -1919,25 +1941,13 @@ public class CreateSR extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDocumentationActionPerformed
 
     private void txtCityKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCityKeyPressed
-        if ((evt.getKeyCode() == KeyEvent.VK_ENTER) || (evt.getKeyCode() == KeyEvent.VK_TAB)) {
-            if (CustomerType == "New"){
-                if (txtCity.getText().isEmpty()){
-                    JOptionPane.showMessageDialog(null,"City is a mandatory field","City is Mandatory!!",JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        }
+        if ((evt.getKeyCode() == KeyEvent.VK_ENTER) && (CustomerType.equals("New")) && (txtCity.getText().isEmpty())){displayMessage("City is a mandatory field","City is Mandatory!!");}
     }//GEN-LAST:event_txtCityKeyPressed
 
     private void txtPhone1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPhone1KeyPressed
-        if ((evt.getKeyCode() == KeyEvent.VK_ENTER) ) {
-            if (CustomerType == "New"){
-                if (txtPhone1.getText().isEmpty()){
-                    JOptionPane.showMessageDialog(null,"Phone # is a mandatory field","Phone# is Mandatory!!",JOptionPane.ERROR_MESSAGE);
-                }
-                else{
-                    btnSave.setEnabled(true);
-                }
-            }
+        if (((evt.getKeyCode() == KeyEvent.VK_ENTER) ) && (CustomerType.equals("New"))){
+            if (txtPhone1.getText().isEmpty()){displayMessage("Phone # is a mandatory field","Phone# is Mandatory!!");}
+            else{btnSave.setEnabled(true);}
         }
     }//GEN-LAST:event_txtPhone1KeyPressed
 
@@ -1948,73 +1958,67 @@ public class CreateSR extends javax.swing.JFrame {
     private void txtBillingNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBillingNameKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER){
             if (txtBillingName.getText().length() == 0){
-                for (Component cp : pnlFreq.getComponents() ){
-                    cp.setEnabled(true);
-                    pnlFreq.requestFocus();
-                }
-                for (Component cp : pnlPayment.getComponents() ){
-                    cp.setEnabled(true);
-                }
-                for (Component cp : pnlService.getComponents() ){
-                    cp.setEnabled(true);
-                }
-                for (Component cp : pnlSchedule.getComponents() ){
-                    cp.setEnabled(true);
-                }
+                for (Component cp : pnlFreq.getComponents() ){cp.setEnabled(true);pnlFreq.requestFocus();}
+                for (Component cp : pnlPayment.getComponents() ){cp.setEnabled(true);}
+                for (Component cp : pnlService.getComponents() ){cp.setEnabled(true);}
+                for (Component cp : pnlSchedule.getComponents() ){cp.setEnabled(true);}
             }
             else if (txtBillingName.getText().length() > 3) {
-                for (Component cp : pnlBillingCustomer.getComponents() ){
-                    cp.setEnabled(true);
-                    txtBillingAlias.requestFocus();
+                //first we need to check if the Billing name is existing
+                BusinessList = executeHQLQuery(QUERY_BASED_ON_BILLING_NAME + txtBillingName.getText() + "%'");
+                System.out.println("BillingList retrieved");
+                switch (BusinessList.size()){
+                    //case 0:
+                    //    displayMessage("There is no customer with Name containing '" + txtCustomer.getText() + "'");
+                    //    break;
+                    case 1:
+                        for(Object obj : BusinessList){
+                            //Object obj = new BillingList();
+                            new_business = (Business)obj;
+                            fillBusinessInfo(new_business);
+                            List BundleList = executeHQLQuery(QUERY_BASED_ON_BUNDLES);
+                            fillBundleInfo(BundleList);
+                            List DeptList = executeHQLQuery(QUERY_BASED_ON_DEPARTMENT);
+                            fillDeptInfo(DeptList);
+                        }
+                        System.out.println("after fillinfo");
+
+                        btnNext.setEnabled(true);
+                        btnSave.setEnabled(true);
+                        break;
+                    default:
+                        //System.out.println("multiple records");
+                        //sqlStmt = "select CustomerName, Address from Customer where CustomerName like '%" + strInput + "%'";
+                        //String tblName = "Customer";
+                        //rs = SQLConnection.getMultipleRecordsRS(sqlStmt);
+                        MultipleRecords MultipleCustomers = new MultipleRecords();
+                        MultipleCustomers.init();
+                        MultipleCustomers.dispose();
+                        btnNext.setEnabled(true);
+                        btnSave.setEnabled(true);
+                        pnlFreq.requestFocus();
+                        break;
                 }
-                for (Component cp : pnlFreq.getComponents() ){
-                    cp.setEnabled(true);
-                }
-                for (Component cp : pnlPayment.getComponents() ){
-                    cp.setEnabled(true);
-                }
-                for (Component cp : pnlService.getComponents() ){
-                    cp.setEnabled(true);
-                }
-                for (Component cp : pnlSchedule.getComponents() ){
-                    cp.setEnabled(true);
-                }
+                for (Component cp : pnlBillingCustomer.getComponents() ){cp.setEnabled(true);txtBillingAlias.requestFocus();}
+                for (Component cp : pnlFreq.getComponents() ){cp.setEnabled(true);}
+                for (Component cp : pnlPayment.getComponents() ){cp.setEnabled(true);}
+                for (Component cp : pnlService.getComponents() ){cp.setEnabled(true);}
+                for (Component cp : pnlSchedule.getComponents() ){cp.setEnabled(true);}
             }
-            else{
-                JOptionPane.showMessageDialog(null,"Billing Name is less than 4 characters","Billing Name too short!!!",JOptionPane.ERROR_MESSAGE);
-                txtBillingName.requestFocus();
-            }
+            else{displayMessage("Billing Name is less than 4 characters","Billing Name too short!!!");txtBillingName.requestFocus();}
         }
     }//GEN-LAST:event_txtBillingNameKeyPressed
 /**/
     private void txtBillingStreetKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBillingStreetKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER){
-            if (txtBillingStreet.getText().length() <= 5){
-                JOptionPane.showMessageDialog(null,"Billing Street is less than 5 characters","Street Name too short!!!",JOptionPane.ERROR_MESSAGE);
-                txtBillingStreet.requestFocus();
-            }
-        }
+        if ((evt.getKeyCode() == KeyEvent.VK_ENTER) && (txtBillingStreet.getText().length() <= 5)){displayMessage("Billing Street is less than 5 characters","Street Name too short!!!");txtBillingStreet.requestFocus();}
     }//GEN-LAST:event_txtBillingStreetKeyPressed
 
     private void txtBillingCityKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBillingCityKeyPressed
-        if ((evt.getKeyCode() == KeyEvent.VK_ENTER)) {
-            if (CustomerType == "New"){
-                if (txtBillingCity.getText().isEmpty()){
-                    JOptionPane.showMessageDialog(null,"Billing City is a mandatory field","City is Mandatory!!",JOptionPane.ERROR_MESSAGE);
-                    txtBillingCity.requestFocus();
-                }
-            }
-        }
+        if (((evt.getKeyCode() == KeyEvent.VK_ENTER)) && (CustomerType.equals("New")) && (txtBillingCity.getText().isEmpty())){displayMessage("Billing City is a mandatory field","City is Mandatory!!");txtBillingCity.requestFocus();}
     }//GEN-LAST:event_txtBillingCityKeyPressed
 
     private void txtBillingPhone1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBillingPhone1KeyPressed
-        if ((evt.getKeyCode() == KeyEvent.VK_ENTER)) {
-            if (CustomerType.equals("New")){
-                if (txtBillingPhone1.getText().isEmpty()){
-                    JOptionPane.showMessageDialog(null,"Billing Phone is a mandatory field","Phone is Mandatory!!",JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        }
+        if ((evt.getKeyCode() == KeyEvent.VK_ENTER) && ((CustomerType.equals("New")) && (txtBillingPhone1.getText().isEmpty()))){displayMessage("Billing Phone is a mandatory field","Phone is Mandatory!!");}
     }//GEN-LAST:event_txtBillingPhone1KeyPressed
 
     private void jCalendar1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCalendar1MouseReleased
@@ -2035,16 +2039,10 @@ public class CreateSR extends javax.swing.JFrame {
             DlgCntnr.add(Lbl);
             DlgCntnr.add(CustList);
             //fill CustList with the records
-            try {
-                //System.out.println("MultipleRecords " + sqlStmt);
-                while (rs.next()){
-                    CustList.addItem(makeObj(rs.getString("CustomerName") + " at " + rs.getString("Address")));
-                }
-            }
-            catch (SQLException ex) {
-                    Logger.getLogger(CreateSR.class.getName()).log(Level.SEVERE, null, ex);
-                    //if (stmt != null) { stmt.close(); }
-                    System.out.println("error");      
+            for(Object obj : CustomerList){
+                new_customer = (Customer)obj;
+                
+                CustList.addItem(new_customer.getCid() +"|" + new_customer.getCustomerName() + " at " + new_customer.getAddress());
             }
             AskPanel.add(BtnOK);
             DlgCntnr.add(AskPanel);
@@ -2057,152 +2055,175 @@ public class CreateSR extends javax.swing.JFrame {
         private Object makeObj(final String item)  {
             return new Object() { public String toString() { return item; } };
         }
-        public void dispose()
-        {
-            Dlg.dispose();
-        }
+        public void dispose(){Dlg.dispose();}
         public void actionPerformed(ActionEvent e1){
-            //System.out.println("actioned performed by ");      
+            System.out.println("actioned performed by ");      
             if(e1.getSource() == BtnOK){
-                //return the item/recordset which was selected
+                //return the item which was selected
+                //Session session = factory.openSession();
+                //Transaction tx = null;
+                try{
+                    //tx = session.beginTransaction();
+                    System.out.println("Selected customer is:" + CustList.getSelectedItem().toString());
+                    String delims = "[|]";
+                    String [] tokens = CustList.getSelectedItem().toString().split(delims);
+                    System.out.println("Selected ID is " + tokens[0]);
+              
+                    //Customer 
+                    new_customer = (Customer)session.get(Customer.class, Integer.getInteger(tokens[0]));
+                    txtCustomer.setText(new_customer.getCustomerName());
+                    /*txtCustInfo.setText(my_customer.getNotes());
+                    txtCustomer.setText(my_customer.getCustomerName());
+                    txtCustInfo.setText(my_customer.getNotes());
+                    txtStreet.setText(my_customer.getAddress());
+                    txtStreetInfo.setText(my_customer.getAddressNotes());
+                    txtCity.setText(my_customer.getCity());
+                    txtProv.setText(my_customer.getProvince());
+                    txtPostalCode.setText(my_customer.getPostalCode());
+                    txtContact.setText(my_customer.getContactName());
+                    txtPhone1.setText(my_customer.getPrimaryPhone());
+                    txtExt1.setText(my_customer.getExt());
+                    txtPhone2.setText(my_customer.getSecondaryPhone());
+                    txtExt2.setText(my_customer.getExt2());
+                    txtFax.setText(my_customer.getFax());
+                    txtEmail.setText(my_customer.getEmailAddress());
+                    cmbBundles.setSelectedItem(my_customer.getBundles().getBundleName());
+                    if ((my_customer.getBundles().getBundleName()).isEmpty()){cbBundle.setSelected(false);}
+                    txtBillingDept.setText(my_customer.getDepartment().getDeptName());
+                    //txtBillingContract.setText(new_customer.getDepartment().getContractNr());
+
+                    txtBillingName.setText(my_customer.getBusiness().getName());
+                    txtBillingAlias.setText(my_customer.getBusiness().getAlias());
+                    txtBillingStreet.setText(my_customer.getBusiness().getAddress());
+                    txtBillingCity.setText(my_customer.getBusiness().getCity());
+                    txtBillingProv.setText(my_customer.getBusiness().getProvince());
+                    txtBillingPostalCode.setText(my_customer.getBusiness().getPostalCode());
+                    txtBillingContact.setText(my_customer.getBusiness().getContactName());
+                    txtBillingPhone1.setText(my_customer.getBusiness().getPrimaryPhone());
+                    txtBillingExt1.setText(my_customer.getBusiness().getExt());
+                    txtBillingPhone2.setText(my_customer.getBusiness().getSecondaryPhone());
+                    txtBillingExt2.setText(my_customer.getBusiness().getExt2());
+                    txtBillingFax.setText(my_customer.getBusiness().getFax());
+                    txtBillingEmail.setText(my_customer.getBusiness().getEmailAddress());
+                    */
+                    tx.commit();
+                }catch (HibernateException e) {
+                    if (tx!=null) tx.rollback();
+                        e.printStackTrace(); 
+                }
+                //finally {
+                //    session.close(); 
+                //}
+                
                 //System.out.println("actioned performed " + CustList.getSelectedItem().toString().replace(" at ", "|"));
-                String new_String = CustList.getSelectedItem().toString().replace(" at ", "|");
-                String delims = "[|]";
-                String [] tokens = new_String.split(delims);
+                //String new_String = CustList.getSelectedItem().toString().replace(" at ", "|");
+                //String delims = "[|]";
+                //String [] tokens = new_String.split(delims);
                 //System.out.println("actioned " + tokens[0]);
                 //System.out.println("another " + tokens[1]);
                 
-                sqlStmt = "select CID,CustomerName,Notes,Address,AddressNotes,City,Province,PostalCode,ContactName,PrimaryPhone,Ext,SecondaryPhone,Ext2,Fax,EmailAddress,BID,BundleName,DepartmentName,ContractNr,UID from Customer where Address = '" + tokens[1] + "' and CustomerName = '" + tokens[0] + "'";
+                //sqlStmt = "select CID,CustomerName,Notes,Address,AddressNotes,City,Province,PostalCode,ContactName,PrimaryPhone,Ext,SecondaryPhone,Ext2,Fax,EmailAddress,BID,BundleName,DepartmentName,ContractNr,UID from Customer where Address = '" + tokens[1] + "' and CustomerName = '" + tokens[0] + "'";
                 //rs = SQLConnection.getRecordSet(sqlStmt);
-                fillInfo(rs);
+                //fillInfo(rs);
                 Dlg.dispose();
             }
         }
     }
-    
-    public void fillInfo(ResultSet rs){
-        /*System.out.println("fillInfo");
-        Customer this_cust = new Customer(rs);
-        txtCustomer.setText(this_cust.CustName);
-        txtCustInfo.setText(this_cust.Notes);
-        txtStreet.setText(this_cust.Address);
-        txtStreetInfo.setText(this_cust.AddressNotes);
-        txtCity.setText(this_cust.City);
-        txtProv.setText(this_cust.Province);
-        txtPostalCode.setText(this_cust.PostalCode);
-        txtContact.setText(this_cust.ContactName);
-        txtPhone1.setText(this_cust.Phone1);
-        txtExt1.setText(this_cust.Ext);
-        txtPhone2.setText(this_cust.Phone2);
-        txtExt2.setText(this_cust.Ext2);
-        txtFax.setText(this_cust.Fax);
-        txtEmail.setText(this_cust.Email);
-        cbBundle.setSelected(this_cust.Bundle);
-        txtBillingDept.setText(this_cust.Department);
-        txtBillingContract.setText(this_cust.ContractNr);
+    public void fillInfo(Customer new_customer){
+        System.out.println("fill Customer Info");
         
-        System.out.println(""+this_cust.CustID);
-        try{        
-            if (rs.getInt("BID") != 0){
-                
-                BusinessID = rs.getInt("BID");
-                //BID = BusinessID.toString();
-                sqlStmt = "select BID,Name,Alias,Address,City,Province,PostalCode,ContactName,PrimaryPhone,Ext,SecondaryPhone,Ext2,Fax,EmailAddress from Business_Details where BID = '" + BusinessID + "';";
-                //tblName = "Business_Details";
-                rs = SQLConnection.getRecordSet(sqlStmt);
-                BillingName this_business = new BillingName(rs);
-                txtBillingName.setText(this_business.BillingName);
-                txtBillingAlias.setText(this_business.Alias);
-                txtBillingStreet.setText(this_business.Address);
-                txtBillingCity.setText(this_business.City);
-                txtBillingProv.setText(this_business.Province);
-                txtBillingPostalCode.setText(this_business.PostalCode);
-                txtBillingContact.setText(this_business.ContactName);
-                txtBillingPhone1.setText(this_business.Phone1);
-                txtBillingExt1.setText(this_business.Ext);
-                txtBillingPhone2.setText(this_business.Phone2);
-                txtBillingExt2.setText(this_business.Ext2);
-                txtBillingFax.setText(this_business.Fax);
-                txtBillingEmail.setText(this_business.Email);
-                //DeptID = 0;
-                //if (this_cust.Department != "" && !this_cust.Department.isEmpty()){
-                //    sqlStmt = "select DID from Department where DeptName = '" + this_cust.Department + "';";
-                //    DeptID = SQLConnection.getRecordSet(sqlStmt).getInt("DID");
-                //}
-                System.out.println("loading SR:" + "0," +this_cust.CustID +"," +BusinessID+","+this_cust.BundleName+"," +avoid_null(txtPO.getText()).toString()+ ","+Freq+"," +ServiceType+","+Payment+","+DaySched+","+jCalendar1.getDate().toString()) ; 
-                ServiceRequest new_SR = new ServiceRequest(this_cust.CustID,BusinessID,this_cust.BundleName,avoid_null(txtPO.getText()).toString(),Freq,ServiceType,Payment,DaySched,jCalendar1.getDate().toString(),"","",0) ;
-                //remove items from the Department list and Contract #
-                //cmbDepartmentName.removeAllItems();
-                //cmbContractNr.removeAllItems();
-                //cmbDepartmentName.setEditable(true);
-                //cmbContractNr.setEditable(true);
-                
-                //sqlStmt = "select DepartmentName,ContractNr from Department where BID = '" + this_business.BusinessID + "'";
-                //tblName = "Department";
-                //rs = SQLConnection.getMultipleRecordsRS(sqlStmt);
-                //while (rs.next()){
-                    //get available bundles
-                //    cmbDepartmentName.addItem((String) (rs.getString("DepartmentName")));               
-                //    cmbContractNr.addItem((String) (rs.getString("ContractNr")));               
-                //}
-                //cmbDepartment.setSelectedItem(this_cust.DepartmentName);
-                //cmbContractNr.setSelectedItem(this_cust.ContractNr);
-                
-                //remove items from the cmbBundles list
-                cmbBundles.removeAllItems();
-                cmbBundles.setEditable(true);
-                sqlStmt = "select BundleName from Bundles where BID = '" + this_business.BusinessID + "'";
-                //tblName = "Business_Details";
-                rs = SQLConnection.getMultipleRecordsRS(sqlStmt);
-                while (rs.next()){
-                    //get available bundles
-                    cmbBundles.addItem((String) (rs.getString("BundleName")));               
-                }
-                cmbBundles.setSelectedItem(this_cust.BundleName);  
-            }
-            else{
-                BillingName this_business = new BillingName();
-                txtBillingName.setText(this_business.BillingName);
-                txtBillingAlias.setText(this_business.Alias);
-                txtBillingStreet.setText(this_business.Address);
-                txtBillingCity.setText(this_business.City);
-                txtBillingProv.setText(this_business.Province);
-                txtBillingPostalCode.setText(this_business.PostalCode);
-                txtBillingContact.setText(this_business.ContactName);
-                txtBillingPhone1.setText(this_business.Phone1);
-                txtBillingExt1.setText(this_business.Ext);
-                txtBillingPhone2.setText(this_business.Phone2);
-                txtBillingExt2.setText(this_business.Ext2);
-                txtBillingFax.setText(this_business.Fax);
-                txtBillingEmail.setText(this_business.Email);
-                txtBillingDept.setText("'");
-                txtBillingContract.setText("");
-                /*
-                txtBillingName.setText("");
-                txtBillingAlias.setText("");
-                txtBillingStreet.setText("");
-                txtBillingCity.setText("");
-                txtBillingProv.setText("");
-                txtBillingPostalCode.setText("");
-                txtBillingContact.setText("");
-                txtBillingPhone1.setText("");
-                txtBillingExt1.setText("");
-                txtBillingPhone2.setText("");
-                txtBillingExt2.setText("");
-                txtBillingFax.setText("");
-                txtBillingEmail.setText("");
-                txtBillingDept.setText("");
-                txtBillingContract.setText("");*/
-        /*    }
-        }    
-         catch (SQLException ex) {
-            Logger.getLogger(ServiceReceipt.class.getName()).log(Level.SEVERE, null, ex);
-            //if (stmt != null) { stmt.close(); }
-            System.out.println("error");      
-            }
-        */
+        txtCustomer.setText(new_customer.getCustomerName());
+        txtCustInfo.setText(new_customer.getNotes());
+        txtStreet.setText(new_customer.getAddress());
+        txtStreetInfo.setText(new_customer.getAddressNotes());
+        txtCity.setText(new_customer.getCity());
+        txtProv.setText(new_customer.getProvince());
+        txtPostalCode.setText(new_customer.getPostalCode());
+        txtContact.setText(new_customer.getContactName());
+        txtPhone1.setText(new_customer.getPrimaryPhone());
+        txtExt1.setText(new_customer.getExt());
+        txtPhone2.setText(new_customer.getSecondaryPhone());
+        txtExt2.setText(new_customer.getExt2());
+        txtFax.setText(new_customer.getFax());
+        txtEmail.setText(new_customer.getEmailAddress());
+        cmbBundles.setSelectedItem(new_customer.getBundles().getBundleName());
+        if ((new_customer.getBundles().getBundleName()).isEmpty()){cbBundle.setSelected(false);}
+        txtBillingName.setText(new_customer.getBusiness().getName());
+        txtBillingAlias.setText(new_customer.getBusiness().getAlias());
+        txtBillingStreet.setText(new_customer.getBusiness().getAddress());
+        txtBillingCity.setText(new_customer.getBusiness().getCity());
+        txtBillingProv.setText(new_customer.getBusiness().getProvince());
+        txtBillingPostalCode.setText(new_customer.getBusiness().getPostalCode());
+        txtBillingContact.setText(new_customer.getBusiness().getContactName());
+        txtBillingPhone1.setText(new_customer.getBusiness().getPrimaryPhone());
+        txtBillingExt1.setText(new_customer.getBusiness().getExt());
+        txtBillingPhone2.setText(new_customer.getBusiness().getSecondaryPhone());
+        txtBillingExt2.setText(new_customer.getBusiness().getExt2());
+        txtBillingFax.setText(new_customer.getBusiness().getFax());
+        txtBillingEmail.setText(new_customer.getBusiness().getEmailAddress());
     }
-    
+    public void fillCustomerInfo(Customer new_customer){
+        System.out.println("fill Customer Info");
+        
+        txtCustomer.setText(new_customer.getCustomerName());
+        txtCustInfo.setText(new_customer.getNotes());
+        txtStreet.setText(new_customer.getAddress());
+        txtStreetInfo.setText(new_customer.getAddressNotes());
+        txtCity.setText(new_customer.getCity());
+        txtProv.setText(new_customer.getProvince());
+        txtPostalCode.setText(new_customer.getPostalCode());
+        txtContact.setText(new_customer.getContactName());
+        txtPhone1.setText(new_customer.getPrimaryPhone());
+        txtExt1.setText(new_customer.getExt());
+        txtPhone2.setText(new_customer.getSecondaryPhone());
+        txtExt2.setText(new_customer.getExt2());
+        txtFax.setText(new_customer.getFax());
+        txtEmail.setText(new_customer.getEmailAddress());
+        cmbBundles.setSelectedItem(new_customer.getBundles().getBundleName());
+        if ((new_customer.getBundles().getBundleName()).isEmpty()){cbBundle.setSelected(false);}
+        cmbDepartmentName.setSelectedItem(new_customer.getDepartment().getDeptName());
+        cmbContractNr.setSelectedItem(new_customer.getDepartment().getContractNr());
+        
+    }    
+    public void fillBusinessInfo(Business new_business){
+        System.out.println("fillInfo");
+        
+        txtBillingName.setText(new_business.getName());
+        txtBillingAlias.setText(new_business.getAlias());
+        txtBillingStreet.setText(new_business.getAddress());
+        txtBillingCity.setText(new_business.getCity());
+        txtBillingProv.setText(new_business.getProvince());
+        txtBillingPostalCode.setText(new_business.getPostalCode());
+        txtBillingContact.setText(new_business.getContactName());
+        txtBillingPhone1.setText(new_business.getPrimaryPhone());
+        txtBillingExt1.setText(new_business.getExt());
+        txtBillingPhone2.setText(new_business.getSecondaryPhone());
+        txtBillingExt2.setText(new_business.getExt2());
+        txtBillingFax.setText(new_business.getFax());
+        txtBillingEmail.setText(new_business.getEmailAddress());
+        //cmbDepartment.setSelectedItem(this_cust.DepartmentName);
+        //cmbContractNr.setSelectedItem(this_cust.ContractNr);
+    }
+    public void fillBundleInfo(List bundleList){
+        Bundles new_bundle = new Bundles();
+        cmbBundles.removeAllItems();
+        cmbBundles.setEditable(true);
+        for (Iterator iterator = bundleList.iterator(); iterator.hasNext();){
+            Bundles my_bundles = (Bundles) iterator.next(); 
+            cmbBundles.addItem((String) my_bundles.getBundleName());
+        }
+    }
+    public void fillDeptInfo(List deptList){
+        cmbDepartmentName.removeAllItems();
+        cmbContractNr.removeAllItems();
+        cmbDepartmentName.setEditable(true);
+        cmbContractNr.setEditable(true);
+        for (Iterator iterator = deptList.iterator(); iterator.hasNext();){
+            Department my_dept = (Department) iterator.next(); 
+            cmbDepartmentName.addItem((String) my_dept.getDeptName());
+            cmbContractNr.addItem((String) my_dept.getContractNr());
+        }
+    }        
     /*
     public void create_service_request(){
         try{
@@ -2257,24 +2278,78 @@ public class CreateSR extends javax.swing.JFrame {
         }
     }
     */
-    public Object avoid_null(Object field_value){
-        return (field_value == null) ? "": field_value;
-    }
+    public Object avoid_null(Object field_value){return (field_value == null) ? "": field_value;}
     
     public void allow_vk_tab(){
     //@see JTable constructor
     Set<KeyStroke> forwardKeys = new HashSet<KeyStroke>(1);
-    forwardKeys.add(KeyStroke.getKeyStroke(
-        KeyEvent.VK_TAB, InputEvent.CTRL_MASK));
-    setFocusTraversalKeys(
-        KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, forwardKeys);
+    forwardKeys.add(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.CTRL_MASK));
+    setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, forwardKeys);
 
     Set<KeyStroke> backwardKeys = new HashSet<KeyStroke>(1);
-    backwardKeys.add(KeyStroke.getKeyStroke(
-        KeyEvent.VK_TAB, InputEvent.SHIFT_MASK | InputEvent.CTRL_MASK));
-    setFocusTraversalKeys(
-        KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, backwardKeys);
+    backwardKeys.add(KeyStroke.getKeyStroke(KeyEvent.VK_TAB, InputEvent.SHIFT_MASK | InputEvent.CTRL_MASK));
+    setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, backwardKeys);
     }
+    
+    /*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+
+public class MyInterceptor extends EmptyInterceptor {
+    private int updates;
+    private int creates;
+    private int loads;
+
+    public void onDelete(Object entity,
+                    Serializable id,
+                    Object[] state,
+                    String[] propertyNames,
+                    org.hibernate.type.Type[] types) {
+       // do nothing
+   }
+
+   // This method is called when Employee object gets updated.
+    public boolean onFlushDirty(Object entity,
+                    Serializable id,
+                    Object[] currentState,
+                    Object[] previousState,
+                    String[] propertyNames,
+                    org.hibernate.type.Type[] types) {
+        if ( entity instanceof Customer ) {
+            System.out.println("Update Operation");
+            return true; 
+        }
+        return false;
+    }
+    public boolean onLoad(Object entity,
+                    Serializable id,
+                    Object[] state,
+                    String[] propertyNames,
+                    org.hibernate.type.Type[] types) {
+        // do nothing
+        return true;
+    }
+    // This method is called when Employee object gets created.
+    public boolean onSave(Object entity,
+                    Serializable id,
+                    Object[] state,
+                    String[] propertyNames,
+                    org.hibernate.type.Type[] types) {
+        if ( entity instanceof Customer ) {
+            System.out.println("Create Operation");
+            return true; 
+        }
+        return false;
+    }
+    //called before commit into database
+    public void preFlush(Iterator iterator) {System.out.println("preFlush");}
+    //called after committed into database
+    public void postFlush(Iterator iterator) {System.out.println("postFlush");}
+}
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDocumentation;
@@ -2284,6 +2359,8 @@ public class CreateSR extends javax.swing.JFrame {
     private javax.swing.JRadioButton btngrpPerService;
     private javax.swing.JCheckBox cbBundle;
     private javax.swing.JComboBox<String> cmbBundles;
+    private javax.swing.JComboBox<String> cmbContractNr;
+    private javax.swing.JComboBox<String> cmbDepartmentName;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblAvailBundles;
     private javax.swing.JLabel lblBillingAlias;
@@ -2347,8 +2424,6 @@ public class CreateSR extends javax.swing.JFrame {
     private javax.swing.JTextField txtBillingAlias;
     private javax.swing.JTextField txtBillingCity;
     private javax.swing.JTextField txtBillingContact;
-    private javax.swing.JTextField txtBillingContract;
-    private javax.swing.JTextField txtBillingDept;
     private javax.swing.JTextField txtBillingEmail;
     private javax.swing.JTextField txtBillingExt1;
     private javax.swing.JTextField txtBillingExt2;

@@ -2,16 +2,14 @@ package com.mycompany.propco_maven;
 
 
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import propco_maven.util.HibernateUtil;
 
 /*
@@ -54,16 +52,21 @@ public class Login extends javax.swing.JFrame {
     }
     
     private void executeHQLQuery(String query){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
         try{
-            Session session = HibernateUtil.getSessionFactory().openSession();
-            session.beginTransaction();
+            tx = session.beginTransaction();
             Query q = session.createQuery(query);
             List resultList = q.list();
             returnResult(resultList);
-            session.getTransaction().commit();
+            tx.commit();
         }
         catch (HibernateException he){
+            if (tx!=null) tx.rollback();
             he.printStackTrace();
+        }
+        finally{
+            session.close();
         }
     }
     /**
@@ -172,12 +175,17 @@ public class Login extends javax.swing.JFrame {
             txtUserName.requestFocus();
             txtUserName.setText("");
         }
-        for(Object obj : resultList){
-            Users new_user = (Users)obj;
-            user_id = new_user.getUid();
-            String user_name = new_user.getUserName();
+        //List resultList = session.createQuery("FROM Employee").list(); 
+         for (Iterator iterator = 
+                           resultList.iterator(); iterator.hasNext();){
+            Users user = (Users) iterator.next(); 
+            
+        //for(Object obj : resultList){
+            //Users new_user = (Users)obj;
+            user_id = user.getUid();
+            String user_name = user.getUserName();
             char[] ppaswd = txtPassword.getPassword();
-            char [] dbpassArray = new_user.getPassword().toCharArray();
+            char[] dbpassArray = user.getPassword().toCharArray();
             
             if(Arrays.equals(dbpassArray,ppaswd)){
                     MainMenu regFace = new MainMenu();
