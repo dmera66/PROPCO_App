@@ -16,12 +16,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import javax.swing.ButtonGroup;
@@ -1431,13 +1428,13 @@ public class CreateSR extends javax.swing.JFrame {
     }
     
     private List executeHQLQuery(String query){
-        System.out.println("Session executeHQLQuery opened");
+        //System.out.println("Session executeHQLQuery opened");
         resultList = null;
         try{
             tx = session.beginTransaction();
-            System.out.println("Session executeHQLQuery tx begin");
+            //System.out.println("Session executeHQLQuery tx begin");
             Query q = session.createQuery(query);
-            System.out.println("Session executeHQLQuery query completed");
+            //System.out.println("Session executeHQLQuery query completed");
             resultList = q.list();
             tx.commit();
         }
@@ -1481,12 +1478,14 @@ public class CreateSR extends javax.swing.JFrame {
         return CustID;
     }
    
-    public void UpdateCustomer(Integer CustID,Integer BDLID, Business business, Department department, Users users, String customerName, String notes, String address, String addressNotes, String city, String province, String postalCode, String contactName, String primaryPhone, String ext, String secondaryPhone, String ext2, String other, String fax, String emailAddress, String contractNr, Date creationDate, Date updateDate, Set serviceRequests){
+    public void UpdateCustomer(Integer CustID,Integer BDLID, byte BID, Integer DID, byte UID, String customerName, String notes, String address, String addressNotes, String city, String province, String postalCode, String contactName, String primaryPhone, String ext, String secondaryPhone, String ext2, String fax, String emailAddress, String contractNr){
         //Bundles bundles, Business business, Department department, String contractNr Set serviceRequests
-        session = HibernateUtil.getSessionFactory().openSession();
-        tx = null;
+        System.out.println("update customer");
+        //session = HibernateUtil.getSessionFactory().openSession();
+        //tx = null;
         try{
-            tx = session.beginTransaction();
+            //tx = session.beginTransaction();
+            
             Customer update_customer = (Customer)session.get(Customer.class,CustID);
             Bundles update_bundle = (Bundles)session.get(Bundles.class,BDLID);
             Business update_business = (Business)session.get(Business.class,BID);
@@ -1502,11 +1501,9 @@ public class CreateSR extends javax.swing.JFrame {
             update_customer.setExt(ext);
             update_customer.setSecondaryPhone(secondaryPhone);
             update_customer.setExt2(ext2);
-            update_customer.setOther(other);
             update_customer.setFax(fax);
             update_customer.setEmailAddress(emailAddress);
-            update_customer.setUpdateDate(updateDate);
-            update_customer.setBusiness(business)  ;
+            //update_customer.setUpdateDate(DateUtils.now_date_time());
         }
         catch (HibernateException e) {
             if (tx!=null) tx.rollback();
@@ -1694,6 +1691,9 @@ public class CreateSR extends javax.swing.JFrame {
                 {
                     //String bundle = "";
                     if (CustomerType == "Existing"){
+                        System.out.println("trying to save customer!");
+                        UpdateCustomer(new_customer.getCid(),new_customer.getBundles().getBdlid(),new_customer.getBusiness().getBid(),new_customer.getDepartment().getDid(),new_customer.getUsers().getUid(), txtCustomer.getText(),txtCustInfo.getText(),txtStreet.getText(),txtStreetInfo.getText(),txtCity.getText(),txtProv.getText(),txtPostalCode.getText(),txtContact.getText(),txtPhone1.getText(),txtExt1.getText(),txtPhone2.getText(),txtExt2.getText(),txtFax.getText(),txtEmail.getText(), cmbContractNr.getSelectedItem().toString());
+//Integer CustID,Integer BDLID, Business business, Department department, Users users, String customerName, String notes, String address, String addressNotes, String city, String province, String postalCode, String contactName, String primaryPhone, String ext, String secondaryPhone, String ext2, String other, String fax, String emailAddress, String contractNr, Date creationDate, Date updateDate, Set serviceRequests
                         //ME.updateCustomer(txtCustomer.getText(),txtCustInfo.getText(),txtStreet.getText(),txtStreetInfo.getText(),txtCity.getText(),txtProv.getText(),txtPostalCode.getText(),txtContact.getText(),txtPhone1.getText(),txtExt1.getText(),txtPhone2.getText(),txtExt2.getText(),txtFax.getText(),txtEmail.getText(),txtBillingDept.getText(),txtBillingContract.getText(),DateUtils.now_date_time());
                     }else{
                         //new_customer
@@ -1824,6 +1824,9 @@ public class CreateSR extends javax.swing.JFrame {
 
                         btnNext.setEnabled(true);
                         btnSave.setEnabled(true);
+                        cmbBundles.setEditable(true);
+                        cmbDepartmentName.setEditable(true);
+                        cmbContractNr.setEditable(true);
                         break;
                     default:
                         //System.out.println("multiple records");
@@ -1835,6 +1838,9 @@ public class CreateSR extends javax.swing.JFrame {
                         MultipleCustomers.dispose();
                         btnNext.setEnabled(true);
                         btnSave.setEnabled(true);
+                        cmbBundles.setEditable(true);
+                        cmbDepartmentName.setEditable(true);
+                        cmbContractNr.setEditable(true);
                         pnlFreq.requestFocus();
                         break;
                 }
@@ -1872,6 +1878,9 @@ public class CreateSR extends javax.swing.JFrame {
                         }
                         btnNext.setEnabled(true);
                         btnSave.setEnabled(true);
+                        cmbBundles.setEditable(true);
+                        cmbDepartmentName.setEditable(true);
+                        cmbContractNr.setEditable(true);
                         break;
                     default:
                         System.out.println("multiple records");
@@ -1886,6 +1895,9 @@ public class CreateSR extends javax.swing.JFrame {
                         MultipleCustomers.dispose();
                         btnNext.setEnabled(true);
                         btnSave.setEnabled(true);
+                        cmbBundles.setEditable(true);
+                        cmbDepartmentName.setEditable(true);
+                        cmbContractNr.setEditable(true);
                         break;
                 }
             }
@@ -1909,9 +1921,9 @@ public class CreateSR extends javax.swing.JFrame {
     }//GEN-LAST:event_rbAnytimeActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        //SaveDlg save_dlg = new SaveDlg();
-        //save_dlg.init();
-        //save_dlg.dispose();
+        SaveDlg save_dlg = new SaveDlg();
+        save_dlg.init();
+        save_dlg.dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed

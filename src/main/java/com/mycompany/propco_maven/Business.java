@@ -12,7 +12,7 @@ import java.util.Set;
 public class Business  implements java.io.Serializable {
 
 
-     private Short bid;
+     private Byte bid;
      private Users users;
      private String name;
      private String alias;
@@ -85,11 +85,11 @@ public class Business  implements java.io.Serializable {
        this.departments = departments;
     }
    
-    public Short getBid() {
+    public Byte getBid() {
         return this.bid;
     }
     
-    public void setBid(Short bid) {
+    public void setBid(Byte bid) {
         this.bid = bid;
     }
     public Users getUsers() {

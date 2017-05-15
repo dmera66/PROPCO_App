@@ -4,7 +4,7 @@
 <!-- Generated 10-May-2017 9:39:45 AM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="com.mycompany.propco_maven.Business" table="Business" catalog="PROPCO_Maven" optimistic-lock="version">
-        <id name="bid" type="java.lang.Short">
+        <id name="bid" type="java.lang.Byte">
             <column name="BID" />
             <generator class="identity" />
         </id>
