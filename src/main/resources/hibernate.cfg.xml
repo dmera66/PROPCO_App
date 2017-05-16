@@ -44,9 +44,10 @@ Contributor(s):
     <property name="hibernate.show_sql">true</property>
     <property name="hibernate.query.factory_class">org.hibernate.hql.internal.classic.ClassicQueryTranslatorFactory</property>
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://192.168.0.21:3306/PROPCO_Maven?zeroDateTimeBehavior=convertToNull</property>
+    <property name="hibernate.connection.url">jdbc:mysql://10.52.0.38:3306/PROPCO_Maven?zeroDateTimeBehavior=convertToNull</property>
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password">Mexico1970</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
     <mapping resource="com/mycompany/propco_maven/Product.hbm.xml"/>
     <mapping resource="com/mycompany/propco_maven/Customer.hbm.xml"/>
     <mapping resource="com/mycompany/propco_maven/PestsLinkedProduct.hbm.xml"/>
