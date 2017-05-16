@@ -20,6 +20,9 @@ public class Bundles  implements java.io.Serializable {
     public Bundles() {
     }
 
+    public Bundles(String bundleName) {
+        this.bundleName = bundleName;
+    }
 	
     public Bundles(int bdlid, Business business, String bundleName) {
         this.bdlid = bdlid;

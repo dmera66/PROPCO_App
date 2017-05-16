@@ -48,17 +48,5 @@ Contributor(s):
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password">Mexico1970</property>
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
-    <mapping resource="com/mycompany/propco_maven/Product.hbm.xml"/>
-    <mapping resource="com/mycompany/propco_maven/Customer.hbm.xml"/>
-    <mapping resource="com/mycompany/propco_maven/PestsLinkedProduct.hbm.xml"/>
-    <mapping resource="com/mycompany/propco_maven/Pests.hbm.xml"/>
-    <mapping resource="com/mycompany/propco_maven/Business.hbm.xml"/>
-    <mapping resource="com/mycompany/propco_maven/HouseKeeping.hbm.xml"/>
-    <mapping resource="com/mycompany/propco_maven/Users.hbm.xml"/>
-    <mapping resource="com/mycompany/propco_maven/Department.hbm.xml"/>
-    <mapping resource="com/mycompany/propco_maven/ServiceRequest.hbm.xml"/>
-    <mapping resource="com/mycompany/propco_maven/Bundles.hbm.xml"/>
-    <mapping resource="com/mycompany/propco_maven/ServiceRequestActivities.hbm.xml"/>
-    <mapping resource="com/mycompany/propco_maven/Labels.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>
