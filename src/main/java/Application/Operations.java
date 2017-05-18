@@ -13,6 +13,7 @@ import com.mycompany.propco_maven_new.Department;
 import com.mycompany.propco_maven_new.Users;
 import static java.time.LocalDate.now;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -41,22 +42,13 @@ public class Operations {
     //Customer new_customer = null;
     //Business new_business = null;
     
-    public static void main(String[] args) {
+    public Operations() {
         try{
             factory = new Configuration().configure().buildSessionFactory();
         }catch (Throwable ex) {
             System.err.println("Failed to create sessionFactory object." + ex);
             throw new ExceptionInInitializerError(ex);
         }
-        Operations manageCustomer = new Operations();
- 
-        /* Let us have a customer object */
-        //Customer customer = manageCustomer.addCustomer("Manoj",32);
- 
-      /* employee record in the database */
-     Integer empID1 = manageCustomer.addBook("", "", "");
-      /* List all the books */
-      manageCustomer.listBooks();
     }
     /* Method to retrieve an user from the database */
     public Users retrieveUser(Integer user_id){
@@ -69,7 +61,7 @@ public class Operations {
             //begin the transaction
             tx = session.beginTransaction();
             //Create a new bundle object
-            users = new Users(Login.user_id);
+            //users = new Users(Login.user_id);
             // save the bundle object.The changes to persistent object will be written to database.
             tx.commit();
         }catch (HibernateException e) {
@@ -80,18 +72,21 @@ public class Operations {
             session.close();
         }
         return users;
-   }
+    }
+    
     /* Method to add a billing record in the database */
-    public Integer addBilling(Department department, String billingName, String billingAlias, String billingAddress, String billingCity, String billingProvince, String billingPostalCode, String billingContactName, String billingPrimaryPhone, String billingExt, String billingSecondaryPhone, String billingExt2, String billingFax, String billingEmailAddress, String tax, String taxRate, int updatedByUser){
+    public Billing addBilling(String billingName, String billingAlias, String billingAddress, String billingCity, String billingProvince, String billingPostalCode, String billingContactName, String billingPrimaryPhone, String billingExt, String billingSecondaryPhone, String billingExt2, String billingFax, String billingEmailAddress, int updatedByUser){
         // Get the session from session factory
         Session session = factory.openSession();
         Transaction tx = null;
         Integer billingID = null;
+        Billing billing = null;
         try{
             //begin the transaction
             tx = session.beginTransaction();
             //Create a new bundle object
-            Billing billing = new Billing(department,billingName,billingAlias,billingAddress,billingCity,billingProvince,billingPostalCode,billingContactName,billingPrimaryPhone,billingExt,billingSecondaryPhone,billingExt2,billingFax,billingEmailAddress,tax,taxRate,Date_as_Date(DateUtils.now_date_time()), Date_as_Date(DateUtils.now_date_time()), updatedByUser);
+            
+            billing = new Billing(billingName,billingAlias,billingAddress,billingCity,billingProvince,billingPostalCode,billingContactName,billingPrimaryPhone,billingExt,billingSecondaryPhone,billingExt2,billingFax,billingEmailAddress,null,null,Date_as_Date(DateUtils.now_date_time()), Date_as_Date(DateUtils.now_date_time()), updatedByUser,,);
             // save the bundle object.The changes to persistent object will be written to database.
             billingID = (Integer) session.save(billing);
             //The changes to persistent object will be written to database.
@@ -103,8 +98,46 @@ public class Operations {
             //close the session.
             session.close();
         }
-      return billingID;
-   }
+      return billing;
+    }
+    /* Method to update a billing record in the database */
+    public void updateBilling(Department department,String billingName, String billingAlias, String billingAddress, String billingCity, String billingProvince, String billingPostalCode, String billingContactName, String billingPrimaryPhone, String billingExt, String billingSecondaryPhone, String billingExt2, String billingFax, String billingEmailAddress, int updatedByUser){
+        // Get the session from session factory
+        Session session = factory.openSession();
+        Transaction tx = null;
+        Integer billingID = null;
+        try{
+            //begin the transaction
+            tx = session.beginTransaction();
+            //Create a new bundle object
+            Billing billing = (Billing)session.get(Billing.class, billingID);
+            billing.setDepartment(department);
+            billing.setBillingName(billingName);
+            billing.setBillingAlias(billingAlias);
+            billing.setBillingAddress(billingAddress);
+            billing.setBillingCity(billingCity);
+            billing.setBillingProvince(billingProvince);
+            billing.setBillingPostalCode(billingPostalCode);
+            billing.setBillingContactName(billingContactName);
+            billing.setBillingPrimaryPhone(billingPrimaryPhone);
+            billing.setBillingExt(billingExt);
+            billing.setBillingSecondaryPhone(billingSecondaryPhone);
+            billing.setBillingExt2(billingExt2);
+            billing.setBillingFax(billingFax);
+            billing.setBillingEmailAddress(billingEmailAddress);
+            //billing.setCreationDate(creationDate);
+            billing.setUpdateDate(Date_as_Date(DateUtils.now_date_time()));
+            billing.setUpdatedByUser(Login.user_id);
+            session.update(billing);
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace();
+        }finally {
+            //close the session.
+            session.close();
+        }
+    }
     /* Method to add a department record in the database */
     public Department addDepartment(String departmentName, String contractNumber){
         // Get the session from session factory
@@ -130,6 +163,32 @@ public class Operations {
         }
         return department;
    }
+    /* Method to update a department record in the database */
+    public void updateDepartment(String departmentName, String contractNumber){
+        // Get the session from session factory
+        Session session = factory.openSession();
+        Transaction tx = null;
+        Integer departmentID = null;
+        try{
+            //begin the transaction
+            tx = session.beginTransaction();
+            //Create a new bundle object
+            Department department = (Department)session.get(Department.class, departmentID);
+            department.setDepartmentName(departmentName);
+            department.setContractNumber(contractNumber);
+            //department.setCreationDate(creationDate);
+            department.setUpdateDate(Date_as_Date(DateUtils.now_date_time()));
+            department.setUpdatedByUser(Login.user_id);
+            session.update(department);
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace();
+        }finally {
+            //close the session.
+            session.close();
+        }
+    }
     /* Method to add a bundle record in the database */
     public Bundles addBundle(String bundleName){
         // Get the session from session factory
@@ -153,8 +212,35 @@ public class Operations {
             //close the session.
             session.close();
         }
-      return bundleID;
+      return bundles;
     }
+    /* Method to update a bundle record in the database */
+    public void updateBundles(String bundleName){
+        // Get the session from session factory
+        Session session = factory.openSession();
+        Transaction tx = null;
+        Integer bundleID = null;
+        try{
+            //begin the transaction
+            tx = session.beginTransaction();
+            //Create a new bundle object
+            Bundles bundles = (Bundles)session.get(Bundles.class, bundleID);
+            bundles.setBundleName(bundleName);
+            
+            //department.setCreationDate(creationDate);
+            //bundles .setUpdateDate(Date_as_Date(DateUtils.now_date_time()));
+            //bundles.setUpdatedByUser(Login.user_id);
+            session.update(bundles);
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace();
+        }finally {
+            //close the session.
+            session.close();
+        }
+    }
+            
     /* Method to add a customer record in the database */
     public Integer addCustomer(Billing billing, Bundles bundles, Users users,String CustomerName,String Notes,String Address,String Unit,String AddressNotes,String City,String Province,String PostalCode,String ContactName,String PrimaryPhone,String Ext,String SecondaryPhone,String Ext2,String Fax,String EmailAddress) {
        // get the session from session factory
@@ -246,63 +332,4 @@ public class Operations {
         return resultList;
     }
     /* Method to CREATE an employee in the database */
-    public Integer addCustomer(String fname, String lname, int salary){
-        tx = null;
-        //CustID = null;
-        initializeSession();
-        try{
-            //tx = session.beginTransaction();
-            new_customer = new Customer();
-                    // Business business, Department department, Users users, String customerName, String notes, 
-                    // String address, String addressNotes, String city, String province, String postalCode, String contactName, String primaryPhone, 
-                    // String ext, String secondaryPhone, String ext2, String other, String fax, String emailAddress, String contractNr, 
-                    // Date creationDate, Date updateDate, Set serviceRequests);
-                    
-            CustID = (Integer) session.save(new_customer); 
-            tx.commit();
-        }catch (HibernateException e) {
-            if (tx!=null) tx.rollback();
-            e.printStackTrace(); 
-        }
-        //finally {
-        //    session.close(); 
-        //}
-        return CustID;
-    }
-   
-    public void UpdateCustomer(Integer CustID,Integer BDLID, byte BID, Integer DID, byte UID, String customerName, String notes, String address, String addressNotes, String city, String province, String postalCode, String contactName, String primaryPhone, String ext, String secondaryPhone, String ext2, String fax, String emailAddress, String contractNr){
-        //Bundles bundles, Business business, Department department, String contractNr Set serviceRequests
-        System.out.println("update customer");
-        //session = HibernateUtil.getSessionFactory().openSession();
-        //tx = null;
-        try{
-            //tx = session.beginTransaction();
-            
-            Customer update_customer = (Customer)session.get(Customer.class,CustID);
-            Bundles update_bundle = (Bundles)session.get(Bundles.class,BDLID);
-            Business update_business = (Business)session.get(Business.class,BID);
-            update_customer.setCustomerName(customerName);
-            update_customer.setNotes(notes);
-            update_customer.setAddress(address);
-            update_customer.setAddressNotes(addressNotes);
-            update_customer.setCity(city);
-            update_customer.setProvince(province);
-            update_customer.setPostalCode(postalCode);
-            update_customer.setContactName(contactName);
-            update_customer.setPrimaryPhone(primaryPhone);
-            update_customer.setExt(ext);
-            update_customer.setSecondaryPhone(secondaryPhone);
-            update_customer.setExt2(ext2);
-            update_customer.setFax(fax);
-            update_customer.setEmailAddress(emailAddress);
-            //update_customer.setUpdateDate(DateUtils.now_date_time());
-        }
-        catch (HibernateException e) {
-            if (tx!=null) tx.rollback();
-            e.printStackTrace(); 
-        }
-        finally {
-            session.close(); 
-        }
-   }    
 }

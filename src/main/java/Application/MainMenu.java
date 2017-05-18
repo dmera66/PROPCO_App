@@ -167,17 +167,17 @@ public MainMenu() {
                     srFace.setVisible(true);
                     System.out.println("Service Receipt");
                     break;
-/*                    
+                    
 	      	case "Assign Service to Technician":
-                    AssignService asFace = new AssignService();
-                    asFace.setSize(1280,720);
-                    asFace.setLocationRelativeTo(null);
-                    asFace.setResizable(false);
+                    AssignService assignService = new AssignService();
+                    assignService.setSize(1280,720);
+                    assignService.setLocationRelativeTo(null);
+                    assignService.setResizable(false);
                     dispose();
-                    asFace.setVisible(true);
+                    assignService.setVisible(true);
                     System.out.println("Assign Service");
                     break;
-                        
+/*                        
 	      	case "Pending Work Orders":
                     PendingWO pwoFace = new PendingWO();
                     pwoFace.setSize(1280,720);

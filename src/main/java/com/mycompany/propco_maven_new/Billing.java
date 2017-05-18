@@ -1,5 +1,5 @@
 package com.mycompany.propco_maven_new;
-// Generated 16-May-2017 5:35:13 PM by Hibernate Tools 4.3.1
+// Generated 17-May-2017 12:47:07 PM by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -11,8 +11,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -23,13 +21,12 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name="billing"
-    ,catalog="PROPCO_MAVEN_new"
+    ,catalog="PROPCO_Maven_new"
 )
 public class Billing  implements java.io.Serializable {
 
 
      private Integer billingId;
-     private Department department;
      private String billingName;
      private String billingAlias;
      private String billingAddress;
@@ -49,14 +46,13 @@ public class Billing  implements java.io.Serializable {
      private Date updateDate;
      private int updatedByUser;
      private Set customers = new HashSet(0);
+     private Set departments = new HashSet(0);
 
     public Billing() {
     }
 
-    
 	
-    public Billing(Department department, String billingName, String billingAlias, String billingAddress, String billingCity, String billingProvince, String billingPostalCode, String billingContactName, String billingPrimaryPhone, String billingExt, String billingSecondaryPhone, String billingExt2, String billingFax, String billingEmailAddress, String taxRate, Date creationDate, Date updateDate, int updatedByUser) {
-        this.department = department;
+    public Billing(String billingName, String billingAddress, String billingCity, String billingPrimaryPhone, String tax, String taxRate, Date creationDate, Date updateDate, int updatedByUser) {
         this.billingName = billingName;
         this.billingAddress = billingAddress;
         this.billingCity = billingCity;
@@ -67,8 +63,8 @@ public class Billing  implements java.io.Serializable {
         this.updateDate = updateDate;
         this.updatedByUser = updatedByUser;
     }
-    public Billing(Department department, String billingName, String billingAlias, String billingAddress, String billingCity, String billingProvince, String billingPostalCode, String billingContactName, String billingPrimaryPhone, String billingExt, String billingSecondaryPhone, String billingExt2, String billingFax, String billingEmailAddress, String tax, String taxRate, Date creationDate, Date updateDate, int updatedByUser) {
-       this.department = department;
+    
+    public Billing(String billingName, String billingAlias, String billingAddress, String billingCity, String billingProvince, String billingPostalCode, String billingContactName, String billingPrimaryPhone, String billingExt, String billingSecondaryPhone, String billingExt2, String billingFax, String billingEmailAddress, String tax, String taxRate, Date creationDate, Date updateDate, int updatedByUser, Set customers, Set departments) {
        this.billingName = billingName;
        this.billingAlias = billingAlias;
        this.billingAddress = billingAddress;
@@ -88,28 +84,7 @@ public class Billing  implements java.io.Serializable {
        this.updateDate = updateDate;
        this.updatedByUser = updatedByUser;
        this.customers = customers;
-    }
-    public Billing(Department department, String billingName, String billingAlias, String billingAddress, String billingCity, String billingProvince, String billingPostalCode, String billingContactName, String billingPrimaryPhone, String billingExt, String billingSecondaryPhone, String billingExt2, String billingFax, String billingEmailAddress, String tax, String taxRate, Date creationDate, Date updateDate, int updatedByUser, Set customers) {
-       this.department = department;
-       this.billingName = billingName;
-       this.billingAlias = billingAlias;
-       this.billingAddress = billingAddress;
-       this.billingCity = billingCity;
-       this.billingProvince = billingProvince;
-       this.billingPostalCode = billingPostalCode;
-       this.billingContactName = billingContactName;
-       this.billingPrimaryPhone = billingPrimaryPhone;
-       this.billingExt = billingExt;
-       this.billingSecondaryPhone = billingSecondaryPhone;
-       this.billingExt2 = billingExt2;
-       this.billingFax = billingFax;
-       this.billingEmailAddress = billingEmailAddress;
-       this.tax = tax;
-       this.taxRate = taxRate;
-       this.creationDate = creationDate;
-       this.updateDate = updateDate;
-       this.updatedByUser = updatedByUser;
-       this.customers = customers;
+       this.departments = departments;
     }
    
      @Id @GeneratedValue(strategy=IDENTITY)
@@ -122,16 +97,6 @@ public class Billing  implements java.io.Serializable {
     
     public void setBillingId(Integer billingId) {
         this.billingId = billingId;
-    }
-
-@ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="departmentID", nullable=false)
-    public Department getDepartment() {
-        return this.department;
-    }
-    
-    public void setDepartment(Department department) {
-        this.department = department;
     }
 
     
@@ -321,6 +286,15 @@ public class Billing  implements java.io.Serializable {
     
     public void setCustomers(Set customers) {
         this.customers = customers;
+    }
+
+@OneToMany(fetch=FetchType.LAZY, mappedBy="billing")
+    public Set getDepartments() {
+        return this.departments;
+    }
+    
+    public void setDepartments(Set departments) {
+        this.departments = departments;
     }
 
 

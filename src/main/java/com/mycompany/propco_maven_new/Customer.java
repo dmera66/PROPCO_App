@@ -1,5 +1,5 @@
 package com.mycompany.propco_maven_new;
-// Generated 16-May-2017 5:35:13 PM by Hibernate Tools 4.3.1
+// Generated 17-May-2017 12:47:07 PM by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
@@ -23,7 +23,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name="customer"
-    ,catalog="PROPCO_MAVEN_new"
+    ,catalog="PROPCO_Maven_new"
 )
 public class Customer  implements java.io.Serializable {
 
@@ -67,29 +67,6 @@ public class Customer  implements java.io.Serializable {
         this.primaryPhone = primaryPhone;
         this.creationDate = creationDate;
         this.updateDate = updateDate;
-    }
-    public Customer(Billing billing, Bundles bundles, Users users, String customerName, String notes, String address, String unit, String addressNotes, String city, String province, String postalCode, String contactName, String primaryPhone, String ext, String secondaryPhone, String ext2, String fax, String emailAddress, Date creationDate, Date updateDate) {
-       this.billing = billing;
-       this.bundles = bundles;
-       this.users = users;
-       this.customerName = customerName;
-       this.notes = notes;
-       this.address = address;
-       this.unit = unit;
-       this.addressNotes = addressNotes;
-       this.city = city;
-       this.province = province;
-       this.postalCode = postalCode;
-       this.contactName = contactName;
-       this.primaryPhone = primaryPhone;
-       this.ext = ext;
-       this.secondaryPhone = secondaryPhone;
-       this.ext2 = ext2;
-       this.fax = fax;
-       this.emailAddress = emailAddress;
-       this.creationDate = creationDate;
-       this.updateDate = updateDate;
-       this.serviceRequests = serviceRequests;
     }
     public Customer(Billing billing, Bundles bundles, Users users, String customerName, String notes, String address, String unit, String addressNotes, String city, String province, String postalCode, String contactName, String primaryPhone, String ext, String secondaryPhone, String ext2, String fax, String emailAddress, Date creationDate, Date updateDate, Set serviceRequests) {
        this.billing = billing;

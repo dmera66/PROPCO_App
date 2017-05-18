@@ -1,15 +1,14 @@
 package com.mycompany.propco_maven_new;
-// Generated 16-May-2017 5:35:13 PM by Hibernate Tools 4.3.1
+// Generated 17-May-2017 12:47:07 PM by Hibernate Tools 4.3.1
 
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,47 +19,31 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(name="department"
-    ,catalog="PROPCO_MAVEN_new"
+    ,catalog="PROPCO_Maven_new"
     , uniqueConstraints = @UniqueConstraint(columnNames="departmentName") 
 )
 public class Department  implements java.io.Serializable {
 
 
      private int departmentId;
+     private Billing billing;
      private String departmentName;
      private String contractNumber;
      private Date creationDate;
      private Date updateDate;
      private int updatedByUser;
-     private Set billings = new HashSet(0);
 
     public Department() {
     }
 
-    public Department(String departmentName, String contractNumber, Date creationDate, Date updateDate, int updatedByUser) {
-        this.departmentName = departmentName;
-        this.contractNumber = contractNumber;
-        this.creationDate = creationDate;
-        this.updateDate = updateDate;
-        this.updatedByUser = updatedByUser;
-    }
-	
-    public Department(int departmentId, String departmentName, String contractNumber, Date creationDate, Date updateDate, int updatedByUser) {
-        this.departmentId = departmentId;
-        this.departmentName = departmentName;
-        this.contractNumber = contractNumber;
-        this.creationDate = creationDate;
-        this.updateDate = updateDate;
-        this.updatedByUser = updatedByUser;
-    }
-    public Department(int departmentId, String departmentName, String contractNumber, Date creationDate, Date updateDate, int updatedByUser, Set billings) {
+    public Department(int departmentId, Billing billing, String departmentName, String contractNumber, Date creationDate, Date updateDate, int updatedByUser) {
        this.departmentId = departmentId;
+       this.billing = billing;
        this.departmentName = departmentName;
        this.contractNumber = contractNumber;
        this.creationDate = creationDate;
        this.updateDate = updateDate;
        this.updatedByUser = updatedByUser;
-       this.billings = billings;
     }
    
      @Id 
@@ -73,6 +56,16 @@ public class Department  implements java.io.Serializable {
     
     public void setDepartmentId(int departmentId) {
         this.departmentId = departmentId;
+    }
+
+@ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="billingID", nullable=false)
+    public Billing getBilling() {
+        return this.billing;
+    }
+    
+    public void setBilling(Billing billing) {
+        this.billing = billing;
     }
 
     
@@ -123,15 +116,6 @@ public class Department  implements java.io.Serializable {
     
     public void setUpdatedByUser(int updatedByUser) {
         this.updatedByUser = updatedByUser;
-    }
-
-@OneToMany(fetch=FetchType.LAZY, mappedBy="department")
-    public Set getBillings() {
-        return this.billings;
-    }
-    
-    public void setBillings(Set billings) {
-        this.billings = billings;
     }
 
 

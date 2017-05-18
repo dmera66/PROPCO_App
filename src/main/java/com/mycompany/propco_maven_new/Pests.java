@@ -1,5 +1,5 @@
 package com.mycompany.propco_maven_new;
-// Generated 16-May-2017 5:35:13 PM by Hibernate Tools 4.3.1
+// Generated 17-May-2017 12:47:07 PM by Hibernate Tools 4.3.1
 
 
 import javax.persistence.Column;
@@ -12,7 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="pests"
-    ,catalog="PROPCO_MAVEN_new"
+    ,catalog="PROPCO_Maven_new"
 )
 public class Pests  implements java.io.Serializable {
 

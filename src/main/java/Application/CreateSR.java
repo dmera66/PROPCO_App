@@ -2,13 +2,11 @@ package Application;
 
 import com.mycompany.propco_maven_new.Billing;
 import com.mycompany.propco_maven_new.Department;
-import java.io.Serializable;
-import java.util.Date;
+import com.mycompany.propco_maven_new.Bundles;
+import com.mycompany.propco_maven_new.Customer;
+import com.mycompany.propco_maven_new.Users;
 import java.util.Iterator;
 
-import org.hibernate.EmptyInterceptor;
-import org.hibernate.Transaction;
-import org.hibernate.type.Type;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
@@ -31,13 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
-import org.hibernate.EmptyInterceptor;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import propco_maven_new.HibernateUtil;
 
 
 /*
@@ -108,7 +100,7 @@ public class CreateSR extends javax.swing.JFrame {
     private void initComponents() {
 
         pnlTitle = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lblPageTitle = new javax.swing.JLabel();
         pnlInfo = new javax.swing.JPanel();
         pnlBillingCustomer = new javax.swing.JPanel();
         lblBillingName = new javax.swing.JLabel();
@@ -126,15 +118,11 @@ public class CreateSR extends javax.swing.JFrame {
         lblBillingAlias = new javax.swing.JLabel();
         txtBillingName = new javax.swing.JTextField();
         txtBillingContactName = new javax.swing.JTextField();
-        txtBillingPrimaryPhone = new javax.swing.JTextField();
-        txtBillingSecondaryPhone = new javax.swing.JTextField();
         txtBillingExt = new javax.swing.JTextField();
         txtBillingExt2 = new javax.swing.JTextField();
         txtBillingProvince = new javax.swing.JTextField();
-        txtBillingFax = new javax.swing.JTextField();
         txtBillingEmailAddress = new javax.swing.JTextField();
         txtBillingCity = new javax.swing.JTextField();
-        txtBillingPostalCode = new javax.swing.JTextField();
         txtBillingAddress = new javax.swing.JTextField();
         txtBillingAlias = new javax.swing.JTextField();
         lblBillingDept = new javax.swing.JLabel();
@@ -142,6 +130,10 @@ public class CreateSR extends javax.swing.JFrame {
         btnDocumentation = new javax.swing.JButton();
         cmbDepartmentName = new javax.swing.JComboBox<>();
         cmbContractNumber = new javax.swing.JComboBox<>();
+        txtBillingFax = new javax.swing.JFormattedTextField();
+        txtBillingFax1 = new javax.swing.JFormattedTextField();
+        txtBillingPrimaryPhone = new javax.swing.JFormattedTextField();
+        txtBillingPostalCode = new javax.swing.JFormattedTextField();
         pnlCustomer = new javax.swing.JPanel();
         lblName = new javax.swing.JLabel();
         lblStreet = new javax.swing.JLabel();
@@ -160,15 +152,11 @@ public class CreateSR extends javax.swing.JFrame {
         lblUnit = new javax.swing.JLabel();
         txtCustomerName = new javax.swing.JTextField();
         txtContactName = new javax.swing.JTextField();
-        txtPrimaryPhone = new javax.swing.JTextField();
-        txtSecondaryPhone = new javax.swing.JTextField();
         txtExt = new javax.swing.JTextField();
         txtExt2 = new javax.swing.JTextField();
         txtProvince = new javax.swing.JTextField();
-        txtFax = new javax.swing.JTextField();
         txtEmailAddress = new javax.swing.JTextField();
         txtCity = new javax.swing.JTextField();
-        txtPostalCode = new javax.swing.JTextField();
         txtAddress = new javax.swing.JTextField();
         txtAddressNotes = new javax.swing.JTextField();
         txtNotes = new javax.swing.JTextField();
@@ -177,6 +165,10 @@ public class CreateSR extends javax.swing.JFrame {
         cbBundle = new javax.swing.JCheckBox();
         lblAvailBundles = new javax.swing.JLabel();
         cmbBundles = new javax.swing.JComboBox<>();
+        txtPrimaryPhone = new javax.swing.JFormattedTextField();
+        txtSecondaryPhone = new javax.swing.JFormattedTextField();
+        txtFax = new javax.swing.JFormattedTextField();
+        txtPostalCode = new javax.swing.JFormattedTextField();
         pnlDetails = new javax.swing.JPanel();
         lblPO = new javax.swing.JLabel();
         txtPO = new javax.swing.JTextField();
@@ -212,9 +204,9 @@ public class CreateSR extends javax.swing.JFrame {
         setName("frmServiceReceipt"); // NOI18N
         setResizable(false);
 
-        jLabel1.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
-        jLabel1.setText("Create Service Receipt");
-        jLabel1.setFocusable(false);
+        lblPageTitle.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        lblPageTitle.setText("Create Service Receipt");
+        lblPageTitle.setFocusable(false);
 
         javax.swing.GroupLayout pnlTitleLayout = new javax.swing.GroupLayout(pnlTitle);
         pnlTitle.setLayout(pnlTitleLayout);
@@ -222,14 +214,14 @@ public class CreateSR extends javax.swing.JFrame {
             pnlTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlTitleLayout.createSequentialGroup()
                 .addGap(421, 421, 421)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblPageTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(421, 421, 421))
         );
         pnlTitleLayout.setVerticalGroup(
             pnlTitleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlTitleLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lblPageTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -358,23 +350,8 @@ public class CreateSR extends javax.swing.JFrame {
         txtBillingContactName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtBillingContactName.setNextFocusableComponent(txtBillingPrimaryPhone);
 
-        txtBillingPrimaryPhone.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtBillingPrimaryPhone.setText("xxx-xxx-xxxx");
-        txtBillingPrimaryPhone.setToolTipText("");
-        txtBillingPrimaryPhone.setNextFocusableComponent(txtBillingExt);
-        txtBillingPrimaryPhone.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtBillingPrimaryPhoneKeyPressed(evt);
-            }
-        });
-
-        txtBillingSecondaryPhone.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtBillingSecondaryPhone.setText("xxx-xxx-xxxx");
-        txtBillingSecondaryPhone.setToolTipText("");
-        txtBillingSecondaryPhone.setNextFocusableComponent(txtBillingExt2);
-
         txtBillingExt.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtBillingExt.setNextFocusableComponent(txtBillingSecondaryPhone);
+        txtBillingExt.setNextFocusableComponent(txtBillingFax1);
 
         txtBillingExt2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtBillingExt2.setNextFocusableComponent(txtBillingFax);
@@ -384,11 +361,6 @@ public class CreateSR extends javax.swing.JFrame {
         txtBillingProvince.setMinimumSize(new java.awt.Dimension(68, 17));
         txtBillingProvince.setNextFocusableComponent(txtBillingPostalCode);
         txtBillingProvince.setPreferredSize(new java.awt.Dimension(68, 17));
-
-        txtBillingFax.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtBillingFax.setText("xxx-xxx-xxxx");
-        txtBillingFax.setToolTipText("");
-        txtBillingFax.setNextFocusableComponent(txtBillingEmailAddress);
 
         txtBillingEmailAddress.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
@@ -402,13 +374,6 @@ public class CreateSR extends javax.swing.JFrame {
                 txtBillingCityKeyPressed(evt);
             }
         });
-
-        txtBillingPostalCode.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtBillingPostalCode.setText("A1A 1A1");
-        txtBillingPostalCode.setMaximumSize(new java.awt.Dimension(68, 17));
-        txtBillingPostalCode.setMinimumSize(new java.awt.Dimension(68, 17));
-        txtBillingPostalCode.setNextFocusableComponent(txtBillingContactName);
-        txtBillingPostalCode.setPreferredSize(new java.awt.Dimension(68, 17));
 
         txtBillingAddress.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtBillingAddress.setMaximumSize(new java.awt.Dimension(68, 17));
@@ -451,6 +416,34 @@ public class CreateSR extends javax.swing.JFrame {
             }
         });
 
+        txtBillingFax.setColumns(12);
+        try {
+            txtBillingFax.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-###-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        txtBillingFax1.setColumns(12);
+        try {
+            txtBillingFax1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-###-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        txtBillingPrimaryPhone.setColumns(12);
+        try {
+            txtBillingPrimaryPhone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-###-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        txtBillingPostalCode.setColumns(7);
+        try {
+            txtBillingPostalCode.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("?#? #?#")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
         javax.swing.GroupLayout pnlBillingCustomerLayout = new javax.swing.GroupLayout(pnlBillingCustomer);
         pnlBillingCustomer.setLayout(pnlBillingCustomerLayout);
         pnlBillingCustomerLayout.setHorizontalGroup(
@@ -466,14 +459,15 @@ public class CreateSR extends javax.swing.JFrame {
                             .addComponent(cmbDepartmentName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cmbContractNumber, 0, 194, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnDocumentation, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnDocumentation, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1, 1, 1))
                     .addGroup(pnlBillingCustomerLayout.createSequentialGroup()
                         .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblBillingName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblBillingAlias, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblBillingStreet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblBillingCity, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblBillingContact, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+                            .addComponent(lblBillingContact, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblBillingPhone1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblBillingPhone2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -481,12 +475,12 @@ public class CreateSR extends javax.swing.JFrame {
                             .addGroup(pnlBillingCustomerLayout.createSequentialGroup()
                                 .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBillingCustomerLayout.createSequentialGroup()
-                                        .addComponent(txtBillingSecondaryPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txtBillingFax1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(lblBillingExt2))
                                     .addGroup(pnlBillingCustomerLayout.createSequentialGroup()
-                                        .addComponent(txtBillingPrimaryPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(3, 3, 3)
+                                        .addComponent(txtBillingPrimaryPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(4, 4, 4)
                                         .addComponent(lblBillingExt1)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -500,26 +494,24 @@ public class CreateSR extends javax.swing.JFrame {
                                         .addComponent(lblBillingFax, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(2, 2, 2)
                                 .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtBillingEmailAddress)
-                                    .addComponent(txtBillingFax, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)))
+                                    .addComponent(txtBillingEmailAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE)
+                                    .addComponent(txtBillingFax, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)))
                             .addComponent(txtBillingAlias, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtBillingContactName)
                             .addComponent(txtBillingName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(pnlBillingCustomerLayout.createSequentialGroup()
                                 .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtBillingCity, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
-                                    .addComponent(txtBillingAddress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtBillingAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 203, Short.MAX_VALUE)
+                                    .addComponent(txtBillingCity, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(4, 4, 4)
                                 .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(pnlBillingCustomerLayout.createSequentialGroup()
-                                        .addComponent(lblBillingPostalCode)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txtBillingPostalCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(pnlBillingCustomerLayout.createSequentialGroup()
-                                        .addComponent(lblBillingProv)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txtBillingProvince, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
-                .addContainerGap(25, Short.MAX_VALUE))
+                                    .addComponent(lblBillingProv)
+                                    .addComponent(lblBillingPostalCode))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtBillingPostalCode, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
+                                    .addComponent(txtBillingProvince, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                .addContainerGap())
         );
         pnlBillingCustomerLayout.setVerticalGroup(
             pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -536,7 +528,7 @@ public class CreateSR extends javax.swing.JFrame {
                     .addComponent(lblBillingStreet, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtBillingAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblBillingPostalCode, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBillingPostalCode, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtBillingPostalCode, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblBillingCity, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -550,13 +542,9 @@ public class CreateSR extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlBillingCustomerLayout.createSequentialGroup()
-                        .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblBillingPhone1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtBillingPrimaryPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblBillingPhone1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblBillingPhone2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtBillingSecondaryPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblBillingPhone2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblBillingDept, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -571,19 +559,21 @@ public class CreateSR extends javax.swing.JFrame {
                             .addComponent(txtBillingExt, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblBillingExt1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblBillingFax, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtBillingFax, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtBillingFax, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtBillingPrimaryPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtBillingEmailAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblBillingEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtBillingExt2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblBillingExt2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 32, Short.MAX_VALUE))
+                            .addComponent(lblBillingExt2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtBillingFax1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(30, 30, 30))
         );
 
         pnlBillingCustomerLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lblBillingAlias, lblBillingCity, lblBillingContact, lblBillingName, lblBillingPhone1, lblBillingPhone2, lblBillingStreet});
 
-        pnlBillingCustomerLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtBillingAddress, txtBillingAlias, txtBillingCity, txtBillingContactName, txtBillingEmailAddress, txtBillingExt, txtBillingExt2, txtBillingFax, txtBillingName, txtBillingPostalCode, txtBillingPrimaryPhone, txtBillingProvince, txtBillingSecondaryPhone});
+        pnlBillingCustomerLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {txtBillingAddress, txtBillingAlias, txtBillingCity, txtBillingContactName, txtBillingEmailAddress, txtBillingExt, txtBillingExt2, txtBillingName, txtBillingProvince});
 
         pnlCustomer.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Customer Info:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
         pnlCustomer.setFocusable(false);
@@ -724,21 +714,6 @@ public class CreateSR extends javax.swing.JFrame {
         txtContactName.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtContactName.setNextFocusableComponent(txtPrimaryPhone);
 
-        txtPrimaryPhone.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtPrimaryPhone.setText("xxx-xxx-xxxx");
-        txtPrimaryPhone.setToolTipText("");
-        txtPrimaryPhone.setNextFocusableComponent(txtExt);
-        txtPrimaryPhone.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtPrimaryPhoneKeyPressed(evt);
-            }
-        });
-
-        txtSecondaryPhone.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtSecondaryPhone.setText("xxx-xxx-xxxx");
-        txtSecondaryPhone.setToolTipText("");
-        txtSecondaryPhone.setNextFocusableComponent(txtExt2);
-
         txtExt.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtExt.setNextFocusableComponent(txtSecondaryPhone);
 
@@ -747,11 +722,6 @@ public class CreateSR extends javax.swing.JFrame {
 
         txtProvince.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtProvince.setNextFocusableComponent(txtPostalCode);
-
-        txtFax.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtFax.setText("xxx-xxx-xxxx");
-        txtFax.setToolTipText("");
-        txtFax.setNextFocusableComponent(txtEmailAddress);
 
         txtEmailAddress.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtEmailAddress.setNextFocusableComponent(txtBillingName);
@@ -763,10 +733,6 @@ public class CreateSR extends javax.swing.JFrame {
                 txtCityKeyPressed(evt);
             }
         });
-
-        txtPostalCode.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtPostalCode.setText("A1A 1A1");
-        txtPostalCode.setNextFocusableComponent(txtContactName);
 
         txtAddress.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtAddress.setNextFocusableComponent(txtUnit);
@@ -801,13 +767,41 @@ public class CreateSR extends javax.swing.JFrame {
         lblAvailBundles.setRequestFocusEnabled(false);
         lblAvailBundles.setVerifyInputWhenFocusTarget(false);
 
+        txtPrimaryPhone.setColumns(12);
+        try {
+            txtPrimaryPhone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-###-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        txtSecondaryPhone.setColumns(12);
+        try {
+            txtSecondaryPhone.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-###-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        txtFax.setColumns(12);
+        try {
+            txtFax.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("###-###-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        txtPostalCode.setColumns(7);
+        try {
+            txtPostalCode.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("?#? #?#")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
         javax.swing.GroupLayout pnlCustomerLayout = new javax.swing.GroupLayout(pnlCustomer);
         pnlCustomer.setLayout(pnlCustomerLayout);
         pnlCustomerLayout.setHorizontalGroup(
             pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlCustomerLayout.createSequentialGroup()
                 .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblName, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                    .addComponent(lblName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblNameInfo)
                     .addComponent(lblStreet, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblStreetInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -819,20 +813,12 @@ public class CreateSR extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlCustomerLayout.createSequentialGroup()
-                        .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtSecondaryPhone, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                                .addComponent(txtPrimaryPhone))
-                            .addComponent(cbBundle))
+                        .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cbBundle)
+                            .addComponent(txtPrimaryPhone, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+                            .addComponent(txtSecondaryPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlCustomerLayout.createSequentialGroup()
-                                .addComponent(lblExt1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtExt, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblFax, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(pnlCustomerLayout.createSequentialGroup()
                                 .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlCustomerLayout.createSequentialGroup()
@@ -845,73 +831,67 @@ public class CreateSR extends javax.swing.JFrame {
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlCustomerLayout.createSequentialGroup()
                                         .addGap(0, 0, Short.MAX_VALUE)
                                         .addComponent(lblAvailBundles, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addGroup(pnlCustomerLayout.createSequentialGroup()
+                                .addComponent(lblExt1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(cmbBundles, 0, 213, Short.MAX_VALUE)
-                                    .addComponent(txtFax, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtEmailAddress))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addGroup(pnlCustomerLayout.createSequentialGroup()
-                        .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlCustomerLayout.createSequentialGroup()
-                                .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtExt, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblProv)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtProvince, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblPostalCode)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtPostalCode))
-                            .addComponent(txtContactName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 498, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCustomerName, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtNotes, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlCustomerLayout.createSequentialGroup()
-                                .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(71, 71, 71)
-                                .addComponent(lblUnit, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtUnit, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtAddressNotes, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(0, 4, Short.MAX_VALUE))))
+                                .addComponent(lblFax, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(9, 9, 9)))
+                        .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(cmbBundles, 0, 213, Short.MAX_VALUE)
+                                .addComponent(txtEmailAddress))
+                            .addComponent(txtFax, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(57, 57, 57))
+                    .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlCustomerLayout.createSequentialGroup()
+                            .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(lblProv)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(txtProvince, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(lblPostalCode)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(txtPostalCode, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE))
+                        .addComponent(txtContactName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 498, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtCustomerName, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtNotes, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlCustomerLayout.createSequentialGroup()
+                            .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(71, 71, 71)
+                            .addComponent(lblUnit, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtUnit, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtAddressNotes, javax.swing.GroupLayout.Alignment.LEADING))))
         );
         pnlCustomerLayout.setVerticalGroup(
             pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlCustomerLayout.createSequentialGroup()
-                .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblNameInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblStreet, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblStreetInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlCustomerLayout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtPrimaryPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblExt1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtExt, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblFax, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtFax, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lblName, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblNameInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblStreet, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblStreetInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtSecondaryPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblExt2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtExt2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtEmailAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(7, 7, 7)
-                        .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbBundle)
-                            .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(cmbBundles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblAvailBundles, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(34, Short.MAX_VALUE))
+                            .addComponent(lblCity, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblProv, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(pnlCustomerLayout.createSequentialGroup()
-                        .addComponent(lblCity, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(116, 116, 116)
+                        .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtProvince, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblPostalCode, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPostalCode, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlCustomerLayout.createSequentialGroup()
                         .addComponent(lblContact, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblPhone2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -919,7 +899,31 @@ public class CreateSR extends javax.swing.JFrame {
                         .addComponent(lblPhone1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblBundled, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(pnlCustomerLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(txtContactName, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
+                        .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblExt1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtExt, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblFax, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPrimaryPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtFax, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblExt2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtExt2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtEmailAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtSecondaryPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(7, 7, 7)
+                        .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbBundle)
+                            .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(cmbBundles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblAvailBundles, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(36, Short.MAX_VALUE))))
             .addGroup(pnlCustomerLayout.createSequentialGroup()
                 .addComponent(txtCustomerName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -931,18 +935,7 @@ public class CreateSR extends javax.swing.JFrame {
                     .addComponent(txtUnit, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtAddressNotes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtCity, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblProv, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtProvince, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblPostalCode, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtPostalCode, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlCustomerLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(txtContactName, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 125, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pnlCustomerLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lblStreetInfo, txtAddressNotes});
@@ -965,19 +958,18 @@ public class CreateSR extends javax.swing.JFrame {
         pnlInfo.setLayout(pnlInfoLayout);
         pnlInfoLayout.setHorizontalGroup(
             pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInfoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(pnlCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(pnlInfoLayout.createSequentialGroup()
+                .addComponent(pnlCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 650, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pnlBillingCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 528, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(115, 115, 115))
+                .addGap(0, 13, Short.MAX_VALUE))
         );
         pnlInfoLayout.setVerticalGroup(
             pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlInfoLayout.createSequentialGroup()
                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(pnlCustomer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlBillingCustomer, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE))
+                    .addComponent(pnlBillingCustomer, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE))
                 .addGap(0, 4, Short.MAX_VALUE))
         );
 
@@ -1088,7 +1080,7 @@ public class CreateSR extends javax.swing.JFrame {
                     .addComponent(rbOthers)
                     .addComponent(rbVisa)
                     .addComponent(rbPcard))
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         pnlService.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Service Type:", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 12))); // NOI18N
@@ -1161,13 +1153,13 @@ public class CreateSR extends javax.swing.JFrame {
                 .addGap(75, 75, 75)
                 .addGroup(pnlServiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(rbInSuit)
-                    .addComponent(rbEmergency, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
+                    .addComponent(rbEmergency, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(rbBlock)
                     .addComponent(rbRegular)
                     .addComponent(rbNew)
                     .addComponent(rbProduct)
                     .addComponent(rbOther))
-                .addContainerGap(154, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlServiceLayout.setVerticalGroup(
             pnlServiceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1362,7 +1354,7 @@ public class CreateSR extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(81, 81, 81)
                         .addComponent(pnlTitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(pnlInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 1197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pnlInfo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
@@ -1396,7 +1388,7 @@ public class CreateSR extends javax.swing.JFrame {
                     .addComponent(pnlFreq, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(pnlService, javax.swing.GroupLayout.PREFERRED_SIZE, 183, Short.MAX_VALUE)
+                    .addComponent(pnlService, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
                     .addComponent(pnlSchedule, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(pnlActions, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1587,21 +1579,27 @@ public class CreateSR extends javax.swing.JFrame {
             if(e1.getSource() == BtnYes)
                 {
                     //String bundle = "";
+                    Operations manageCustomer = new Operations();
                     if (CustomerType == "Existing"){
                         System.out.println("trying to save customer!");
+                        Users users = manageCustomer.retrieveUser(Login.user_id);
+                        Department department = manageCustomer.updateDepartment(cmbDepartmentName.getSelectedItem().toString(), cmbContractNumber.getSelectedItem().toString());
+                        manageCustomer.updateBilling(department,txtBillingName.getText(), txtBillingAlias.getText(),txtBillingAddress.getText(),txtBillingCity.getText(),txtBillingProvince.getText(),txtBillingPostalCode.getText(), txtBillingContactName.getText(),txtBillingPrimaryPhone.getText(),txtBillingExt.getText(),txtBillingFax1.getText(), txtBillingExt2.getText(),txtBillingFax.getText(), txtBillingEmailAddress.getText(),Login.user_id);
+                        Bundles bundles = manageCustomer.updateBundle(cmbBundles.getSelectedItem().toString());
+                        
+                        Integer customerID = manageCustomer.updateCustomer(billing,bundles,users,txtCustomerName.getText(),txtNotes.getText(),txtAddress.getText(),txtUnit.getText(),txtAddressNotes.getText(),txtCity.getText(),txtProvince.getText(),txtPostalCode.getText(),txtContactName.getText(),txtPrimaryPhone.getText(),txtExt.getText(),txtSecondaryPhone.getText(),txtExt2.getText(),txtFax.getText(),txtEmailAddress.getText());
                         //UpdateCustomer(new_customer.getCid(),new_customer.getBundles().getBdlid(),new_customer.getBusiness().getBid(),new_customer.getDepartment().getDid(),new_customer.getUsers().getUid(), txtCustomerName.getText(),txtNotes.getText(),txtAddress.getText(),txtAddressNotes.getText(),txtCity.getText(),txtProvince.getText(),txtPostalCode.getText(),txtContactName.getText(),txtPrimaryPhone.getText(),txtExt.getText(),txtSecondaryPhone.getText(),txtExt2.getText(),txtFax.getText(),txtEmailAddress.getText(), cmbContractNr.getSelectedItem().toString());
 //Integer CustID,Integer BDLID, Business business, Department department, Users users, String customerName, String notes, String address, String addressNotes, String city, String province, String postalCode, String contactName, String primaryPhone, String ext, String secondaryPhone, String ext2, String other, String fax, String emailAddress, String contractNr, Date creationDate, Date updateDate, Set serviceRequests
                         //ME.updateCustomer(txtCustomer.getText(),txtCustInfo.getText(),txtStreet.getText(),txtStreetInfo.getText(),txtCity.getText(),txtProv.getText(),txtPostalCode.getText(),txtContact.getText(),txtPhone1.getText(),txtExt1.getText(),txtPhone2.getText(),txtExt2.getText(),txtFax.getText(),txtEmail.getText(),txtBillingDept.getText(),txtBillingContract.getText(),DateUtils.now_date_time());
                     }else{
                         //new_customer
-                        Operations manageCustomer = new Operations();
+                        
+                        Users users = manageCustomer.retrieveUser(Login.user_id);
                         Department department = manageCustomer.addDepartment(cmbDepartmentName.getSelectedItem().toString(), cmbContractNumber.getSelectedItem().toString());
-                        Billing billing = manageCustomer.addBilling(department, txtBillingName.getText(), txtBillingAlias.getText(),txtBillingAddress.getText(),txtBillingCity.getText(),txtBillingProvince.getText(),txtBillingPostalCode.getText(), txtBillingContactName.getText(),txtBillingPrimaryPhone.getText(),txtBillingExt.getText(),txtBillingSecondaryPhone.getText(), txtBillingExt2.getText(),txtBillingFax.getText(), txtBillingEmailAddress.getText());
+                        Billing billing = manageCustomer.addBilling(department,txtBillingName.getText(), txtBillingAlias.getText(),txtBillingAddress.getText(),txtBillingCity.getText(),txtBillingProvince.getText(),txtBillingPostalCode.getText(), txtBillingContactName.getText(),txtBillingPrimaryPhone.getText(),txtBillingExt.getText(),txtBillingFax1.getText(), txtBillingExt2.getText(),txtBillingFax.getText(), txtBillingEmailAddress.getText(),Login.user_id);
+                        Bundles bundles = manageCustomer.addBundle(cmbBundles.getSelectedItem().toString());
                         
-                        Department department = manageCustomer.addDepartment(int departmentId, String departmentName, String contractNumber, Date creationDate, Date updateDate, int updatedByUser, Set billings);
-                        Bundles bundles = manageCustomer.addBundle(cmbBundles.getSelectedItem());
-                        
-                        customerID = manageCustomer.addCustomer(,bundles,,txtCustomerName.getText(),txtNotes.getText(),txtAddress.getText(),txtUnit.getText(),txtAddressNotes.getText(),txtCity.getText(),txtProvince.getText(),txtPostalCode.getText(),txtContactName.getText(),txtPrimaryPhone.getText(),txtExt.getText(),txtSecondaryPhone.getText(),txtExt2.getText(),txtFax.getText(),txtEmailAddress.getText());
+                        Integer customerID = manageCustomer.addCustomer(billing,bundles,users,txtCustomerName.getText(),txtNotes.getText(),txtAddress.getText(),txtUnit.getText(),txtAddressNotes.getText(),txtCity.getText(),txtProvince.getText(),txtPostalCode.getText(),txtContactName.getText(),txtPrimaryPhone.getText(),txtExt.getText(),txtSecondaryPhone.getText(),txtExt2.getText(),txtFax.getText(),txtEmailAddress.getText());
                     }
                     //try{    
                         //get bundle info
@@ -1860,13 +1858,6 @@ public class CreateSR extends javax.swing.JFrame {
         if ((evt.getKeyCode() == KeyEvent.VK_ENTER) && (CustomerType.equals("New")) && (txtCity.getText().isEmpty())){displayMessage("City is a mandatory field","City is Mandatory!!");}
     }//GEN-LAST:event_txtCityKeyPressed
 
-    private void txtPrimaryPhoneKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrimaryPhoneKeyPressed
-        if (((evt.getKeyCode() == KeyEvent.VK_ENTER) ) && (CustomerType.equals("New"))){
-            if (txtPrimaryPhone.getText().isEmpty()){displayMessage("Phone # is a mandatory field","Phone# is Mandatory!!");}
-            else{btnSave.setEnabled(true);}
-        }
-    }//GEN-LAST:event_txtPrimaryPhoneKeyPressed
-
     private void jCalendar1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCalendar1MouseClicked
         btnNext.setEnabled(true);
     }//GEN-LAST:event_jCalendar1MouseClicked
@@ -1932,10 +1923,6 @@ public class CreateSR extends javax.swing.JFrame {
     private void txtBillingCityKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBillingCityKeyPressed
         if (((evt.getKeyCode() == KeyEvent.VK_ENTER)) && (CustomerType.equals("New")) && (txtBillingCity.getText().isEmpty())){displayMessage("Billing City is a mandatory field","City is Mandatory!!");txtBillingCity.requestFocus();}
     }//GEN-LAST:event_txtBillingCityKeyPressed
-
-    private void txtBillingPrimaryPhoneKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBillingPrimaryPhoneKeyPressed
-        if ((evt.getKeyCode() == KeyEvent.VK_ENTER) && ((CustomerType.equals("New")) && (txtBillingPrimaryPhone.getText().isEmpty()))){displayMessage("Billing Phone is a mandatory field","Phone is Mandatory!!");}
-    }//GEN-LAST:event_txtBillingPrimaryPhoneKeyPressed
 
     private void jCalendar1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCalendar1MouseReleased
         btnNext.setEnabled(true);
@@ -2073,7 +2060,7 @@ public class CreateSR extends javax.swing.JFrame {
         txtBillingContactName.setText(new_customer.getBusiness().getContactName());
         txtBillingPrimaryPhone.setText(new_customer.getBusiness().getPrimaryPhone());
         txtBillingExt.setText(new_customer.getBusiness().getExt());
-        txtBillingSecondaryPhone.setText(new_customer.getBusiness().getSecondaryPhone());
+        txtBillingFax1.setText(new_customer.getBusiness().getSecondaryPhone());
         txtBillingExt2.setText(new_customer.getBusiness().getExt2());
         txtBillingFax.setText(new_customer.getBusiness().getFax());
         txtBillingEmailAddress.setText(new_customer.getBusiness().getEmailAddress());
@@ -2113,7 +2100,7 @@ public class CreateSR extends javax.swing.JFrame {
         txtBillingContactName.setText(new_business.getContactName());
         txtBillingPrimaryPhone.setText(new_business.getPrimaryPhone());
         txtBillingExt.setText(new_business.getExt());
-        txtBillingSecondaryPhone.setText(new_business.getSecondaryPhone());
+        txtBillingFax1.setText(new_business.getSecondaryPhone());
         txtBillingExt2.setText(new_business.getExt2());
         txtBillingFax.setText(new_business.getFax());
         txtBillingEmailAddress.setText(new_business.getEmailAddress());
@@ -2213,59 +2200,7 @@ public class CreateSR extends javax.swing.JFrame {
  * and open the template in the editor.
  */
 
-
-public class MyInterceptor extends EmptyInterceptor {
-    private int updates;
-    private int creates;
-    private int loads;
-
-    public void onDelete(Object entity,
-                    Serializable id,
-                    Object[] state,
-                    String[] propertyNames,
-                    org.hibernate.type.Type[] types) {
-       // do nothing
-   }
-
-   // This method is called when Employee object gets updated.
-    public boolean onFlushDirty(Object entity,
-                    Serializable id,
-                    Object[] currentState,
-                    Object[] previousState,
-                    String[] propertyNames,
-                    org.hibernate.type.Type[] types) {
-        if ( entity instanceof Customer ) {
-            System.out.println("Update Operation");
-            return true; 
-        }
-        return false;
-    }
-    public boolean onLoad(Object entity,
-                    Serializable id,
-                    Object[] state,
-                    String[] propertyNames,
-                    org.hibernate.type.Type[] types) {
-        // do nothing
-        return true;
-    }
-    // This method is called when Employee object gets created.
-    public boolean onSave(Object entity,
-                    Serializable id,
-                    Object[] state,
-                    String[] propertyNames,
-                    org.hibernate.type.Type[] types) {
-        if ( entity instanceof Customer ) {
-            System.out.println("Create Operation");
-            return true; 
-        }
-        return false;
-    }
-    //called before commit into database
-    public void preFlush(Iterator iterator) {System.out.println("preFlush");}
-    //called after committed into database
-    public void postFlush(Iterator iterator) {System.out.println("postFlush");}
-}
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDocumentation;
@@ -2277,7 +2212,6 @@ public class MyInterceptor extends EmptyInterceptor {
     private javax.swing.JComboBox<String> cmbBundles;
     private javax.swing.JComboBox<String> cmbContractNumber;
     private javax.swing.JComboBox<String> cmbDepartmentName;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblAvailBundles;
     private javax.swing.JLabel lblBillingAlias;
     private javax.swing.JLabel lblBillingCity;
@@ -2304,6 +2238,7 @@ public class MyInterceptor extends EmptyInterceptor {
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblNameInfo;
     private javax.swing.JLabel lblPO;
+    private javax.swing.JLabel lblPageTitle;
     private javax.swing.JLabel lblPhone1;
     private javax.swing.JLabel lblPhone2;
     private javax.swing.JLabel lblPostalCode;
@@ -2346,25 +2281,25 @@ public class MyInterceptor extends EmptyInterceptor {
     private javax.swing.JTextField txtBillingEmailAddress;
     private javax.swing.JTextField txtBillingExt;
     private javax.swing.JTextField txtBillingExt2;
-    private javax.swing.JTextField txtBillingFax;
+    private javax.swing.JFormattedTextField txtBillingFax;
+    private javax.swing.JFormattedTextField txtBillingFax1;
     private javax.swing.JTextField txtBillingName;
-    private javax.swing.JTextField txtBillingPostalCode;
-    private javax.swing.JTextField txtBillingPrimaryPhone;
+    private javax.swing.JFormattedTextField txtBillingPostalCode;
+    private javax.swing.JFormattedTextField txtBillingPrimaryPhone;
     private javax.swing.JTextField txtBillingProvince;
-    private javax.swing.JTextField txtBillingSecondaryPhone;
     private javax.swing.JTextField txtCity;
     private javax.swing.JTextField txtContactName;
     private javax.swing.JTextField txtCustomerName;
     private javax.swing.JTextField txtEmailAddress;
     private javax.swing.JTextField txtExt;
     private javax.swing.JTextField txtExt2;
-    private javax.swing.JTextField txtFax;
+    private javax.swing.JFormattedTextField txtFax;
     private javax.swing.JTextField txtNotes;
     private javax.swing.JTextField txtPO;
-    private javax.swing.JTextField txtPostalCode;
-    private javax.swing.JTextField txtPrimaryPhone;
+    private javax.swing.JFormattedTextField txtPostalCode;
+    private javax.swing.JFormattedTextField txtPrimaryPhone;
     private javax.swing.JTextField txtProvince;
-    private javax.swing.JTextField txtSecondaryPhone;
+    private javax.swing.JFormattedTextField txtSecondaryPhone;
     private javax.swing.JTextField txtUnit;
     // End of variables declaration//GEN-END:variables
 }
