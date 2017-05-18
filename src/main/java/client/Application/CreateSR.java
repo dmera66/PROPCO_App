@@ -1,11 +1,4 @@
-package Application;
-
-import com.mycompany.propco_maven_new.Billing;
-import com.mycompany.propco_maven_new.Department;
-import com.mycompany.propco_maven_new.Bundles;
-import com.mycompany.propco_maven_new.Customer;
-import com.mycompany.propco_maven_new.Users;
-import java.util.Iterator;
+package main.java.client.Application;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -18,8 +11,10 @@ import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -29,7 +24,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+
 import org.hibernate.HibernateException;
+
+import main.java.com.propco.rts.server.pojo.v1.Billing;
+import main.java.com.propco.rts.server.pojo.v1.Bundles;
+import main.java.com.propco.rts.server.pojo.v1.Customer;
+import main.java.com.propco.rts.server.pojo.v1.Department;
+import main.java.com.propco.rts.server.pojo.v1.Users;
 
 
 /*

@@ -1,17 +1,20 @@
-package Application;
+package main.java.client.Application;
 
 
-import com.mycompany.propco_maven_new.Users;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.swing.JOptionPane;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import propco_maven_new.HibernateUtil;
+
+import main.java.com.propco.rts.server.pojo.v1.Users;
+import main.java.propco.rts.server.dao.HibernateSessionFactory;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -53,7 +56,7 @@ public class Login extends javax.swing.JFrame {
     }
     
     private void executeHQLQuery(String query){
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateSessionFactory.getSessionFactory().openSession();
         Transaction tx = null;
         try{
             tx = session.beginTransaction();

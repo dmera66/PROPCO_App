@@ -1,4 +1,4 @@
-package Application;
+package main.java.client.Application;
 
 
 import java.awt.event.ActionEvent;
@@ -6,14 +6,17 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import propco_maven_new.HibernateUtil;
+
+import main.java.propco.rts.server.dao.HibernateSessionFactory;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -233,7 +236,7 @@ public MainMenu() {
     }
 
     private void executeHQLQuery(String query){
-        Session session = HibernateUtil.getSessionFactory().openSession();
+        Session session = HibernateSessionFactory.getSessionFactory().openSession();
         Transaction tx = null;
         try{
             tx = session.beginTransaction();

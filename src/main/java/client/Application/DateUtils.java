@@ -1,4 +1,4 @@
-package Application;
+package main.java.client.Application;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

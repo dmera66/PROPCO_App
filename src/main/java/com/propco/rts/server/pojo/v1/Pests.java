@@ -1,4 +1,4 @@
-package com.mycompany.propco_maven_new;
+package main.java.com.propco.rts.server.pojo.v1;
 // Generated 17-May-2017 12:47:07 PM by Hibernate Tools 4.3.1
 
 

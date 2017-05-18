@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package propco_maven_new;
+package main.java.propco.rts.server.dao;
 
-import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.SessionFactory;
 
 /**
@@ -14,7 +14,7 @@ import org.hibernate.SessionFactory;
  *
  * @author dan.mera
  */
-public class HibernateUtil {
+public class HibernateSessionFactory {
 
     private static final SessionFactory sessionFactory;
     
@@ -22,7 +22,7 @@ public class HibernateUtil {
         try {
             // Create the SessionFactory from standard (hibernate.cfg.xml) 
             // config file.
-            sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
+        	sessionFactory = new Configuration().configure().buildSessionFactory();
         } catch (Throwable ex) {
             // Log the exception. 
             System.err.println("Initial SessionFactory creation failed." + ex);
