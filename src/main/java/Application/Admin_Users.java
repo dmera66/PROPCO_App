@@ -1,0 +1,157 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Application;
+
+import java.awt.BorderLayout;
+import java.sql.SQLException;
+import java.util.Vector;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+/**
+ *
+ * @author dan
+ */
+public class Admin_Users extends javax.swing.JFrame{
+    private String[] columnNames=new String[3];
+    private Object[][] dataValues=new String[3][];
+    JTable table = new JTable();
+    JScrollPane pane = new JScrollPane();
+    JPanel pnlTable = new JPanel();
+    JPanel pnlMore = new JPanel();
+    JPanel pnlActions = new JPanel();
+    JPanel pnlActivities = new JPanel();
+    JButton btnMore = new JButton("More Rows...");
+    JButton btnCancel = new JButton("Cancel");
+    JButton btnCompleteReq  = new JButton("Complete Request");    
+    myTableModel model;
+    /**
+     * Creates new form Admin_Users
+     */
+    public Admin_Users() {
+        initComponents();
+        setTitle("Administrative Panel for Users");
+        setSize(800,600);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        //initComponents();
+        System.out.println("===Administrative Panel for Users===");
+        pnlTable.setLayout(new BorderLayout());
+        
+        columnNames = new String[] {"User Name","Password","Full Privilege","Service Receipt","Assign Service to Technician","Pending Service Request","Review Service Request","Invoices","Reports" };
+        dataValues=new Object[][] {{"","","","","","","","",""},{"","","","","","","","",""},{"","","","","","","","",""},{"","","","","","","","","",},{"","","","","","","","",""},};
+        
+        myTableModel model=new myTableModel();
+        table.setRowHeight(30);
+        //table.setShowVerticalLines(true);
+        table.setShowGrid(true);
+        table.setAutoResizeMode(4);
+        
+        table.setModel(model);
+        table.setCellSelectionEnabled(true);
+        
+        ListSelectionModel cellSelectionModel = table.getSelectionModel();
+        cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        pnlTable.add(pane);
+        pnlTable.setSize(800,400);
+        
+        pnlMore.add(btnMore);
+        pnlMore.setSize(800,100);
+        btnMore.setBounds(350,400,100,30);
+        
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        TableColumnAdjuster tca = new TableColumnAdjuster(table);
+        tca.adjustColumns();
+
+        pane.setViewportView(table);
+        
+        //pnlTable.add(pane);
+        //pnlTable.setBounds(0,0,400,200);
+        pnlActions.setLayout(new BorderLayout());
+        pnlActions.add(btnCancel,BorderLayout.WEST);
+        btnCancel.setBounds(50,0,100,30);
+        btnCompleteReq.setBounds(250,0,100,30);
+        pnlActions.add(btnCompleteReq,BorderLayout.EAST);
+        //pnlActions.setBounds(200,0,400,200);
+        pnlActivities.setLayout(new BorderLayout());
+        pnlActivities.add(pnlTable,BorderLayout.NORTH);
+        pnlActivities.add(pnlMore,BorderLayout.CENTER);
+        pnlActivities.add(pnlActions,BorderLayout.SOUTH);
+        
+        getContentPane().add(pnlActivities);
+                
+        setVisible(true);
+        setResizable(false);
+        
+        btnMore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Vector rowData = null;
+                //model.addRow(new Object[][] {{"","","","Choose"},});
+                model.addRow(rowData);
+                table.validate();
+            }
+        });
+        
+        //table.addKeyListener(new KeyListener()); 
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+        
+        btnCompleteReq.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCompleteReqActionPerformed(evt);
+            }
+        });
+        
+        
+    }
+    public class myTableModel extends DefaultTableModel{
+        myTableModel(){
+            super(dataValues,columnNames);
+        }
+        public boolean isCellEditable(int row,int cols){return true;}
+    }
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    private void btnCompleteReqActionPerformed(java.awt.event.ActionEvent evt) {}
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {}
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // End of variables declaration//GEN-END:variables
+}

@@ -524,11 +524,12 @@ public class CreateSR extends javax.swing.JFrame {
                     .addComponent(lblBillingAlias, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtBillingAlias, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblBillingStreet, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBillingAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblBillingPostalCode, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBillingPostalCode, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
+                .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtBillingPostalCode, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                    .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblBillingStreet, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtBillingAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblBillingPostalCode, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlBillingCustomerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblBillingCity, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1583,12 +1584,12 @@ public class CreateSR extends javax.swing.JFrame {
                     if (CustomerType == "Existing"){
                         System.out.println("trying to save customer!");
                         Users users = manageCustomer.retrieveUser(Login.user_id);
-                        Department department = manageCustomer.updateDepartment(cmbDepartmentName.getSelectedItem().toString(), cmbContractNumber.getSelectedItem().toString());
-                        manageCustomer.updateBilling(department,txtBillingName.getText(), txtBillingAlias.getText(),txtBillingAddress.getText(),txtBillingCity.getText(),txtBillingProvince.getText(),txtBillingPostalCode.getText(), txtBillingContactName.getText(),txtBillingPrimaryPhone.getText(),txtBillingExt.getText(),txtBillingFax1.getText(), txtBillingExt2.getText(),txtBillingFax.getText(), txtBillingEmailAddress.getText(),Login.user_id);
-                        Bundles bundles = manageCustomer.updateBundle(cmbBundles.getSelectedItem().toString());
+                        //Department department = manageCustomer.updateDepartment(cmbDepartmentName.getSelectedItem().toString(), cmbContractNumber.getSelectedItem().toString());
+                        //manageCustomer.updateBilling(department,txtBillingName.getText(), txtBillingAlias.getText(),txtBillingAddress.getText(),txtBillingCity.getText(),txtBillingProvince.getText(),txtBillingPostalCode.getText(), txtBillingContactName.getText(),txtBillingPrimaryPhone.getText(),txtBillingExt.getText(),txtBillingFax1.getText(), txtBillingExt2.getText(),txtBillingFax.getText(), txtBillingEmailAddress.getText(),Login.user_id);
+                        //Bundles bundles = manageCustomer.updateBundle(cmbBundles.getSelectedItem().toString());
                         
-                        Integer customerID = manageCustomer.updateCustomer(billing,bundles,users,txtCustomerName.getText(),txtNotes.getText(),txtAddress.getText(),txtUnit.getText(),txtAddressNotes.getText(),txtCity.getText(),txtProvince.getText(),txtPostalCode.getText(),txtContactName.getText(),txtPrimaryPhone.getText(),txtExt.getText(),txtSecondaryPhone.getText(),txtExt2.getText(),txtFax.getText(),txtEmailAddress.getText());
-                        //UpdateCustomer(new_customer.getCid(),new_customer.getBundles().getBdlid(),new_customer.getBusiness().getBid(),new_customer.getDepartment().getDid(),new_customer.getUsers().getUid(), txtCustomerName.getText(),txtNotes.getText(),txtAddress.getText(),txtAddressNotes.getText(),txtCity.getText(),txtProvince.getText(),txtPostalCode.getText(),txtContactName.getText(),txtPrimaryPhone.getText(),txtExt.getText(),txtSecondaryPhone.getText(),txtExt2.getText(),txtFax.getText(),txtEmailAddress.getText(), cmbContractNr.getSelectedItem().toString());
+                        //Integer customerID = manageCustomer.updateCustomer(billing,bundles,users,txtCustomerName.getText(),txtNotes.getText(),txtAddress.getText(),txtUnit.getText(),txtAddressNotes.getText(),txtCity.getText(),txtProvince.getText(),txtPostalCode.getText(),txtContactName.getText(),txtPrimaryPhone.getText(),txtExt.getText(),txtSecondaryPhone.getText(),txtExt2.getText(),txtFax.getText(),txtEmailAddress.getText());
+                        //UpdateCustomer(new_customer.getCid(),new_customer.getBundles().getBdlid(),new_customer.getBilling().getBid(),new_customer.getDepartment().getDid(),new_customer.getUsers().getUid(), txtCustomerName.getText(),txtNotes.getText(),txtAddress.getText(),txtAddressNotes.getText(),txtCity.getText(),txtProvince.getText(),txtPostalCode.getText(),txtContactName.getText(),txtPrimaryPhone.getText(),txtExt.getText(),txtSecondaryPhone.getText(),txtExt2.getText(),txtFax.getText(),txtEmailAddress.getText(), cmbContractNr.getSelectedItem().toString());
 //Integer CustID,Integer BDLID, Business business, Department department, Users users, String customerName, String notes, String address, String addressNotes, String city, String province, String postalCode, String contactName, String primaryPhone, String ext, String secondaryPhone, String ext2, String other, String fax, String emailAddress, String contractNr, Date creationDate, Date updateDate, Set serviceRequests
                         //ME.updateCustomer(txtCustomer.getText(),txtCustInfo.getText(),txtStreet.getText(),txtStreetInfo.getText(),txtCity.getText(),txtProv.getText(),txtPostalCode.getText(),txtContact.getText(),txtPhone1.getText(),txtExt1.getText(),txtPhone2.getText(),txtExt2.getText(),txtFax.getText(),txtEmail.getText(),txtBillingDept.getText(),txtBillingContract.getText(),DateUtils.now_date_time());
                     }else{
@@ -1596,109 +1597,12 @@ public class CreateSR extends javax.swing.JFrame {
                         
                         Users users = manageCustomer.retrieveUser(Login.user_id);
                         Department department = manageCustomer.addDepartment(cmbDepartmentName.getSelectedItem().toString(), cmbContractNumber.getSelectedItem().toString());
-                        Billing billing = manageCustomer.addBilling(department,txtBillingName.getText(), txtBillingAlias.getText(),txtBillingAddress.getText(),txtBillingCity.getText(),txtBillingProvince.getText(),txtBillingPostalCode.getText(), txtBillingContactName.getText(),txtBillingPrimaryPhone.getText(),txtBillingExt.getText(),txtBillingFax1.getText(), txtBillingExt2.getText(),txtBillingFax.getText(), txtBillingEmailAddress.getText(),Login.user_id);
+                        //Billing billing = manageCustomer.addBilling(department,txtBillingName.getText(), txtBillingAlias.getText(),txtBillingAddress.getText(),txtBillingCity.getText(),txtBillingProvince.getText(),txtBillingPostalCode.getText(), txtBillingContactName.getText(),txtBillingPrimaryPhone.getText(),txtBillingExt.getText(),txtBillingFax1.getText(), txtBillingExt2.getText(),txtBillingFax.getText(), txtBillingEmailAddress.getText(),Login.user_id);
                         Bundles bundles = manageCustomer.addBundle(cmbBundles.getSelectedItem().toString());
                         
-                        Integer customerID = manageCustomer.addCustomer(billing,bundles,users,txtCustomerName.getText(),txtNotes.getText(),txtAddress.getText(),txtUnit.getText(),txtAddressNotes.getText(),txtCity.getText(),txtProvince.getText(),txtPostalCode.getText(),txtContactName.getText(),txtPrimaryPhone.getText(),txtExt.getText(),txtSecondaryPhone.getText(),txtExt2.getText(),txtFax.getText(),txtEmailAddress.getText());
+                        //Integer customerID = manageCustomer.addCustomer(billing,bundles,users,txtCustomerName.getText(),txtNotes.getText(),txtAddress.getText(),txtUnit.getText(),txtAddressNotes.getText(),txtCity.getText(),txtProvince.getText(),txtPostalCode.getText(),txtContactName.getText(),txtPrimaryPhone.getText(),txtExt.getText(),txtSecondaryPhone.getText(),txtExt2.getText(),txtFax.getText(),txtEmailAddress.getText());
                     }
-                    //try{    
-                        //get bundle info
-                        //if (cbBundle.isEnabled()){
-                        //    bundle = cmbBundles.getSelectedItem().toString();
-                        //}
-                        
-                        //get user_id
-                        //String return_field = "User_ID"; 
-                        //String sqlStmt = "Select " + return_field + " from Users where user_name = '" + frmLogin.user_name + "'";
-                        //String sqlStmt = "Select " + return_field + " from Users where user_name = '" + user_name + "'";
-                        //Integer user_id = Integer.getInteger(SQLConnection.return_value(sqlStmt,return_field));
-                        //rs = SQLConnection.getRecordSet(sqlStmt);
-                        //ServiceRequest new_cust = new ServiceRequest();
-                        //Integer user_id = rs.getInt("User_ID");
-                        /*sqlStmt = "UPDATE Customer SET CustomerName = '" + txtCustomer.getText() + "'," 
-                                + " Notes = '" + txtCustInfo.getText() + "',"
-                                + " Address = '" + txtStreet.getText() + "',"
-                                + " AddressNotes = '" + txtStreetInfo.getText() + "',"
-                                + " City = '" + txtCity.getText() + "',"
-                                + " Province = '" + txtProv.getText() + "',"
-                                + " PostalCode = '" + txtPostalCode.getText() + "',"
-                                + " ContactName = '" + txtContact.getText() + "',"
-                                + " PrimaryPhone = '" + txtPhone1.getText() + "',"
-                                + " Ext = '" + txtExt1.getText() + "',"
-                                + " SecondaryPhone = '" + txtPhone2.getText() + "',"
-                                + " Ext2 = '" + txtExt2.getText() + "',"
-                                + " Other = '',"
-                                + " Fax = '" + txtFax.getText() + "',"
-                                + " EmailAddress = '" + txtEmail.getText() + "',"
-                                //+ " BundleName = '" + bundle + "',"
-                                + " DepartmentName = '" + txtBillingDept.getText() + "',"
-                                + " ContractNr = '" + txtBillingContract.getText() + "',"
-                                + " UpdateDate = '" + DateUtils.now_date_time() + "',";
-                                //+ " UID = '" + new_cust.getuser_id() + "'"
-                                //+ " where CID = '" + new_cust.getCustID() + "'";
-                                //+ " UserID = '(SELECT User_ID from Users where user_name = '" + frmLogin.user_name + "')'"
-                                //+ " where cust_id = '" + CustID + "'";
-
-                        System.out.println(sqlStmt);
-                        */
-                        //int updateCust = SQLConnection.updateRecordSet(sqlStmt);
-                        //reload Customer class
-                        //int user_id = new_cust.getuser_id();
-                        //int custID = new_cust.getCustID();
-                        //Customer upd_Cust = new Customer(user_id,txtCustomer.getText(),txtCustInfo.getText(),txtStreet.getText(),txtStreetInfo.getText(), txtCity.getText(), txtProv.getText(), txtPostalCode.getText(), txtContact.getText(),txtPhone1.getText(),txtExt1.getText(),txtPhone2.getText(),txtExt2.getText(),txtFax.getText(),txtEmail.getText(),bundle, txtBillingDept.getText(),txtBillingContract.getText(),custID);
-                        //System.out.println("test" + upd_Cust.CustID);
-                        //update Billing info
-                        //if (BusinessID > 0) {
-                            //need to add new bundle if it was updated
-                            //sqlStmt = "SELECT count(*) as num from Bundles where BundleName = '" + bundle 
-                            //        + "' and BID = '" + BusinessID + "'";
-                            //rs = SQLConnection.getRecordSet(sqlStmt);
-                            //System.out.println("count is: " + rs.getInt("num"));
-                            //if (rs.getInt("num") == 0){
-                            //    sqlStmt = "INSERT INTO Bundles (BID,BundleName) VALUES (?,?)";
-                             //   System.out.println(sqlStmt);
-                                //PreparedStatement stmt = SQLConnection.conn.prepareStatement(sqlStmt);//"insert into Bundles (BID, BundleName) values (?, ?)");
-                                //System.out.println("insert into Bundles (BID, BundleName) values (?, ?)");
-                                //stmt.setInt(1, BusinessID);
-                            //    System.out.println("1");
-                                //stmt.setString(2, bundle);
-                            //    System.out.println("2");
-                                //stmt.executeUpdate();
-                                
-                                //SQLConnection.insertRecordSet(sqlStmt);
-                            //}
-                            /*
-                            sqlStmt = "UPDATE Business_Details SET Name = '" + txtBillingName.getText() + "'," 
-                                    + " Alias = '" + txtBillingAlias.getText() + "',"
-                                    + " Address = '" + txtBillingStreet.getText() + "',"
-                                    + " City = '" + txtBillingCity.getText() + "',"
-                                    + " Province = '" + txtBillingProv.getText() + "',"
-                                    + " PostalCode = '" + txtBillingPostalCode.getText() + "',"
-                                    + " ContactName = '" +txtBillingContact.getText() + "',"
-                                    + " PrimaryPhone = '" +txtBillingPhone1.getText() + "',"
-                                    + " Ext = '" + txtBillingExt1.getText() + "',"
-                                    + " SecondaryPhone = '" +txtBillingPhone2.getText() + "',"
-                                    + " Ext2 = '" + txtBillingExt2.getText() + "',"
-                                    + " Fax ='" + txtBillingFax.getText() + "',"
-                                    + " EmailAddress = '" + txtBillingEmail.getText() + "',"
-                                    + " UpdateDate = '" + DateUtils.now_date_time() + "'"
-                                    + " where BID = '" + BusinessID + "'";
-*/
-                            //System.out.println(sqlStmt);
-                            //int updateBillingCust = SQLConnection.updateRecordSet(sqlStmt);
-                        //}
-                        //if ((updateCust == 1) && (updateBillingCust == 1)){
-                            //JOptionPane.showMessageDialog(null,"Customer Info Updated");
-                        //    JOptionPane.showMessageDialog(null, "Customer Info Updated", "Success!!", 1);
-                        //    Dlg.dispose();
-                        //}
-
-                    //}
-                    //catch (SQLException ex) {
-                        //Logger.getLogger(ServiceReceipt.class.getName()).log(Level.SEVERE, null, ex);
-                        //if (stmt != null) { stmt.close(); }
-                    //    System.out.println("error");      
-                    //}
+                    
                 }
             else {
                 //CustomerType = "Existing";
@@ -1710,7 +1614,7 @@ public class CreateSR extends javax.swing.JFrame {
     private void txtCustomerNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCustomerNameKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER)  {
             if (CustomerType.equals("Existing")){
-                CustomerList = executeHQLQuery(QUERY_BASED_ON_CUSTOMER_NAME + txtCustomerName.getText() + "%'");
+                /*CustomerList = executeHQLQuery("class retrieval of the customer info needed here" + txtCustomerName.getText() + "%'"); */
                 System.out.println("CustomerList retrieved");
                 switch (CustomerList.size()){
                     case 0:
@@ -1718,7 +1622,7 @@ public class CreateSR extends javax.swing.JFrame {
                         break;
                     case 1:
                         for(Object obj : CustomerList){
-                            new_customer = (Customer)obj;
+                            Customer new_customer = (Customer)obj;
                             fillInfo(new_customer);
                             //fillBusinessInfo(new_customer);
                         }
@@ -1767,14 +1671,14 @@ public class CreateSR extends javax.swing.JFrame {
         if ((evt.getKeyCode() == KeyEvent.VK_ENTER) || (evt.getKeyCode() == KeyEvent.VK_TAB)) {
             //System.out.println("street1 :" + strInput);
             if (CustomerType.equals("Existing")){
-                CustomerList = executeHQLQuery(QUERY_BASED_ON_CUSTOMER_STREET + txtAddress.getText() + "%'");
+                /*CustomerList = executeHQLQuery("class retrieval of the customer info needed here" + txtCustomerName.getText() + "%'"); */
                 switch (CustomerList.size()){
                     case 0:
                         displayMessage("There is no customer with Street containing '" + txtAddress.getText() + "'");
                         break;
                     case 1:
                         for(Object obj : CustomerList){
-                            new_customer = (Customer)obj;
+                            Customer new_customer = (Customer)obj;
                             fillInfo(new_customer);
                             //fillBusinessInfo(new_customer);
                         }
@@ -1872,7 +1776,7 @@ public class CreateSR extends javax.swing.JFrame {
             }
             else if (txtBillingName.getText().length() > 3) {
                 //first we need to check if the Billing name is existing
-                BusinessList = executeHQLQuery(QUERY_BASED_ON_BILLING_NAME + txtBillingName.getText() + "%'");
+                /*BusinessList = executeHQLQuery("class retrieval of the customer info needed here" + txtCustomerName.getText() + "%'"); */
                 System.out.println("BillingList retrieved");
                 switch (BusinessList.size()){
                     //case 0:
@@ -1881,12 +1785,12 @@ public class CreateSR extends javax.swing.JFrame {
                     case 1:
                         for(Object obj : BusinessList){
                             //Object obj = new BillingList();
-                            new_business = (Business)obj;
-                            fillBusinessInfo(new_business);
-                            List BundleList = executeHQLQuery(QUERY_BASED_ON_BUNDLES);
-                            fillBundleInfo(BundleList);
-                            List DeptList = executeHQLQuery(QUERY_BASED_ON_DEPARTMENT);
-                            fillDeptInfo(DeptList);
+                            Billing new_business = (Billing)obj;
+                            fillBillingInfo(new_business);
+                            //List BundleList = executeHQLQuery(QUERY_BASED_ON_BUNDLES);
+                            //fillBundleInfo(BundleList);
+                            //List DeptList = executeHQLQuery(QUERY_BASED_ON_DEPARTMENT);
+                            //fillDeptInfo(DeptList);
                         }
                         System.out.println("after fillinfo");
 
@@ -1943,9 +1847,9 @@ public class CreateSR extends javax.swing.JFrame {
             DlgCntnr.add(CustList);
             //fill CustList with the records
             for(Object obj : CustomerList){
-                new_customer = (Customer)obj;
+                Customer new_customer = (Customer)obj;
                 
-                CustList.addItem(new_customer.getCid() +"|" + new_customer.getCustomerName() + " at " + new_customer.getAddress());
+                CustList.addItem(new_customer.getCustomerId() +"|" + new_customer.getCustomerName() + " at " + new_customer.getAddress());
             }
             AskPanel.add(BtnOK);
             DlgCntnr.add(AskPanel);
@@ -1973,8 +1877,8 @@ public class CreateSR extends javax.swing.JFrame {
                     System.out.println("Selected ID is " + tokens[0]);
               
                     //Customer 
-                    new_customer = (Customer)session.get(Customer.class, Integer.getInteger(tokens[0]));
-                    txtCustomerName.setText(new_customer.getCustomerName());
+                    //Customer new_customer = (Customer)session.get(Customer.class, Integer.getInteger(tokens[0]));
+                    //txtCustomerName.setText(new_customer.getCustomerName());
                     /*txtCustInfo.setText(my_customer.getNotes());
                     txtCustomer.setText(my_customer.getCustomerName());
                     txtCustInfo.setText(my_customer.getNotes());
@@ -1995,39 +1899,29 @@ public class CreateSR extends javax.swing.JFrame {
                     txtBillingDept.setText(my_customer.getDepartment().getDeptName());
                     //txtBillingContract.setText(new_customer.getDepartment().getContractNr());
 
-                    txtBillingName.setText(my_customer.getBusiness().getName());
-                    txtBillingAlias.setText(my_customer.getBusiness().getAlias());
-                    txtBillingStreet.setText(my_customer.getBusiness().getAddress());
-                    txtBillingCity.setText(my_customer.getBusiness().getCity());
-                    txtBillingProv.setText(my_customer.getBusiness().getProvince());
-                    txtBillingPostalCode.setText(my_customer.getBusiness().getPostalCode());
-                    txtBillingContact.setText(my_customer.getBusiness().getContactName());
-                    txtBillingPhone1.setText(my_customer.getBusiness().getPrimaryPhone());
-                    txtBillingExt1.setText(my_customer.getBusiness().getExt());
-                    txtBillingPhone2.setText(my_customer.getBusiness().getSecondaryPhone());
-                    txtBillingExt2.setText(my_customer.getBusiness().getExt2());
-                    txtBillingFax.setText(my_customer.getBusiness().getFax());
-                    txtBillingEmail.setText(my_customer.getBusiness().getEmailAddress());
+                    txtBillingName.setText(my_customer.getBilling().getName());
+                    txtBillingAlias.setText(my_customer.getBilling().getAlias());
+                    txtBillingStreet.setText(my_customer.getBilling().getAddress());
+                    txtBillingCity.setText(my_customer.getBilling().getCity());
+                    txtBillingProv.setText(my_customer.getBilling().getProvince());
+                    txtBillingPostalCode.setText(my_customer.getBilling().getPostalCode());
+                    txtBillingContact.setText(my_customer.getBilling().getContactName());
+                    txtBillingPhone1.setText(my_customer.getBilling().getPrimaryPhone());
+                    txtBillingExt1.setText(my_customer.getBilling().getExt());
+                    txtBillingPhone2.setText(my_customer.getBilling().getSecondaryPhone());
+                    txtBillingExt2.setText(my_customer.getBilling().getExt2());
+                    txtBillingFax.setText(my_customer.getBilling().getFax());
+                    txtBillingEmail.setText(my_customer.getBilling().getEmailAddress());
                     */
-                    tx.commit();
+                    //tx.commit();
                 }catch (HibernateException e) {
-                    if (tx!=null) tx.rollback();
+                    //if (tx!=null) tx.rollback();
                         e.printStackTrace(); 
                 }
                 //finally {
                 //    session.close(); 
                 //}
                 
-                //System.out.println("actioned performed " + CustList.getSelectedItem().toString().replace(" at ", "|"));
-                //String new_String = CustList.getSelectedItem().toString().replace(" at ", "|");
-                //String delims = "[|]";
-                //String [] tokens = new_String.split(delims);
-                //System.out.println("actioned " + tokens[0]);
-                //System.out.println("another " + tokens[1]);
-                
-                //sqlStmt = "select CID,CustomerName,Notes,Address,AddressNotes,City,Province,PostalCode,ContactName,PrimaryPhone,Ext,SecondaryPhone,Ext2,Fax,EmailAddress,BID,BundleName,DepartmentName,ContractNr,UID from Customer where Address = '" + tokens[1] + "' and CustomerName = '" + tokens[0] + "'";
-                //rs = SQLConnection.getRecordSet(sqlStmt);
-                //fillInfo(rs);
                 Dlg.dispose();
             }
         }
@@ -2051,19 +1945,19 @@ public class CreateSR extends javax.swing.JFrame {
         txtEmailAddress.setText(new_customer.getEmailAddress());
         cmbBundles.setSelectedItem(new_customer.getBundles().getBundleName());
         if ((new_customer.getBundles().getBundleName()).isEmpty()){cbBundle.setSelected(false);}
-        txtBillingName.setText(new_customer.getBusiness().getName());
-        txtBillingAlias.setText(new_customer.getBusiness().getAlias());
-        txtBillingAddress.setText(new_customer.getBusiness().getAddress());
-        txtBillingCity.setText(new_customer.getBusiness().getCity());
-        txtBillingProvince.setText(new_customer.getBusiness().getProvince());
-        txtBillingPostalCode.setText(new_customer.getBusiness().getPostalCode());
-        txtBillingContactName.setText(new_customer.getBusiness().getContactName());
-        txtBillingPrimaryPhone.setText(new_customer.getBusiness().getPrimaryPhone());
-        txtBillingExt.setText(new_customer.getBusiness().getExt());
-        txtBillingFax1.setText(new_customer.getBusiness().getSecondaryPhone());
-        txtBillingExt2.setText(new_customer.getBusiness().getExt2());
-        txtBillingFax.setText(new_customer.getBusiness().getFax());
-        txtBillingEmailAddress.setText(new_customer.getBusiness().getEmailAddress());
+        txtBillingName.setText(new_customer.getBilling().getBillingName());
+        txtBillingAlias.setText(new_customer.getBilling().getBillingAlias());
+        txtBillingAddress.setText(new_customer.getBilling().getBillingAddress());
+        txtBillingCity.setText(new_customer.getBilling().getBillingCity());
+        txtBillingProvince.setText(new_customer.getBilling().getBillingProvince());
+        txtBillingPostalCode.setText(new_customer.getBilling().getBillingPostalCode());
+        txtBillingContactName.setText(new_customer.getBilling().getBillingContactName());
+        txtBillingPrimaryPhone.setText(new_customer.getBilling().getBillingPrimaryPhone());
+        txtBillingExt.setText(new_customer.getBilling().getBillingExt());
+        txtBillingFax1.setText(new_customer.getBilling().getBillingSecondaryPhone());
+        txtBillingExt2.setText(new_customer.getBilling().getBillingExt2());
+        txtBillingFax.setText(new_customer.getBilling().getBillingFax());
+        txtBillingEmailAddress.setText(new_customer.getBilling().getBillingEmailAddress());
     }
     public void fillCustomerInfo(Customer new_customer){
         System.out.println("fill Customer Info");
@@ -2084,26 +1978,26 @@ public class CreateSR extends javax.swing.JFrame {
         txtEmailAddress.setText(new_customer.getEmailAddress());
         cmbBundles.setSelectedItem(new_customer.getBundles().getBundleName());
         if ((new_customer.getBundles().getBundleName()).isEmpty()){cbBundle.setSelected(false);}
-        cmbDepartmentName.setSelectedItem(new_customer.getDepartment().getDeptName());
-        cmbContractNumber.setSelectedItem(new_customer.getDepartment().getContractNr());
+        //cmbDepartmentName.setSelectedItem(new_customer.getDepartment().getDeptName());
+        //cmbContractNumber.setSelectedItem(new_customer.getDepartment().getContractNr());
         
     }    
-    public void fillBusinessInfo(Business new_business){
+    public void fillBillingInfo(Billing new_business){
         System.out.println("fillInfo");
         
-        txtBillingName.setText(new_business.getName());
-        txtBillingAlias.setText(new_business.getAlias());
-        txtBillingAddress.setText(new_business.getAddress());
-        txtBillingCity.setText(new_business.getCity());
-        txtBillingProvince.setText(new_business.getProvince());
-        txtBillingPostalCode.setText(new_business.getPostalCode());
-        txtBillingContactName.setText(new_business.getContactName());
-        txtBillingPrimaryPhone.setText(new_business.getPrimaryPhone());
-        txtBillingExt.setText(new_business.getExt());
-        txtBillingFax1.setText(new_business.getSecondaryPhone());
-        txtBillingExt2.setText(new_business.getExt2());
-        txtBillingFax.setText(new_business.getFax());
-        txtBillingEmailAddress.setText(new_business.getEmailAddress());
+        txtBillingName.setText(new_business.getBillingName());
+        txtBillingAlias.setText(new_business.getBillingAlias());
+        txtBillingAddress.setText(new_business.getBillingAddress());
+        txtBillingCity.setText(new_business.getBillingCity());
+        txtBillingProvince.setText(new_business.getBillingProvince());
+        txtBillingPostalCode.setText(new_business.getBillingPostalCode());
+        txtBillingContactName.setText(new_business.getBillingContactName());
+        txtBillingPrimaryPhone.setText(new_business.getBillingPrimaryPhone());
+        txtBillingExt.setText(new_business.getBillingExt());
+        txtBillingFax1.setText(new_business.getBillingSecondaryPhone());
+        txtBillingExt2.setText(new_business.getBillingExt2());
+        txtBillingFax.setText(new_business.getBillingFax());
+        txtBillingEmailAddress.setText(new_business.getBillingEmailAddress());
         //cmbDepartment.setSelectedItem(this_cust.DepartmentName);
         //cmbContractNr.setSelectedItem(this_cust.ContractNr);
     }
@@ -2123,8 +2017,8 @@ public class CreateSR extends javax.swing.JFrame {
         cmbContractNumber.setEditable(true);
         for (Iterator iterator = deptList.iterator(); iterator.hasNext();){
             Department my_dept = (Department) iterator.next(); 
-            cmbDepartmentName.addItem((String) my_dept.getDeptName());
-            cmbContractNumber.addItem((String) my_dept.getContractNr());
+            //cmbDepartmentName.addItem((String) my_dept.getDeptName());
+            //cmbContractNumber.addItem((String) my_dept.getContractNr());
         }
     }        
     /*
