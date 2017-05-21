@@ -267,8 +267,28 @@ public class Operations {
       }
       return customerID;
    }
-   
-    /* Method to list all the books detail */
+    
+    /* Method to list all the customer details */
+    public List listCustomers(String query){
+        //Get the session from the session factory.
+        Session session = factory.openSession();
+        Transaction tx = null;
+        List customers = null;
+        try{
+            tx = session.beginTransaction();
+            //Make an HQL query to get the results from customer table
+            customers = session.createQuery(query).list();
+            //Iterate over the result and print it.
+            for (Iterator iterator = customers.iterator(); iterator.hasNext();){
+                Customer customer = (Customer) iterator.next();
+            }
+            tx.commit();
+        }catch (HibernateException e) {if (tx!=null) tx.rollback();e.printStackTrace();}
+        finally {session.close();}
+        return customers;
+    }
+    
+    /* Method to list all the billing details */
     public void listBilling(String query){
         //Get the session from the session factory.
         Session session = factory.openSession();

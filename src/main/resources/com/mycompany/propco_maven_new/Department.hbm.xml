@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 21-May-2017 4:03:39 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated 21-May-2017 5:38:12 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="com.mycompany.propco_maven_new.Department" table="department" catalog="PROPCO_Maven_new" optimistic-lock="version">
         <id name="departmentId" type="int">

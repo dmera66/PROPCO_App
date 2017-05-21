@@ -30,6 +30,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import org.hibernate.HibernateException;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.AnnotationConfiguration;
 
 
 /*
@@ -66,7 +68,7 @@ public class CreateSR extends javax.swing.JFrame {
     List CustomerList = null;
     List BusinessList = null;
     
-    
+    private static SessionFactory factory;
     
     /**
      * Creates new form ServiceReceipt
@@ -76,6 +78,12 @@ public class CreateSR extends javax.swing.JFrame {
         
         initComponents();
         //correct tab key functionality
+        try{
+            factory = new AnnotationConfiguration().configure().addPackage("Application").buildSessionFactory();
+        }catch (Throwable ex) { 
+            System.err.println("Failed to create sessionFactory object." + ex);
+            throw new ExceptionInInitializerError(ex); 
+        }
         allow_vk_tab();
         grpFreq();
         grpServType();
