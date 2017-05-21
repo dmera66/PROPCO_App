@@ -115,7 +115,7 @@ public MainMenu() {
         pnlPage.setLayout(null);
         
         JLabel lblLogo = new javax.swing.JLabel();
-        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("Picture1.png")));
+        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/propco_maven_new/Picture1.png")));
 	lblLogo.setBounds(25,200,400,400);
         pnlLogo.add(lblLogo);
         

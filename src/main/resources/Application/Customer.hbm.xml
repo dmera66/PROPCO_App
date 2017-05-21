@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21-May-2017 2:58:51 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="Application.Customer" table="customer" catalog="PROPCO_Maven_new" optimistic-lock="version">
+        <id name="customerId" type="java.lang.Integer">
+            <column name="customerID" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="billing" class="Application.Billing" fetch="select">
+            <column name="billingID" not-null="true" />
+        </many-to-one>
+        <many-to-one name="bundles" class="Application.Bundles" fetch="select">
+            <column name="bundleID" not-null="true" />
+        </many-to-one>
+        <many-to-one name="users" class="Application.Users" fetch="select">
+            <column name="updatedByUser" not-null="true" />
+        </many-to-one>
+        <property name="customerName" type="string">
+            <column name="customerName" length="50" not-null="true" />
+        </property>
+        <property name="notes" type="string">
+            <column name="notes" length="50" />
+        </property>
+        <property name="address" type="string">
+            <column name="address" length="50" not-null="true" />
+        </property>
+        <property name="unit" type="string">
+            <column name="unit" length="8" not-null="true" />
+        </property>
+        <property name="addressNotes" type="string">
+            <column name="addressNotes" length="30" />
+        </property>
+        <property name="city" type="string">
+            <column name="city" length="30" not-null="true" />
+        </property>
+        <property name="province" type="string">
+            <column name="province" length="2" />
+        </property>
+        <property name="postalCode" type="string">
+            <column name="postalCode" length="7" />
+        </property>
+        <property name="contactName" type="string">
+            <column name="contactName" length="20" not-null="true" />
+        </property>
+        <property name="primaryPhone" type="string">
+            <column name="primaryPhone" length="12" not-null="true" />
+        </property>
+        <property name="ext" type="string">
+            <column name="ext" length="5" />
+        </property>
+        <property name="secondaryPhone" type="string">
+            <column name="secondaryPhone" length="12" />
+        </property>
+        <property name="ext2" type="string">
+            <column name="ext2" length="5" />
+        </property>
+        <property name="fax" type="string">
+            <column name="fax" length="12" />
+        </property>
+        <property name="emailAddress" type="string">
+            <column name="emailAddress" length="30" />
+        </property>
+        <property name="creationDate" type="timestamp">
+            <column name="creationDate" length="0" not-null="true" />
+        </property>
+        <property name="updateDate" type="timestamp">
+            <column name="updateDate" length="0" not-null="true" />
+        </property>
+        <set name="serviceRequests" table="serviceRequest" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="customerID" not-null="true" unique="true" />
+            </key>
+            <one-to-many class="Application.ServiceRequest" />
+        </set>
+    </class>
+</hibernate-mapping>

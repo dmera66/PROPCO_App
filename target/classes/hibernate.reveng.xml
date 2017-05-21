@@ -41,16 +41,16 @@ Contributor(s):
 -->
 <hibernate-reverse-engineering>
   <schema-selection match-catalog="PROPCO_Maven_new"/>
-  <table-filter match-name="serviceRequestActivities"/>
-  <table-filter match-name="serviceRequest"/>
-  <table-filter match-name="housekeeping"/>
-  <table-filter match-name="department"/>
-  <table-filter match-name="product"/>
-  <table-filter match-name="bundles"/>
-  <table-filter match-name="pestsLinkedProduct"/>
-  <table-filter match-name="pests"/>
-  <table-filter match-name="users"/>
-  <table-filter match-name="billing"/>
   <table-filter match-name="labels"/>
+  <table-filter match-name="department"/>
   <table-filter match-name="customer"/>
+  <table-filter match-name="housekeeping"/>
+  <table-filter match-name="bundles"/>
+  <table-filter match-name="product"/>
+  <table-filter match-name="pestsLinkedProduct"/>
+  <table-filter match-name="serviceRequest"/>
+  <table-filter match-name="serviceRequestActivities"/>
+  <table-filter match-name="users"/>
+  <table-filter match-name="pests"/>
+  <table-filter match-name="billing"/>
 </hibernate-reverse-engineering>

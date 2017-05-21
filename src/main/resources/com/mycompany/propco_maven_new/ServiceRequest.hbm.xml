@@ -1,19 +1,16 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<!-- Generated 17-May-2017 12:47:08 PM by Hibernate Tools 4.3.1 -->
+<!-- Generated 21-May-2017 4:03:39 PM by Hibernate Tools 4.3.1 -->
 <hibernate-mapping>
     <class name="com.mycompany.propco_maven_new.ServiceRequest" table="serviceRequest" catalog="PROPCO_Maven_new" optimistic-lock="version">
         <id name="serviceRequestNr" type="java.lang.Integer">
             <column name="serviceRequestNr" />
-            <generator class="foreign">
-                <param name="property">serviceRequestActivities</param>
-            </generator>
+            <generator class="identity" />
         </id>
         <many-to-one name="customer" class="com.mycompany.propco_maven_new.Customer" fetch="select">
             <column name="customerID" not-null="true" unique="true" />
         </many-to-one>
-        <one-to-one name="serviceRequestActivities" class="com.mycompany.propco_maven_new.ServiceRequestActivities" constrained="true"></one-to-one>
         <property name="purchaseOrderNumber" type="string">
             <column name="purchaseOrderNumber" length="7" />
         </property>
@@ -30,13 +27,13 @@
             <column name="schedule" length="7" not-null="true" />
         </property>
         <property name="serviceDate" type="date">
-            <column name="serviceDate" length="10" not-null="true" />
+            <column name="serviceDate" length="0" not-null="true" />
         </property>
         <property name="creationDate" type="timestamp">
-            <column name="creationDate" length="19" not-null="true" />
+            <column name="creationDate" length="0" not-null="true" />
         </property>
         <property name="updateDate" type="timestamp">
-            <column name="updateDate" length="19" not-null="true" />
+            <column name="updateDate" length="0" not-null="true" />
         </property>
         <property name="updatedByUser" type="int">
             <column name="updatedByUser" not-null="true" unique="true" />
@@ -44,5 +41,11 @@
         <property name="activityCount" type="byte">
             <column name="ActivityCount" not-null="true" />
         </property>
+        <set name="serviceRequestActivitieses" table="serviceRequestActivities" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="serviceReqNr" not-null="true" unique="true" />
+            </key>
+            <one-to-many class="com.mycompany.propco_maven_new.ServiceRequestActivities" />
+        </set>
     </class>
 </hibernate-mapping>

@@ -39,7 +39,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="pnlSchedule" pref="524" max="32767" attributes="0"/>
-                  <Component id="pnlPayment" pref="0" max="32767" attributes="0"/>
+                  <Component id="pnlPayment" pref="524" max="32767" attributes="0"/>
               </Group>
           </Group>
           <Group type="102" attributes="0">
@@ -812,19 +812,19 @@
                                   <Component id="lblProv" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="txtProvince" min="-2" pref="41" max="-2" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Component id="lblPostalCode" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="txtPostalCode" pref="0" max="32767" attributes="0"/>
+                                  <Component id="txtPostalCode" min="-2" pref="61" max="-2" attributes="0"/>
                               </Group>
                               <Component id="txtContactName" alignment="0" min="-2" pref="498" max="-2" attributes="0"/>
                               <Component id="txtCustomerName" alignment="0" max="32767" attributes="0"/>
                               <Component id="txtNotes" alignment="0" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="txtAddress" min="-2" pref="217" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="71" max="-2" attributes="0"/>
-                                  <Component id="lblUnit" min="-2" pref="75" max="-2" attributes="0"/>
                                   <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="lblUnit" min="-2" pref="75" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                                   <Component id="txtUnit" min="-2" pref="83" max="-2" attributes="0"/>
                               </Group>
                               <Component id="txtAddressNotes" alignment="0" max="32767" attributes="0"/>
@@ -836,30 +836,18 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="lblName" linkSize="4" min="-2" pref="22" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="lblNameInfo" linkSize="4" min="-2" pref="22" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="lblStreet" linkSize="2" min="-2" pref="24" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="lblStreetInfo" linkSize="1" min="-2" pref="24" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="lblCity" linkSize="7" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
-                                  <Component id="txtCity" linkSize="7" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
-                                  <Component id="lblProv" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="-2" pref="116" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="txtProvince" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
-                                  <Component id="lblPostalCode" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
-                                  <Component id="txtPostalCode" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
+                      <Component id="lblName" linkSize="4" min="-2" pref="22" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="lblNameInfo" linkSize="4" min="-2" pref="22" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="lblStreet" linkSize="2" min="-2" pref="24" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="lblStreetInfo" linkSize="1" min="-2" pref="24" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblCity" linkSize="7" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
+                          <Component id="txtCity" linkSize="7" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
+                          <Component id="lblProv" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
                       </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
@@ -899,7 +887,7 @@
                                       <Component id="lblAvailBundles" linkSize="8" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace pref="36" max="32767" attributes="0"/>
+                              <EmptySpace pref="37" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -915,7 +903,13 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="txtAddressNotes" linkSize="1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="txtPostalCode" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                          <Component id="lblPostalCode" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
+                          <Component id="txtProvince" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

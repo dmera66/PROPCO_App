@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 21-May-2017 2:58:51 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="Application.Users" table="users" catalog="PROPCO_Maven_new" optimistic-lock="version">
+        <id name="userId" type="java.lang.Integer">
+            <column name="userID" />
+            <generator class="identity" />
+        </id>
+        <property name="userName" type="string">
+            <column name="userName" length="12" not-null="true" />
+        </property>
+        <property name="password" type="string">
+            <column name="password" length="8" not-null="true" />
+        </property>
+        <property name="fullprivilege" type="boolean">
+            <column name="fullprivilege" not-null="true" />
+        </property>
+        <property name="serviceReceipt" type="boolean">
+            <column name="ServiceReceipt" not-null="true" />
+        </property>
+        <property name="assignServiceTech" type="boolean">
+            <column name="AssignServiceTech" not-null="true" />
+        </property>
+        <property name="pendingWo" type="boolean">
+            <column name="PendingWO" not-null="true" />
+        </property>
+        <property name="reviewSr" type="boolean">
+            <column name="ReviewSR" not-null="true" />
+        </property>
+        <property name="invoices" type="boolean">
+            <column name="Invoices" not-null="true" />
+        </property>
+        <property name="reports" type="boolean">
+            <column name="Reports" not-null="true" />
+        </property>
+        <set name="customers" table="customer" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="updatedByUser" not-null="true" />
+            </key>
+            <one-to-many class="Application.Customer" />
+        </set>
+    </class>
+</hibernate-mapping>
