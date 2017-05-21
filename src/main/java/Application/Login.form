@@ -104,7 +104,7 @@
     <Component class="javax.swing.JLabel" name="lblLogo">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/Application/Picture1.png"/>
+          <Image iconType="3" name="/com/mycompany/propco_maven_new/Picture1.png"/>
         </Property>
       </Properties>
     </Component>

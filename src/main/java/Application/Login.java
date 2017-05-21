@@ -10,7 +10,9 @@ import javax.swing.JOptionPane;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 import propco_maven_new.HibernateUtil;
 
 /*
@@ -34,7 +36,8 @@ public class Login extends javax.swing.JFrame {
     String puname = null;
     private static String QUERY_BASED_ON_USERNAME="from Users where username ='";
     private static String QUERY_BASED_ON_PASSWORD="from Users where password ='";
-   
+    private static SessionFactory factory; 
+    
     /**
      * Creates new form PROPCO_UI
      */
@@ -53,6 +56,11 @@ public class Login extends javax.swing.JFrame {
     }
     
     private void executeHQLQuery(String query){
+        /*try{factory = new Configuration().configure().buildSessionFactory();
+        }catch (Throwable ex) { 
+            System.err.println("Failed to create sessionFactory object." + ex);
+            throw new ExceptionInInitializerError(ex); 
+        } */
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
         try{
@@ -130,7 +138,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Application/Picture1.png"))); // NOI18N
+        lblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/mycompany/propco_maven_new/Picture1.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
