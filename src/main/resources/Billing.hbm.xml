@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 21-May-2017 12:09:26 AM by Hibernate Tools 5.2.3.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class catalog="propco" dynamic-insert="false" dynamic-update="false" mutable="true" name="com.propco.rts.pojo.v1.Billing" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="billing">
+        <id name="billingId" type="int">
+            <column name="billingID"/>
+            <generator class="assigned"/>
+        </id>
+        <property generated="never" lazy="false" name="billingName" optimistic-lock="true" type="string" unique="false">
+            <column length="50" name="billingName" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="billingAlias" optimistic-lock="true" type="string" unique="false">
+            <column length="50" name="billingAlias"/>
+        </property>
+        <property generated="never" lazy="false" name="billingAddress" optimistic-lock="true" type="string" unique="false">
+            <column length="60" name="billingAddress" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="billingCity" optimistic-lock="true" type="string" unique="false">
+            <column length="30" name="billingCity" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="billingProvince" optimistic-lock="true" type="string" unique="false">
+            <column length="2" name="billingProvince" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="billingPostalCode" optimistic-lock="true" type="string" unique="false">
+            <column length="7" name="billingPostalCode" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="billingContactName" optimistic-lock="true" type="string" unique="false">
+            <column length="20" name="billingContactName" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="billingPrimaryPhone" optimistic-lock="true" type="string" unique="false">
+            <column length="12" name="billingPrimaryPhone" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="billingExt" optimistic-lock="true" type="string" unique="false">
+            <column length="5" name="billingExt" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="billingSecondaryPhone" optimistic-lock="true" type="string" unique="false">
+            <column length="12" name="billingSecondaryPhone"/>
+        </property>
+        <property generated="never" lazy="false" name="billingExt2" optimistic-lock="true" type="string" unique="false">
+            <column length="5" name="billingExt2"/>
+        </property>
+        <property generated="never" lazy="false" name="billingFax" optimistic-lock="true" type="string" unique="false">
+            <column length="12" name="billingFax"/>
+        </property>
+        <property generated="never" lazy="false" name="billingEmailAddress" optimistic-lock="true" type="string" unique="false">
+            <column length="30" name="billingEmailAddress"/>
+        </property>
+        <property generated="never" lazy="false" name="tax" optimistic-lock="true" type="string" unique="false">
+            <column length="3" name="tax"/>
+        </property>
+        <property generated="never" lazy="false" name="taxRate" optimistic-lock="true" type="string" unique="false">
+            <column length="5" name="taxRate"/>
+        </property>
+        <property generated="never" lazy="false" name="creationDate" optimistic-lock="true" type="date" unique="false">
+            <column length="0" name="creationDate" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="updateDate" optimistic-lock="true" type="date" unique="false">
+            <column length="0" name="updateDate" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="updatedByUser" optimistic-lock="true" type="byte" unique="false">
+            <column name="updatedByUser" not-null="true"/>
+        </property>
+        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="departments" optimistic-lock="true" sort="unsorted" table="department">
+            <key on-delete="noaction">
+                <column name="billingID" not-null="true"/>
+            </key>
+            <one-to-many class="com.propco.rts.pojo.v1.Department" embed-xml="true" not-found="exception"/>
+        </set>
+        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="customers" optimistic-lock="true" sort="unsorted" table="customer">
+            <key on-delete="noaction">
+                <column name="billingID" not-null="true"/>
+            </key>
+            <one-to-many class="com.propco.rts.pojo.v1.Customer" embed-xml="true" not-found="exception"/>
+        </set>
+    </class>
+</hibernate-mapping>

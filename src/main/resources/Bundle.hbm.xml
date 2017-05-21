@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 21-May-2017 12:09:26 AM by Hibernate Tools 5.2.3.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class catalog="propco" dynamic-insert="false" dynamic-update="false" mutable="true" name="com.propco.rts.pojo.v1.Bundle" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="bundle">
+        <id name="bundleId" type="int">
+            <column name="bundleID"/>
+            <generator class="assigned"/>
+        </id>
+        <property generated="never" lazy="false" name="bundleName" optimistic-lock="true" type="string" unique="false">
+            <column length="30" name="bundleName" not-null="true"/>
+        </property>
+        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="customers" optimistic-lock="true" sort="unsorted" table="customer">
+            <key on-delete="noaction">
+                <column name="bundleID" not-null="true"/>
+            </key>
+            <one-to-many class="com.propco.rts.pojo.v1.Customer" embed-xml="true" not-found="exception"/>
+        </set>
+    </class>
+</hibernate-mapping>

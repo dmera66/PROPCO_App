@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 21-May-2017 12:09:26 AM by Hibernate Tools 5.2.3.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class catalog="propco" dynamic-insert="false" dynamic-update="false" mutable="true" name="com.propco.rts.pojo.v1.ServiceRequest" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="service_request">
+        <id name="serviceRequestId" type="int">
+            <column name="serviceRequestID"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="com.propco.rts.pojo.v1.Customer" embed-xml="true" fetch="select" insert="true" name="customer" not-found="exception" optimistic-lock="true" unique="false" update="true">
+            <column name="customerID" not-null="true"/>
+        </many-to-one>
+        <property generated="never" lazy="false" name="purchaseOrderNumber" optimistic-lock="true" type="string" unique="false">
+            <column length="45" name="purchaseOrderNumber"/>
+        </property>
+        <property generated="never" lazy="false" name="invoiceFrequency" optimistic-lock="true" type="string" unique="false">
+            <column length="45" name="invoiceFrequency" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="serviceType" optimistic-lock="true" type="string" unique="false">
+            <column length="45" name="serviceType" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="paymentType" optimistic-lock="true" type="string" unique="false">
+            <column length="45" name="paymentType" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="schedule" optimistic-lock="true" type="string" unique="false">
+            <column length="45" name="schedule" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="serviceDate" optimistic-lock="true" type="date" unique="false">
+            <column length="0" name="serviceDate" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="creationDate" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="0" name="creationDate" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="updateDate" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="0" name="updateDate" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="updatedByUser" optimistic-lock="true" type="string" unique="false">
+            <column length="45" name="updatedByUser" not-null="true"/>
+        </property>
+        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="activities" optimistic-lock="true" sort="unsorted" table="activity">
+            <key on-delete="noaction">
+                <column name="serviceRequestID" not-null="true"/>
+            </key>
+            <one-to-many class="com.propco.rts.pojo.v1.Activity" embed-xml="true" not-found="exception"/>
+        </set>
+    </class>
+</hibernate-mapping>

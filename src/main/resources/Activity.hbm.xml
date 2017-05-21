@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 21-May-2017 12:09:26 AM by Hibernate Tools 5.2.3.Final --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class catalog="propco" dynamic-insert="false" dynamic-update="false" mutable="true" name="com.propco.rts.pojo.v1.Activity" optimistic-lock="version" polymorphism="implicit" select-before-update="false" table="activity">
+        <id name="activityId" type="int">
+            <column name="activityID"/>
+            <generator class="assigned"/>
+        </id>
+        <many-to-one class="com.propco.rts.pojo.v1.ServiceRequest" embed-xml="true" fetch="select" insert="true" name="serviceRequest" not-found="exception" optimistic-lock="true" unique="false" update="true">
+            <column name="serviceRequestID" not-null="true"/>
+        </many-to-one>
+        <property generated="never" lazy="false" name="location" optimistic-lock="true" type="string" unique="false">
+            <column length="100" name="location"/>
+        </property>
+        <property generated="never" lazy="false" name="notes" optimistic-lock="true" type="string" unique="false">
+            <column length="16777215" name="notes"/>
+        </property>
+        <property generated="never" lazy="false" name="status" optimistic-lock="true" type="string" unique="false">
+            <column length="45" name="status"/>
+        </property>
+        <property generated="never" lazy="false" name="creationDateTime" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="0" name="creationDateTime"/>
+        </property>
+        <property generated="never" lazy="false" name="updateDateTime" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="0" name="updateDateTime"/>
+        </property>
+        <property generated="never" lazy="false" name="updatedByUser" optimistic-lock="true" type="string" unique="false">
+            <column length="45" name="updatedByUser"/>
+        </property>
+    </class>
+</hibernate-mapping>
