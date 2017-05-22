@@ -1,5 +1,5 @@
 package com.propco.rts.pojo.v1;
-// Generated 21-May-2017 12:09:26 AM by Hibernate Tools 5.2.3.Final
+// Generated 22-May-2017 8:46:33 AM by Hibernate Tools 5.2.3.Final
 
 import java.util.Date;
 
@@ -8,7 +8,7 @@ import java.util.Date;
  */
 public class Department implements java.io.Serializable {
 
-	private int departmentId;
+	private Integer departmentId;
 	private Billing billing;
 	private String departmentName;
 	private String contractNr;
@@ -19,9 +19,8 @@ public class Department implements java.io.Serializable {
 	public Department() {
 	}
 
-	public Department(int departmentId, Billing billing, String departmentName, String contractNr, Date creationDate,
-			Date updateDate, byte updatedByUser) {
-		this.departmentId = departmentId;
+	public Department(Billing billing, String departmentName, String contractNr, Date creationDate, Date updateDate,
+			byte updatedByUser) {
 		this.billing = billing;
 		this.departmentName = departmentName;
 		this.contractNr = contractNr;
@@ -30,11 +29,11 @@ public class Department implements java.io.Serializable {
 		this.updatedByUser = updatedByUser;
 	}
 
-	public int getDepartmentId() {
+	public Integer getDepartmentId() {
 		return this.departmentId;
 	}
 
-	public void setDepartmentId(int departmentId) {
+	public void setDepartmentId(Integer departmentId) {
 		this.departmentId = departmentId;
 	}
 

@@ -1,5 +1,5 @@
 package com.propco.rts.pojo.v1;
-// Generated 21-May-2017 12:09:26 AM by Hibernate Tools 5.2.3.Final
+// Generated 22-May-2017 8:46:33 AM by Hibernate Tools 5.2.3.Final
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,29 +9,27 @@ import java.util.Set;
  */
 public class Bundle implements java.io.Serializable {
 
-	private int bundleId;
+	private Integer bundleId;
 	private String bundleName;
 	private Set customers = new HashSet(0);
 
 	public Bundle() {
 	}
 
-	public Bundle(int bundleId, String bundleName) {
-		this.bundleId = bundleId;
+	public Bundle(String bundleName) {
 		this.bundleName = bundleName;
 	}
 
-	public Bundle(int bundleId, String bundleName, Set customers) {
-		this.bundleId = bundleId;
+	public Bundle(String bundleName, Set customers) {
 		this.bundleName = bundleName;
 		this.customers = customers;
 	}
 
-	public int getBundleId() {
+	public Integer getBundleId() {
 		return this.bundleId;
 	}
 
-	public void setBundleId(int bundleId) {
+	public void setBundleId(Integer bundleId) {
 		this.bundleId = bundleId;
 	}
 

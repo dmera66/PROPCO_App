@@ -1,5 +1,5 @@
 package com.propco.rts.pojo.v1;
-// Generated 21-May-2017 12:09:26 AM by Hibernate Tools 5.2.3.Final
+// Generated 22-May-2017 8:46:33 AM by Hibernate Tools 5.2.3.Final
 
 import java.util.Date;
 
@@ -8,7 +8,7 @@ import java.util.Date;
  */
 public class Activity implements java.io.Serializable {
 
-	private int activityId;
+	private Integer activityId;
 	private ServiceRequest serviceRequest;
 	private String location;
 	private String notes;
@@ -20,14 +20,12 @@ public class Activity implements java.io.Serializable {
 	public Activity() {
 	}
 
-	public Activity(int activityId, ServiceRequest serviceRequest) {
-		this.activityId = activityId;
+	public Activity(ServiceRequest serviceRequest) {
 		this.serviceRequest = serviceRequest;
 	}
 
-	public Activity(int activityId, ServiceRequest serviceRequest, String location, String notes, String status,
-			Date creationDateTime, Date updateDateTime, String updatedByUser) {
-		this.activityId = activityId;
+	public Activity(ServiceRequest serviceRequest, String location, String notes, String status, Date creationDateTime,
+			Date updateDateTime, String updatedByUser) {
 		this.serviceRequest = serviceRequest;
 		this.location = location;
 		this.notes = notes;
@@ -37,11 +35,11 @@ public class Activity implements java.io.Serializable {
 		this.updatedByUser = updatedByUser;
 	}
 
-	public int getActivityId() {
+	public Integer getActivityId() {
 		return this.activityId;
 	}
 
-	public void setActivityId(int activityId) {
+	public void setActivityId(Integer activityId) {
 		this.activityId = activityId;
 	}
 

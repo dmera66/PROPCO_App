@@ -1,5 +1,5 @@
 package com.propco.rts.pojo.v1;
-// Generated 21-May-2017 12:09:26 AM by Hibernate Tools 5.2.3.Final
+// Generated 22-May-2017 8:46:33 AM by Hibernate Tools 5.2.3.Final
 
 import java.util.Date;
 import java.util.HashSet;
@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public class Customer implements java.io.Serializable {
 
-	private int customerId;
+	private Integer customerId;
 	private Billing billing;
 	private Bundle bundle;
 	private String customerName;
@@ -36,10 +36,9 @@ public class Customer implements java.io.Serializable {
 	public Customer() {
 	}
 
-	public Customer(int customerId, Billing billing, Bundle bundle, String customerName, String address, String city,
-			String province, String postalCode, String contactName, String primaryPhone, String ext, Date creationDate,
-			Date updateDate, byte updatedByUser) {
-		this.customerId = customerId;
+	public Customer(Billing billing, Bundle bundle, String customerName, String address, String city, String province,
+			String postalCode, String contactName, String primaryPhone, String ext, Date creationDate, Date updateDate,
+			byte updatedByUser) {
 		this.billing = billing;
 		this.bundle = bundle;
 		this.customerName = customerName;
@@ -55,11 +54,10 @@ public class Customer implements java.io.Serializable {
 		this.updatedByUser = updatedByUser;
 	}
 
-	public Customer(int customerId, Billing billing, Bundle bundle, String customerName, String notes, String address,
+	public Customer(Billing billing, Bundle bundle, String customerName, String notes, String address,
 			String addressNotes, String city, String province, String postalCode, String contactName,
 			String primaryPhone, String ext, String secondaryPhone, String ext2, String other, String fax,
 			String emailAddress, Date creationDate, Date updateDate, byte updatedByUser, Set serviceRequests) {
-		this.customerId = customerId;
 		this.billing = billing;
 		this.bundle = bundle;
 		this.customerName = customerName;
@@ -83,11 +81,11 @@ public class Customer implements java.io.Serializable {
 		this.serviceRequests = serviceRequests;
 	}
 
-	public int getCustomerId() {
+	public Integer getCustomerId() {
 		return this.customerId;
 	}
 
-	public void setCustomerId(int customerId) {
+	public void setCustomerId(Integer customerId) {
 		this.customerId = customerId;
 	}
 

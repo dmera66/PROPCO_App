@@ -1,5 +1,5 @@
 package com.propco.rts.pojo.v1;
-// Generated 21-May-2017 12:09:26 AM by Hibernate Tools 5.2.3.Final
+// Generated 22-May-2017 8:46:33 AM by Hibernate Tools 5.2.3.Final
 
 import java.util.Date;
 import java.util.HashSet;
@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public class ServiceRequest implements java.io.Serializable {
 
-	private int serviceRequestId;
+	private Integer serviceRequestId;
 	private Customer customer;
 	private String purchaseOrderNumber;
 	private String invoiceFrequency;
@@ -26,10 +26,8 @@ public class ServiceRequest implements java.io.Serializable {
 	public ServiceRequest() {
 	}
 
-	public ServiceRequest(int serviceRequestId, Customer customer, String invoiceFrequency, String serviceType,
-			String paymentType, String schedule, Date serviceDate, Date creationDate, Date updateDate,
-			String updatedByUser) {
-		this.serviceRequestId = serviceRequestId;
+	public ServiceRequest(Customer customer, String invoiceFrequency, String serviceType, String paymentType,
+			String schedule, Date serviceDate, Date creationDate, Date updateDate, String updatedByUser) {
 		this.customer = customer;
 		this.invoiceFrequency = invoiceFrequency;
 		this.serviceType = serviceType;
@@ -41,10 +39,9 @@ public class ServiceRequest implements java.io.Serializable {
 		this.updatedByUser = updatedByUser;
 	}
 
-	public ServiceRequest(int serviceRequestId, Customer customer, String purchaseOrderNumber, String invoiceFrequency,
-			String serviceType, String paymentType, String schedule, Date serviceDate, Date creationDate,
-			Date updateDate, String updatedByUser, Set activities) {
-		this.serviceRequestId = serviceRequestId;
+	public ServiceRequest(Customer customer, String purchaseOrderNumber, String invoiceFrequency, String serviceType,
+			String paymentType, String schedule, Date serviceDate, Date creationDate, Date updateDate,
+			String updatedByUser, Set activities) {
 		this.customer = customer;
 		this.purchaseOrderNumber = purchaseOrderNumber;
 		this.invoiceFrequency = invoiceFrequency;
@@ -58,11 +55,11 @@ public class ServiceRequest implements java.io.Serializable {
 		this.activities = activities;
 	}
 
-	public int getServiceRequestId() {
+	public Integer getServiceRequestId() {
 		return this.serviceRequestId;
 	}
 
-	public void setServiceRequestId(int serviceRequestId) {
+	public void setServiceRequestId(Integer serviceRequestId) {
 		this.serviceRequestId = serviceRequestId;
 	}
 

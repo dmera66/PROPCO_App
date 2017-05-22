@@ -1,5 +1,5 @@
 package com.propco.rts.pojo.v1;
-// Generated 21-May-2017 12:09:26 AM by Hibernate Tools 5.2.3.Final
+// Generated 22-May-2017 8:46:33 AM by Hibernate Tools 5.2.3.Final
 
 import java.util.Date;
 import java.util.HashSet;
@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public class Billing implements java.io.Serializable {
 
-	private int billingId;
+	private Integer billingId;
 	private String billingName;
 	private String billingAlias;
 	private String billingAddress;
@@ -35,10 +35,9 @@ public class Billing implements java.io.Serializable {
 	public Billing() {
 	}
 
-	public Billing(int billingId, String billingName, String billingAddress, String billingCity, String billingProvince,
+	public Billing(String billingName, String billingAddress, String billingCity, String billingProvince,
 			String billingPostalCode, String billingContactName, String billingPrimaryPhone, String billingExt,
 			Date creationDate, Date updateDate, byte updatedByUser) {
-		this.billingId = billingId;
 		this.billingName = billingName;
 		this.billingAddress = billingAddress;
 		this.billingCity = billingCity;
@@ -52,12 +51,11 @@ public class Billing implements java.io.Serializable {
 		this.updatedByUser = updatedByUser;
 	}
 
-	public Billing(int billingId, String billingName, String billingAlias, String billingAddress, String billingCity,
+	public Billing(String billingName, String billingAlias, String billingAddress, String billingCity,
 			String billingProvince, String billingPostalCode, String billingContactName, String billingPrimaryPhone,
 			String billingExt, String billingSecondaryPhone, String billingExt2, String billingFax,
 			String billingEmailAddress, String tax, String taxRate, Date creationDate, Date updateDate,
 			byte updatedByUser, Set departments, Set customers) {
-		this.billingId = billingId;
 		this.billingName = billingName;
 		this.billingAlias = billingAlias;
 		this.billingAddress = billingAddress;
@@ -80,11 +78,11 @@ public class Billing implements java.io.Serializable {
 		this.customers = customers;
 	}
 
-	public int getBillingId() {
+	public Integer getBillingId() {
 		return this.billingId;
 	}
 
-	public void setBillingId(int billingId) {
+	public void setBillingId(Integer billingId) {
 		this.billingId = billingId;
 	}
 
