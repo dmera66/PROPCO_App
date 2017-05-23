@@ -46,7 +46,7 @@ public class Department  implements java.io.Serializable {
        this.updatedByUser = updatedByUser;
     }
    
-     @Id 
+     @Id
 
     
     @Column(name="departmentID", unique=true, nullable=false)

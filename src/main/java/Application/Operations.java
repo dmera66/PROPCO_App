@@ -10,19 +10,18 @@ import com.mycompany.propco_maven_new.Billing;
 import com.mycompany.propco_maven_new.Bundles;
 import com.mycompany.propco_maven_new.Customer;
 import com.mycompany.propco_maven_new.Department;
+import com.mycompany.propco_maven_new.ServiceRequest;
 import com.mycompany.propco_maven_new.Users;
-import static java.time.LocalDate.now;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -41,15 +40,17 @@ public class Operations {
     private static Transaction tx;
     //Customer new_customer = null;
     //Business new_business = null;
-    
-    public Operations() {
+   
+    public static SessionFactory createFactory() {
+        factory = null;
         try{
             factory = new Configuration().configure().buildSessionFactory();
         }catch (Throwable ex) {
             System.err.println("Failed to create sessionFactory object." + ex);
             throw new ExceptionInInitializerError(ex);
         }
-    }
+        return factory;
+    } 
     /* Method to retrieve an user from the database */
     public Users retrieveUser(Integer user_id){
         // Get the session from session factory
@@ -139,7 +140,7 @@ public class Operations {
         }
     }
     /* Method to add a department record in the database */
-    public Department addDepartment(String departmentName, String contractNumber){
+    public Department addDepartment(Billing billing,String departmentName, String contractNumber){
         // Get the session from session factory
         Session session = factory.openSession();
         Transaction tx = null;
@@ -148,8 +149,8 @@ public class Operations {
         try{
             //begin the transaction
             tx = session.beginTransaction();
-            //Create a new bundle object
-            //department = new Department(departmentName, contractNumber,  Date_as_Date(DateUtils.now_date_time()), Date_as_Date(DateUtils.now_date_time()),Login.user_id);
+            //Create a new department object
+            //department = new Department(billing, departmentName, contractNumber,  Date_as_Date(DateUtils.now_date_time()), Date_as_Date(DateUtils.now_date_time()),Login.user_id);
             // save the bundle object.The changes to persistent object will be written to database.
             departmentID = (Integer) session.save(department);
             //The changes to persistent object will be written to database.
@@ -190,17 +191,16 @@ public class Operations {
         }
     }
     /* Method to add a bundle record in the database */
-    public Bundles addBundle(String bundleName){
+    public Bundles addBundle(Integer bundleID, String bundleName){
         // Get the session from session factory
         Session session = factory.openSession();
         Transaction tx = null;
-        Integer bundleID = null;
         Bundles bundles = null;
         try{
             //begin the transaction
             tx = session.beginTransaction();
             //Create a new bundle object
-            //bundles = new Bundles(bundleName);
+            bundles = new Bundles(bundleID, bundleName);
             // save the bundle object.The changes to persistent object will be written to database.
             bundleID = (Integer) session.save(bundles);
             //The changes to persistent object will be written to database.
@@ -242,42 +242,47 @@ public class Operations {
     }
             
     /* Method to add a customer record in the database */
-    public Integer addCustomer(Billing billing, Bundles bundles, Users users,String CustomerName,String Notes,String Address,String Unit,String AddressNotes,String City,String Province,String PostalCode,String ContactName,String PrimaryPhone,String Ext,String SecondaryPhone,String Ext2,String Fax,String EmailAddress) {
-       // get the session from session factory
-      Session session = factory.openSession();
-      Transaction tx = null;
-      Integer customerID = null;
-      Customer customer = null;
-      try{
-          // begin the transaction from the sessiom
-         tx = session.beginTransaction();
-         // create a new object for bundle
-         //customer = new Customer(billing,bundles,users,CustomerName,Notes,Address,Unit,AddressNotes,City,Province,PostalCode,ContactName,PrimaryPhone,Ext,SecondaryPhone,Ext2,Fax,EmailAddress,Date_as_Date(DateUtils.now_date_time()),Date_as_Date(DateUtils.now_date_time()));
-         //Billing billing, Bundles bundles, Users users, String customerName, String notes, String address, String unit,String addressNotes, String city, String province, String postalCode, String contactName, String primaryPhone, String ext, String secondaryPhone, String ext2, String fax, String emailAddress, Date creationDate, Date updateDate, Set serviceRequests
-         // save the author . It auto generates the Id .So need to give the id
-         customerID = (Integer) session.save(customer);
-         //The changes to persistent object will be written to database.
-         tx.commit();
-      }catch (HibernateException e) {
-         if (tx!=null) tx.rollback();
-         e.printStackTrace();
-      }finally {
-          // close the session
-         session.close();
-      }
-      return customerID;
+    
+    public Integer addCustomer(Billing billing, Bundles bundles, Users users,String CustomerName,String Notes,String Address,String Unit,String AddressNotes,String City,String Province,String PostalCode,String ContactName,String PrimaryPhone,String Ext,String SecondaryPhone,String Ext2,String Fax,String EmailAddress,ServiceRequest mySR) {
+        // get the session from session factory
+        Session session = factory.openSession();
+        Transaction tx = null;
+        Integer customerID = null;
+        Customer customer = null;
+        try{
+            // begin the transaction from the sessiom
+            tx = session.beginTransaction();
+            // create a new object for customer
+            customer = new Customer(billing,bundles,users,CustomerName,Notes,Address,Unit,AddressNotes,City,Province,PostalCode,ContactName,PrimaryPhone,Ext,SecondaryPhone,Ext2,Fax,EmailAddress,Date_as_Date(DateUtils.now_date_time()),Date_as_Date(DateUtils.now_date_time()), null);
+            //Billing billing, Bundles bundles, Users users, String customerName, String notes, String address, String unit,String addressNotes, String city, String province, String postalCode, String contactName, String primaryPhone, String ext, String secondaryPhone, String ext2, String fax, String emailAddress, Date creationDate, Date updateDate, Set serviceRequests
+            customerID = (Integer) session.save(customer);
+            //The changes to persistent object will be written to database.
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace();
+        }finally {
+            // close the session
+            session.close();
+        }
+        return customerID;
    }
     
     /* Method to list all the customer details */
-    public List listCustomers(String query){
+    public static List listCustomers(String query){
         //Get the session from the session factory.
+        System.out.println("listCustomers " + query);
         Session session = factory.openSession();
         Transaction tx = null;
         List customers = null;
         try{
             tx = session.beginTransaction();
             //Make an HQL query to get the results from customer table
-            customers = session.createQuery(query).list();
+            //customers = session.createQuery(query).list();
+            Criteria cr = session.createCriteria(Customer.class);
+            // Add restriction.
+            cr.add(Restrictions.like("customerName", query));
+            customers = cr.list();
             //Iterate over the result and print it.
             for (Iterator iterator = customers.iterator(); iterator.hasNext();){
                 Customer customer = (Customer) iterator.next();
@@ -288,6 +293,31 @@ public class Operations {
         return customers;
     }
     
+    /* Method to READ the unique customer having a specific criteria */
+    public static void listCustomer(String field, String value ){
+        Session session = factory.openSession();
+        Transaction tx = null;
+        try{
+            tx = session.beginTransaction();
+            Criteria cr = session.createCriteria(Customer.class);
+            // Add restriction.
+            cr.add(Restrictions.like(field, value));
+            List customers = cr.list();
+
+            for (Iterator iterator = customers.iterator(); iterator.hasNext();){
+                Customer customer = (Customer) iterator.next(); 
+                System.out.print("Name: " + customer.getCustomerName()); 
+                System.out.print("Address: " + customer.getAddress()); 
+            }
+            tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace(); 
+        }finally {
+            session.close(); 
+        }
+    }
+   
     /* Method to list all the billing details */
     public void listBilling(String query){
         //Get the session from the session factory.
@@ -295,18 +325,13 @@ public class Operations {
         Transaction tx = null;
         try{
             tx = session.beginTransaction();
-            //Make an HQL query to get the results from books table . You can also use SQL here.
-            List billing = session.createQuery(query).list();
-            //Iterate over the result and print it.
-            for (Iterator iterator = billing.iterator(); iterator.hasNext();){
-                Billing book = (Billing) iterator.next();
-                //System.out.print("Title : " + book.getTitle());
-                //System.out.print("\tGenre of the  book: " + book.getGenre());
-                // Get the author of the book here.
-                //Author author = book.getAuthor();
-                //System.out.println("Author of the book ");
-                //System.out.println("\tname : " +  author.getName());
-                //System.out.println("\tage : " + author.getAge());
+            //Make an HQL query to get the results from billing table
+            List billings = session.createQuery(query).list();
+            //Iterate over the result
+            for (Iterator iterator = billings.iterator(); iterator.hasNext();){
+                Billing billing = (Billing) iterator.next();
+                // Get the department of the billing here.
+                //Department department = billing.getDepartments();
             }
             tx.commit();
         }catch (HibernateException e) {
@@ -328,8 +353,8 @@ public class Operations {
         }
     }
     
-    private List executeHQLQuery(String query){
-        //System.out.println("Session executeHQLQuery opened");
+    public List executeHQLQuery(String query){
+        System.out.println("Session executeHQLQuery opened");
         List resultList = null;
         try{
             tx = session.beginTransaction();

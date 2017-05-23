@@ -35,7 +35,6 @@ public class AssignService extends javax.swing.JFrame {
         setTitle("Assign Service to Technician");
         setSize(800,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        //initComponents();
         System.out.println("===Assign Service to Technician===");
         pnlTable.setLayout(new BorderLayout());
         

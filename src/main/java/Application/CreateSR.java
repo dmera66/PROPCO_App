@@ -78,13 +78,13 @@ public class CreateSR extends javax.swing.JFrame {
         
         initComponents();
         //correct tab key functionality
-        try{
+        allow_vk_tab();
+        /*try{
             factory = new AnnotationConfiguration().configure().addPackage("Application").buildSessionFactory();
         }catch (Throwable ex) { 
             System.err.println("Failed to create sessionFactory object." + ex);
             throw new ExceptionInInitializerError(ex); 
-        }
-        allow_vk_tab();
+        } */
         grpFreq();
         grpServType();
         grpPayment();
@@ -95,6 +95,7 @@ public class CreateSR extends javax.swing.JFrame {
         if (CustomerType.equals("New")){disable_form();}
         //initializeSession();
         System.out.println("this is a " + this.CustomerType + " customer!");
+        Operations.createFactory();
     }
 
     
@@ -1592,11 +1593,17 @@ public class CreateSR extends javax.swing.JFrame {
                         //ME.updateCustomer(txtCustomer.getText(),txtCustInfo.getText(),txtStreet.getText(),txtStreetInfo.getText(),txtCity.getText(),txtProv.getText(),txtPostalCode.getText(),txtContact.getText(),txtPhone1.getText(),txtExt1.getText(),txtPhone2.getText(),txtExt2.getText(),txtFax.getText(),txtEmail.getText(),txtBillingDept.getText(),txtBillingContract.getText(),DateUtils.now_date_time());
                     }else{
                         //new_customer
-                        
                         Users users = manageCustomer.retrieveUser(Login.user_id);
-                        Department department = manageCustomer.addDepartment(cmbDepartmentName.getSelectedItem().toString(), cmbContractNumber.getSelectedItem().toString());
-                        //Billing billing = manageCustomer.addBilling(department,txtBillingName.getText(), txtBillingAlias.getText(),txtBillingAddress.getText(),txtBillingCity.getText(),txtBillingProvince.getText(),txtBillingPostalCode.getText(), txtBillingContactName.getText(),txtBillingPrimaryPhone.getText(),txtBillingExt.getText(),txtBillingFax1.getText(), txtBillingExt2.getText(),txtBillingFax.getText(), txtBillingEmailAddress.getText(),Login.user_id);
-                        Bundles bundles = manageCustomer.addBundle(cmbBundles.getSelectedItem().toString());
+                        if (txtBillingName.equals("")){
+                            Integer customerID = Operations.addCustomer(null, null,users,txtCustomerName.getText(),txtNotes.getText(),txtAddress.getText(),txtUnit.getText(),txtAddressNotes.getText(),txtCity.getText(),txtProvince.getText(),txtPostalCode.getText(),txtContactName.getText(),txtPrimaryPhone.getText(),txtExt.getText(),txtSecondaryPhone.getText(),txtExt2.getText(),txtFax.getText(),txtEmailAddress.getText(),null);
+                        }
+                        else{
+                            Bundles bundles = addBundle(cmbBundles.getSelectedIndex(), cmbBundles.getSelectedItem().toString());
+                            Billing billing = addBilling(department,txtBillingName.getText(), txtBillingAlias.getText(),txtBillingAddress.getText(),txtBillingCity.getText(),txtBillingProvince.getText(),txtBillingPostalCode.getText(), txtBillingContactName.getText(),txtBillingPrimaryPhone.getText(),txtBillingExt.getText(),txtBillingFax1.getText(), txtBillingExt2.getText(),txtBillingFax.getText(), txtBillingEmailAddress.getText(),Login.user_id);
+                            Department department = Operations.addDepartment(billing,cmbDepartmentName.getSelectedItem().toString(), cmbContractNumber.getSelectedItem().toString());
+                            
+                            Integer customerID = addCustomer(null, null,users,txtCustomerName.getText(),txtNotes.getText(),txtAddress.getText(),txtUnit.getText(),txtAddressNotes.getText(),txtCity.getText(),txtProvince.getText(),txtPostalCode.getText(),txtContactName.getText(),txtPrimaryPhone.getText(),txtExt.getText(),txtSecondaryPhone.getText(),txtExt2.getText(),txtFax.getText(),txtEmailAddress.getText(),null);
+                        }
                         
                         //Integer customerID = manageCustomer.addCustomer(billing,bundles,users,txtCustomerName.getText(),txtNotes.getText(),txtAddress.getText(),txtUnit.getText(),txtAddressNotes.getText(),txtCity.getText(),txtProvince.getText(),txtPostalCode.getText(),txtContactName.getText(),txtPrimaryPhone.getText(),txtExt.getText(),txtSecondaryPhone.getText(),txtExt2.getText(),txtFax.getText(),txtEmailAddress.getText());
                     }
@@ -1610,9 +1617,10 @@ public class CreateSR extends javax.swing.JFrame {
     }
     
     private void txtCustomerNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCustomerNameKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER)  {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER){
             if (CustomerType.equals("Existing")){
-                /*CustomerList = executeHQLQuery("class retrieval of the customer info needed here" + txtCustomerName.getText() + "%'"); */
+                //CustomerList = Operations.listCustomers("SELECT customerName, address FROM Customer where customerName like '%" + txtCustomerName.getText() + "%'"); 
+                CustomerList = Operations.listCustomers("%" + txtCustomerName.getText() + "%"); 
                 System.out.println("CustomerList retrieved");
                 switch (CustomerList.size()){
                     case 0:
@@ -1666,7 +1674,7 @@ public class CreateSR extends javax.swing.JFrame {
 
     private void txtAddressKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAddressKeyPressed
         
-        if ((evt.getKeyCode() == KeyEvent.VK_ENTER) || (evt.getKeyCode() == KeyEvent.VK_TAB)) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             //System.out.println("street1 :" + strInput);
             if (CustomerType.equals("Existing")){
                 /*CustomerList = executeHQLQuery("class retrieval of the customer info needed here" + txtCustomerName.getText() + "%'"); */
@@ -1847,7 +1855,8 @@ public class CreateSR extends javax.swing.JFrame {
             for(Object obj : CustomerList){
                 Customer new_customer = (Customer)obj;
                 
-                CustList.addItem(new_customer.getCustomerId() +"|" + new_customer.getCustomerName() + " at " + new_customer.getAddress());
+                //CustList.addItem(new_customer.getCustomerId() +"|" + new_customer.getCustomerName() + " at " + new_customer.getAddress());
+                CustList.addItem(new_customer.getCustomerName() + " at " + new_customer.getAddress());
             }
             AskPanel.add(BtnOK);
             DlgCntnr.add(AskPanel);
@@ -1864,16 +1873,13 @@ public class CreateSR extends javax.swing.JFrame {
         public void actionPerformed(ActionEvent e1){
             System.out.println("actioned performed by ");      
             if(e1.getSource() == BtnOK){
-                //return the item which was selected
-                //Session session = factory.openSession();
-                //Transaction tx = null;
                 try{
-                    //tx = session.beginTransaction();
                     System.out.println("Selected customer is:" + CustList.getSelectedItem().toString());
-                    String delims = "[|]";
+                    String delims = "[ at ]";
                     String [] tokens = CustList.getSelectedItem().toString().split(delims);
                     System.out.println("Selected ID is " + tokens[0]);
-              
+                    Operations.listCustomer("customerName",tokens[0]);
+                    System.out.println("Evrika");
                     //Customer 
                     //Customer new_customer = (Customer)session.get(Customer.class, Integer.getInteger(tokens[0]));
                     //txtCustomerName.setText(new_customer.getCustomerName());

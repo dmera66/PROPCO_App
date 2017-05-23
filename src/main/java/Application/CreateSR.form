@@ -909,7 +909,6 @@
                           <Component id="lblPostalCode" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
                           <Component id="txtProvince" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
