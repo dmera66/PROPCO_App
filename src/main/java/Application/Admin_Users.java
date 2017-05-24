@@ -59,8 +59,6 @@ public class Admin_Users extends javax.swing.JFrame{
         System.out.println("===Add Users and Update Administrative Rights===");
         pnlTable.setLayout(new BorderLayout());
         
-          
-        
         columnNames = new String[] {};//"User Name","Password","Full Privilege","Service Receipt","Assign Service to Technician","Pending Service Request","Review Service Request","Invoices","Reports" };
         dataValues=new Object[][]{}; //{{"","","","","","","","",""},{"","","","","","","","",""},{"","","","","","","","",""},{"","","","","","","","","",},{"","","","","","","","",""},};
         

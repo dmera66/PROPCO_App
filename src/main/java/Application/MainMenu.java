@@ -169,12 +169,12 @@ public MainMenu() {
                     break;
                     
 	      	case "Assign Service to Technician":
-                    AssignService assignService = new AssignService();
-                    assignService.setSize(1280,720);
-                    assignService.setLocationRelativeTo(null);
-                    assignService.setResizable(false);
+                    AssignServiceBy assignServiceBy = new AssignServiceBy();
+                    assignServiceBy.setSize(800,600);
+                    assignServiceBy.setLocationRelativeTo(null);
+                    assignServiceBy.setResizable(false);
                     dispose();
-                    assignService.setVisible(true);
+                    assignServiceBy.setVisible(true);
                     System.out.println("Assign Service");
                     break;
 /*                        

@@ -14,6 +14,16 @@ import com.mycompany.propco_maven_new.ServiceRequest;
 import com.mycompany.propco_maven_new.Users;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -22,6 +32,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
+import propco_maven_new.HibernateUtil;
 
 /**
  *
@@ -49,8 +60,33 @@ public class Operations {
             System.err.println("Failed to create sessionFactory object." + ex);
             throw new ExceptionInInitializerError(ex);
         }
+        System.out.println("factory opened");
         return factory;
-    } 
+    }
+    /*
+    public void initializeSession(){
+        try{
+            factory = new Configuration().configure().buildSessionFactory();
+            session = factory.openSession();
+            tx = session.beginTransaction();
+            
+        }catch (Throwable ex) { 
+            System.err.println("Failed to create sessionFactory object." + ex);
+            throw new ExceptionInInitializerError(ex); 
+        }
+    }*/
+    /* using annotation - need more info to understand it
+    try{
+         factory = new AnnotationConfiguration().
+                   configure().
+                   //addPackage("com.xyz") //add package if used.
+                   addAnnotatedClass(Employee.class).
+                   buildSessionFactory();
+      }catch (Throwable ex) { 
+         System.err.println("Failed to create sessionFactory object." + ex);
+         throw new ExceptionInInitializerError(ex); 
+      }
+    */
     /* Method to retrieve an user from the database */
     public Users retrieveUser(Integer user_id){
         // Get the session from session factory
@@ -269,14 +305,19 @@ public class Operations {
    }
     
     /* Method to list all the customer details */
-    public static List listCustomers(String query){
+    public static List listCustomers(String query) throws NamingException, NotSupportedException, SystemException, RollbackException, HeuristicMixedException{
         //Get the session from the session factory.
         System.out.println("listCustomers " + query);
-        Session session = factory.openSession();
-        Transaction tx = null;
+        UserTransaction tx = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");  
+        //Session session = factory.openSession();
+        //Transaction tx = null;
         List customers = null;
         try{
-            tx = session.beginTransaction();
+            //tx = session.beginTransaction();
+            tx.begin();  
+  
+            // Do some work  
+            
             //Make an HQL query to get the results from customer table
             //customers = session.createQuery(query).list();
             Criteria cr = session.createCriteria(Customer.class);
@@ -287,27 +328,39 @@ public class Operations {
             for (Iterator iterator = customers.iterator(); iterator.hasNext();){
                 Customer customer = (Customer) iterator.next();
             }
+            
+            //factory.getCurrentSession().load(...);  
+            //factory.getCurrentSession().persist(...); 
             tx.commit();
-        }catch (HibernateException e) {if (tx!=null) tx.rollback();e.printStackTrace();}
+        }catch (HibernateException e) {if (tx!=null) tx.rollback();e.printStackTrace();} catch (HeuristicRollbackException ex) {
+            Logger.getLogger(Operations.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SecurityException ex) {
+            Logger.getLogger(Operations.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalStateException ex) {
+            Logger.getLogger(Operations.class.getName()).log(Level.SEVERE, null, ex);
+        }
         finally {session.close();}
         return customers;
     }
     
     /* Method to READ the unique customer having a specific criteria */
-    public static void listCustomer(String field, String value ){
+    public static Customer listCustomer(String field, String value ){
         Session session = factory.openSession();
         Transaction tx = null;
+        Customer customer = null;
         try{
+            System.out.println("listCustomers " + field + ";" + value);
             tx = session.beginTransaction();
             Criteria cr = session.createCriteria(Customer.class);
             // Add restriction.
             cr.add(Restrictions.like(field, value));
             List customers = cr.list();
-
+            System.out.println("listCustomers1 " + field + ";" + value);
             for (Iterator iterator = customers.iterator(); iterator.hasNext();){
-                Customer customer = (Customer) iterator.next(); 
-                System.out.print("Name: " + customer.getCustomerName()); 
-                System.out.print("Address: " + customer.getAddress()); 
+                System.out.println("listCustomers2 " + field + ";" + value);
+                customer = (Customer) iterator.next();
+                //System.out.print("Name: " + customer.getCustomerName()); 
+                //System.out.print("Address: " + customer.getAddress()); 
             }
             tx.commit();
         }catch (HibernateException e) {
@@ -316,6 +369,7 @@ public class Operations {
         }finally {
             session.close(); 
         }
+        return customer;
     }
    
     /* Method to list all the billing details */
@@ -341,17 +395,6 @@ public class Operations {
             session.close();
         }
    }
-    public void initializeSession(){
-        try{
-            factory = new Configuration().configure().buildSessionFactory();
-            session = factory.openSession();
-            tx = session.beginTransaction();
-            
-        }catch (Throwable ex) { 
-            System.err.println("Failed to create sessionFactory object." + ex);
-            throw new ExceptionInInitializerError(ex); 
-        }
-    }
     
     public List executeHQLQuery(String query){
         System.out.println("Session executeHQLQuery opened");
@@ -376,5 +419,30 @@ public class Operations {
         
         return resultList;
     }
-    /* Method to CREATE an employee in the database */
+    /* Method to Count Service Requests from the database */
+    public static Integer countServiceRequests(String query){
+        Session sesion = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        List SR_list = null;
+        Integer ServiceRequestCount = null;
+        //System.out.println("Session countServiceRequests opened");
+
+        try {
+            tx = sesion.beginTransaction();
+            //System.out.println("Session executeHQLQuery tx begin " + query);
+            SR_list = sesion.createQuery(query).list();
+            System.out.println("Session executeHQLQuery query completed");
+            ServiceRequestCount = SR_list.size();
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            sesion.close();
+            System.out.println("Session countServiceRequests closed");
+        }
+        return ServiceRequestCount;
+    }
 }

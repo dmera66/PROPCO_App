@@ -27,7 +27,7 @@
             <column name="address" length="50" not-null="true" />
         </property>
         <property name="unit" type="string">
-            <column name="unit" length="8" not-null="true" />
+            <column name="unit" length="8" />
         </property>
         <property name="addressNotes" type="string">
             <column name="addressNotes" length="30" />

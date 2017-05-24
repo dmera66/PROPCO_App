@@ -165,7 +165,7 @@ public class Customer  implements java.io.Serializable {
     }
 
     
-    @Column(name="unit", nullable=false, length=8)
+    @Column(name="unit", length=8)
     public String getUnit() {
         return this.unit;
     }

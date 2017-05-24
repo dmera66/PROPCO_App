@@ -31,7 +31,8 @@ public class AssignService extends javax.swing.JFrame {
      * Creates new form AssignService
      */
     public AssignService() {
-        initComponents();
+        //initComponents();
+        this.setLocationRelativeTo(null);
         setTitle("Assign Service to Technician");
         setSize(800,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -39,7 +40,7 @@ public class AssignService extends javax.swing.JFrame {
         pnlTable.setLayout(new BorderLayout());
         
         columnNames = new String[] {"Service Request #","Customer Name","Address","PO#","Invoicing","Service Type","Payment Type","Schedule","Date","Select Technician" };
-        dataValues=new Object[][] {{"","","","","","","","","","","Technician"},{"","","","","","","","","","","Technician"},{"","","","","","","","","","","Technician"},{"","","","","","","","","","","Technician"},{"","","","","","","","","","","Technician"},};
+        dataValues=new Object[][] {};//{"","","","","","","","","","","Technician"},{"","","","","","","","","","","Technician"},{"","","","","","","","","","","Technician"},{"","","","","","","","","","","Technician"},{"","","","","","","","","","","Technician"},};
         
         myTableModel model=new myTableModel();
         table.setRowHeight(30);
@@ -83,8 +84,24 @@ public class AssignService extends javax.swing.JFrame {
                 
         setVisible(true);
         setResizable(false);
-        
-    
+        /*
+        btnMore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                System.out.println("nr of rows " + model.getRowCount());
+                if (!model.getValueAt(model.getRowCount()-1,0).toString().isEmpty() 
+                        && !model.getValueAt(model.getRowCount()-1,1).toString().isEmpty()){
+                    Vector rowData = null;
+                    Boolean[] tmpArray = {};
+                    for(int columnIndex=2;columnIndex!=model.getColumnCount();columnIndex++){  
+                        tmpArray = add(tmpArray,false);
+                    }
+                    String[] rowData1= {"",""};
+                    model.addRow(rowData1);
+                    table.validate();
+                }
+            }
+        });
+        */
         
         //table.addKeyListener(new KeyListener()); 
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
