@@ -1912,7 +1912,8 @@ public class CreateSR extends javax.swing.JFrame {
                     //String delims = "[|]";
                     //String [] tokens = CustList.getSelectedItem().toString().split(delims);
                     //System.out.println("Selected ID is " + tokens[0]);
-                    fillInfo(Operations.listCustomer("customerName",CustList.getSelectedItem().toString()));
+                    //fillInfo(Operations.listCustomer("customerName",CustList.getSelectedItem().toString()));
+                    new listCustomer("customerName",CustList.getSelectedItem().toString());
                     //Operations.listBilling();
                     System.out.println("Evrika");
                     //Customer 

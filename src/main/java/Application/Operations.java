@@ -54,6 +54,7 @@ public class Operations {
     //Customer new_customer = null;
     //Business new_business = null;
    
+    
     public static SessionFactory createFactory() {
         factory = null;
         try{
@@ -345,42 +346,7 @@ public class Operations {
         return customers;
     }
     
-    /* Method to READ the unique customer having a specific criteria */
     
-    @Transactional
-    public static Customer listCustomer(String field, String value ){
-        Session session = factory.openSession();
-        Transaction tx = null;
-        
-        Customer customer = null;
-        try{
-            System.out.println("listCustomers " + field + ";" + value);
-            //tx = session.beginTransaction();
-            Criteria cr = session.createCriteria(Customer.class);
-            // Add restriction.
-            cr.add(Restrictions.like(field, value));
-            
-            List customers = cr.list();
-            System.out.println("listCustomers1 " + field + ";" + value);
-            for (Iterator iterator = customers.iterator(); iterator.hasNext();){
-                System.out.println("listCustomers2 " + field + ";" + value);
-                customer = (Customer) iterator.next();
-                
-                System.out.print("Name: "); 
-                //System.out.print("Address: " + customer.getAddress()); 
-            }
-            //session.load(customer, serializable); ??? what is the second param
-            //session.persist(customer);
-            
-            //tx.commit();
-        }catch (HibernateException e) {
-            if (tx!=null) tx.rollback();
-            e.printStackTrace(); 
-        }finally {
-            session.close(); 
-        }
-        return customer;
-    }
    
     /* Method to list all the billing details */
     public void listBilling(String query){
