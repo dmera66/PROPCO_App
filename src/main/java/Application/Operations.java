@@ -323,11 +323,11 @@ public class Operations {
             // Do some work  
             
             //Make an HQL query to get the results from customer table
-            //customers = session.createQuery(query).list();
-            Criteria cr = session.createCriteria(Customer.class);
+            customers = session.createQuery(query).list();
+            //Criteria cr = session.createCriteria(Customer.class);
             // Add restriction.
-            cr.add(Restrictions.like("customerName", query));
-            customers = cr.list();
+            //cr.add(Restrictions.like("customerName", query));
+            //customers = cr.list();
             //Hibernate.initialize(c.billing );
             //Iterate over the result and print it.
             //for (Iterator iterator = customers.iterator(); iterator.hasNext();){
@@ -346,8 +346,70 @@ public class Operations {
         return customers;
     }
     
-    
-   
+    public static Customer listCustomer(String query, String value) {
+        Operations.createFactory();
+        Session session = factory.openSession();
+        Transaction tx = null;
+        
+        Customer customer = null;
+        try{
+            System.out.println("listCustomers " + query + ";" + value);
+            //tx = session.beginTransaction();
+            //Criteria cr = session.createCriteria(Customer.class);
+            // Add restriction.
+            //cr.add(Restrictions.like(field, value));
+            List customers = session.createQuery(query).list();
+            //List customers = cr.list();
+            //System.out.println("listCustomers1 " + field + ";" + value);
+            for (Iterator iterator = customers.iterator(); iterator.hasNext();){
+                //System.out.println("listCustomers2 " + field + ";" + value);
+                customer = (Customer) iterator.next();
+                
+            }
+            //session.load(customer, serializable); ??? what is the second param
+            //session.persist(customer);
+            
+            //tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace(); 
+        }finally {
+            session.close(); 
+        }
+        return customer;
+    }
+   public static Billing listBilling(String field, Integer value) {
+        Operations.createFactory();
+        Session session = factory.openSession();
+        Transaction tx = null;
+        
+        Billing billing = null;
+        try{
+            System.out.println("listBilling " + field + ";" + value);
+            //tx = session.beginTransaction();
+            Criteria cr = session.createCriteria(Billing.class);
+            // Add restriction.
+            cr.add(Restrictions.like(field, value));
+            
+            List billings = cr.list();
+            //System.out.println("listCustomers1 " + field + ";" + value);
+            for (Iterator iterator = billings.iterator(); iterator.hasNext();){
+                //System.out.println("listCustomers2 " + field + ";" + value);
+                billing = (Billing) iterator.next();
+                
+            }
+            //session.load(customer, serializable); ??? what is the second param
+            //session.persist(customer);
+            
+            //tx.commit();
+        }catch (HibernateException e) {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace(); 
+        }finally {
+            session.close(); 
+        }
+        return billing;
+    }
     /* Method to list all the billing details */
     public void listBilling(String query){
         //Get the session from the session factory.

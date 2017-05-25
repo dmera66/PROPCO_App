@@ -130,7 +130,7 @@
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="pnlCustomer" max="32767" attributes="0"/>
-                      <Component id="pnlBillingCustomer" pref="323" max="32767" attributes="0"/>
+                      <Component id="pnlBillingCustomer" pref="326" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="0" pref="4" max="32767" attributes="0"/>
               </Group>
@@ -186,7 +186,7 @@
                                   <Component id="lblBillingAlias" alignment="0" max="32767" attributes="0"/>
                                   <Component id="lblBillingStreet" alignment="0" max="32767" attributes="0"/>
                                   <Component id="lblBillingCity" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="lblBillingContact" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="lblBillingContact" alignment="0" pref="111" max="32767" attributes="0"/>
                                   <Component id="lblBillingPhone1" alignment="0" max="32767" attributes="0"/>
                                   <Component id="lblBillingPhone2" alignment="0" max="32767" attributes="0"/>
                               </Group>
@@ -221,7 +221,7 @@
                                       <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="txtBillingEmailAddress" pref="131" max="32767" attributes="0"/>
-                                          <Component id="txtBillingFax" pref="0" max="32767" attributes="0"/>
+                                          <Component id="txtBillingFax" pref="148" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
                                   <Component id="txtBillingAlias" alignment="0" max="32767" attributes="0"/>
@@ -264,7 +264,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="txtBillingPostalCode" alignment="1" pref="25" max="32767" attributes="0"/>
+                          <Component id="txtBillingPostalCode" alignment="1" pref="31" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="lblBillingStreet" linkSize="9" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
                               <Component id="txtBillingAddress" linkSize="10" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
@@ -1419,7 +1419,7 @@
                       <Component id="rbVisa" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="rbPcard" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="21" max="32767" attributes="0"/>
+                  <EmptySpace pref="18" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -1505,14 +1505,14 @@
                   <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="rbInSuit" alignment="0" max="-2" attributes="0"/>
-                      <Component id="rbEmergency" alignment="0" max="32767" attributes="0"/>
+                      <Component id="rbEmergency" alignment="0" pref="403" max="32767" attributes="0"/>
                       <Component id="rbBlock" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="rbRegular" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="rbNew" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="rbProduct" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="rbOther" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="160" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
