@@ -5,13 +5,15 @@
  */
 package Application;
 
+import static Application.Admin_Users.add;
 import com.mycompany.propco_maven_new.Users;
 import java.awt.BorderLayout;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import javax.swing.JPanel;
 import javax.swing.JButton;
+import static javax.swing.JFrame.EXIT_ON_CLOSE;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -23,12 +25,13 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.persister.entity.AbstractEntityPersister;
 import propco_maven_new.HibernateUtil;
+
 /**
  *
  * @author dan
  */
-public class Admin_Users extends javax.swing.JFrame{
-    private String[] columnNames=new String[7];
+public class UnassignedSRList extends javax.swing.JFrame {
+    private String[] columnNames=new String[3];
     private Object[][] dataValues=new String[3][];
     JTable table = new JTable();
     JScrollPane pane = new JScrollPane();
@@ -39,21 +42,21 @@ public class Admin_Users extends javax.swing.JFrame{
     JButton btnMore = new JButton("More Rows...");
     JButton btnCancel = new JButton("Cancel");
     JButton btnSave  = new JButton("Create/Save User");    
-    myTableModel model;
+    Admin_Users.myTableModel model;
     /**
-     * Creates new form Admin_Users
+     * Creates new form UnassignedSRList
      */
-    public Admin_Users() {
+    public UnassignedSRList(String strTitle) {
         //initComponents();
         this.setLocationRelativeTo(null);
-        setTitle("Administrative Panel for Users");
+        setTitle(strTitle);
         setSize(740,600);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         //initComponents();
-        System.out.println("===Add Users and Update Administrative Rights===");
+        System.out.println("===" + strTitle + "===");
         pnlTable.setLayout(new BorderLayout());
         
-        columnNames = new String[] {};//"User Name","Password","Full Privilege","Service Receipt","Assign Service to Technician","Pending Service Request","Review Service Request","Invoices","Reports" };
+        columnNames = new String[]{};//"User Name","Password","Full Privilege","Service Receipt","Assign Service to Technician","Pending Service Request","Review Service Request","Invoices","Reports" };
         dataValues=new Object[][]{}; //{{"","","","","","","","",""},{"","","","","","","","",""},{"","","","","","","","",""},{"","","","","","","","","",},{"","","","","","","","",""},};
         
         myTableModel model=new myTableModel();
@@ -85,9 +88,9 @@ public class Admin_Users extends javax.swing.JFrame{
         pnlTable.add(pane);
         pnlTable.setSize(740,150);
         
-        pnlMore.add(btnMore);
-        pnlMore.setSize(740,100);
-        btnMore.setBounds(350,150,100,30);
+        //pnlMore.add(btnMore);
+        //pnlMore.setSize(740,100);
+        //btnMore.setBounds(350,150,100,30);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         TableColumnAdjuster tca = new TableColumnAdjuster(table);
         tca.adjustColumns();
@@ -104,25 +107,25 @@ public class Admin_Users extends javax.swing.JFrame{
         //pnlActions.setBounds(200,0,400,200);
         pnlActivities.setLayout(new BorderLayout());
         pnlActivities.add(pnlTable,BorderLayout.NORTH);
-        pnlActivities.add(pnlMore,BorderLayout.CENTER);
+        //pnlActivities.add(pnlMore,BorderLayout.CENTER);
         pnlActivities.add(pnlActions,BorderLayout.SOUTH);
         getContentPane().add(pnlActivities);
         setVisible(true);
         setResizable(false);
-        AbstractEntityPersister aep=((AbstractEntityPersister)HibernateUtil.getSessionFactory().getClassMetadata(Users.class));  
-        String[] properties=aep.getPropertyNames(); 
+        //AbstractEntityPersister aep=((AbstractEntityPersister)HibernateUtil.getSessionFactory().getClassMetadata(Users.class));  
+        //String[] properties=aep.getPropertyNames(); 
         
-        String[] tmpArray = {};
-        for(int nameIndex=0;nameIndex!=properties.length;nameIndex++){  
+        //String[] tmpArray = {};
+        //for(int nameIndex=0;nameIndex!=properties.length;nameIndex++){  
             //System.out.println("Property name: "+properties[nameIndex]);  
-            String[] columnNames=aep.getPropertyColumnNames(nameIndex);
-            for(int columnIndex=0;columnIndex!=columnNames.length;columnIndex++){  
+        //    String[] columnNames=aep.getPropertyColumnNames(nameIndex);
+        //    for(int columnIndex=0;columnIndex!=columnNames.length;columnIndex++){  
                 //System.out.println("Column name: "+columnNames[columnIndex]);  
-                tmpArray = add(tmpArray,columnNames[columnIndex]);
-            }  
-        } 
+        //        tmpArray = add(tmpArray,columnNames[columnIndex]);
+        //   }  
+        //} 
         
-        model.setColumnIdentifiers(tmpArray);
+        //model.setColumnIdentifiers(tmpArray);
         
         List users_list = usersList();
         for (Iterator iterator = users_list.iterator(); iterator.hasNext();){
@@ -139,7 +142,7 @@ public class Admin_Users extends javax.swing.JFrame{
                 users.isReports()
                 });
             }
-        btnMore.addActionListener(new java.awt.event.ActionListener() {
+        /* btnMore.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 System.out.println("nr of rows " + model.getRowCount());
                 if (!model.getValueAt(model.getRowCount()-1,0).toString().isEmpty() 
@@ -154,7 +157,7 @@ public class Admin_Users extends javax.swing.JFrame{
                     table.validate();
                 }
             }
-        });
+        }); */
         
         //table.addKeyListener(new KeyListener()); 
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
@@ -168,9 +171,8 @@ public class Admin_Users extends javax.swing.JFrame{
                 btnSaveActionPerformed(evt);
             }
         });
-        
-        
     }
+
     public class myTableModel extends DefaultTableModel{
         myTableModel(){
             super(dataValues,columnNames);
@@ -230,8 +232,10 @@ public class Admin_Users extends javax.swing.JFrame{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 400, Short.MAX_VALUE)
@@ -240,8 +244,11 @@ public class Admin_Users extends javax.swing.JFrame{
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 300, Short.MAX_VALUE)
         );
+
+        pack();
     }// </editor-fold>//GEN-END:initComponents
-/**
+
+    /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -258,20 +265,20 @@ public class Admin_Users extends javax.swing.JFrame{
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UnassignedSRList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UnassignedSRList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UnassignedSRList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UnassignedSRList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Admin_Users().setVisible(true);
+                new UnassignedSRList("").setVisible(true);
             }
         });
     }

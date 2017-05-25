@@ -23,8 +23,10 @@ import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
+import javax.transaction.Transactional;
 import javax.transaction.UserTransaction;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -305,16 +307,17 @@ public class Operations {
    }
     
     /* Method to list all the customer details */
+    @Transactional
     public static List listCustomers(String query) throws NamingException, NotSupportedException, SystemException, RollbackException, HeuristicMixedException{
         //Get the session from the session factory.
         System.out.println("listCustomers " + query);
-        UserTransaction tx = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");  
-        //Session session = factory.openSession();
+        //UserTransaction tx = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");  
+        Session session = factory.openSession();
         //Transaction tx = null;
         List customers = null;
         try{
             //tx = session.beginTransaction();
-            tx.begin();  
+            //tx.begin();  
   
             // Do some work  
             
@@ -324,17 +327,16 @@ public class Operations {
             // Add restriction.
             cr.add(Restrictions.like("customerName", query));
             customers = cr.list();
+            //Hibernate.initialize(c.billing );
             //Iterate over the result and print it.
-            for (Iterator iterator = customers.iterator(); iterator.hasNext();){
-                Customer customer = (Customer) iterator.next();
-            }
+            //for (Iterator iterator = customers.iterator(); iterator.hasNext();){
+            //    Customer customer = (Customer) iterator.next();
+            //}
             
             //factory.getCurrentSession().load(...);  
             //factory.getCurrentSession().persist(...); 
-            tx.commit();
-        }catch (HibernateException e) {if (tx!=null) tx.rollback();e.printStackTrace();} catch (HeuristicRollbackException ex) {
-            Logger.getLogger(Operations.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SecurityException ex) {
+            //tx.commit();
+        }catch (HibernateException e) {if (tx!=null) tx.rollback();e.printStackTrace();} catch (SecurityException ex) {
             Logger.getLogger(Operations.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalStateException ex) {
             Logger.getLogger(Operations.class.getName()).log(Level.SEVERE, null, ex);
@@ -344,25 +346,33 @@ public class Operations {
     }
     
     /* Method to READ the unique customer having a specific criteria */
+    
+    @Transactional
     public static Customer listCustomer(String field, String value ){
         Session session = factory.openSession();
         Transaction tx = null;
+        
         Customer customer = null;
         try{
             System.out.println("listCustomers " + field + ";" + value);
-            tx = session.beginTransaction();
+            //tx = session.beginTransaction();
             Criteria cr = session.createCriteria(Customer.class);
             // Add restriction.
             cr.add(Restrictions.like(field, value));
+            
             List customers = cr.list();
             System.out.println("listCustomers1 " + field + ";" + value);
             for (Iterator iterator = customers.iterator(); iterator.hasNext();){
                 System.out.println("listCustomers2 " + field + ";" + value);
                 customer = (Customer) iterator.next();
-                //System.out.print("Name: " + customer.getCustomerName()); 
+                
+                System.out.print("Name: "); 
                 //System.out.print("Address: " + customer.getAddress()); 
             }
-            tx.commit();
+            //session.load(customer, serializable); ??? what is the second param
+            //session.persist(customer);
+            
+            //tx.commit();
         }catch (HibernateException e) {
             if (tx!=null) tx.rollback();
             e.printStackTrace(); 

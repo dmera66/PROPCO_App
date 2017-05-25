@@ -36,6 +36,7 @@ import javax.transaction.HeuristicMixedException;
 import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
+import javax.transaction.Transactional;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
@@ -1902,6 +1903,7 @@ public class CreateSR extends javax.swing.JFrame {
             return new Object() { public String toString() { return item; } };
         }
         public void dispose(){Dlg.dispose();}
+        
         public void actionPerformed(ActionEvent e1){
             System.out.println("actioned performed by ");      
             if(e1.getSource() == BtnOK){
@@ -1963,6 +1965,7 @@ public class CreateSR extends javax.swing.JFrame {
             }
         }
     }
+    @Transactional
     public void fillInfo(Customer new_customer){
         System.out.println("fill Customer Info");
         
