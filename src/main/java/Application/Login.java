@@ -18,6 +18,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import Application.UserManager;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
+
+@Configuration("Login") 
+
+@ImportResource({"classpath:src/main/resources/spring.xml"}) 
+
+//@PropertySource({"classpath:Services.properties", "classpath:AppConfig.properties"})
 
 /*
  * To change this license header, choose License Headers in Project Properties.
