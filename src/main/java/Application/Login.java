@@ -13,6 +13,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import propco_maven_new.HibernateUtil;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import Application.UserManager;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -174,7 +178,16 @@ public class Login extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         System.out.println("action listener");
         puname = txtUserName.getText(); 
-        runQueryBasedOnUserName();
+        //runQueryBasedOnUserName();
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
+        UserManager userManager = (UserManager) ctx.getBean("userManagerImpl");
+        Users user = new Users();
+        user = userManager.getUser(puname);
+      
+      System.out.println("\nUser fetched by username!"
+        + "\nId: " + user.getUserId()
+        + "\nUsername: " + user.getUserName()
+        + "\nName: " + user.getPassword());
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void returnResult(List resultList){
