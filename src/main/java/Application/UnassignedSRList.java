@@ -5,12 +5,10 @@
  */
 package Application;
 
-import static Application.Admin_Users.add;
 import com.mycompany.propco_maven_new.Users;
 import java.awt.BorderLayout;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 import javax.swing.JButton;
 import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JPanel;
@@ -23,7 +21,6 @@ import javax.swing.table.DefaultTableModel;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.persister.entity.AbstractEntityPersister;
 import propco_maven_new.HibernateUtil;
 
 /**
