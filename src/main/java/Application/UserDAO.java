@@ -17,7 +17,7 @@ public interface UserDAO {
 
   void insertUser(Users user);
   
-  Users getUserById(int userID);
+  Users getUserById(int userId);
   
   Users getUser(String userName);
   

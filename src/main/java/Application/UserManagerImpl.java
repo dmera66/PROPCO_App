@@ -36,8 +36,8 @@ public class UserManagerImpl implements UserManager {
   }
   
   @Transactional
-  public Users getUser(String username) {
-    return userDAO.getUser(username);
+  public Users getUser(String userName) {
+    return userDAO.getUser(userName);
   }
 
   @Transactional
