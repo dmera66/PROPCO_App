@@ -188,7 +188,7 @@ public class Login extends javax.swing.JFrame {
         System.out.println("action listener");
         puname = txtUserName.getText(); 
         //runQueryBasedOnUserName();
-        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
+        
         UserManager userManager = (UserManager) ctx.getBean("userManagerImpl");
         Users user = new Users();
         user = userManager.getUser(puname);
@@ -289,7 +289,7 @@ public class Login extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("spring.xml");
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
